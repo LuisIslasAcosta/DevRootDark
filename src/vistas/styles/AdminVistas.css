@@ -1,0 +1,86 @@
+/* =========================
+   Sección de administración
+========================= */
+.admin-section {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 40px;
+}
+
+/* Títulos */
+.admin-section h2,
+.admin-section h3 {
+  color: var(--text-color);
+  margin-bottom: 20px;
+}
+
+/* Formularios */
+.admin-section form label {
+  color: var(--text-color);
+}
+
+.admin-section form input,
+.admin-section form select {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.admin-section form input:focus,
+.admin-section form select:focus {
+  border-color: var(--link-color);
+  outline: none;
+  box-shadow: 0 0 4px var(--link-color);
+}
+
+/* Tablas */
+.admin-table {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.admin-table th {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  font-weight: 600;
+  text-align: center;
+}
+
+.admin-table td {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  vertical-align: middle;
+  padding: 12px;
+}
+
+/* Botones */
+.admin-section button {
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.admin-section button:hover {
+  filter: brightness(0.95);
+}
+.admin-link {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 500;
+  margin-right: 20px;
+  transition: color 0.2s ease;
+}
+
+.admin-link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}

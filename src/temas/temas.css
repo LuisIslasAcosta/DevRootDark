@@ -1,0 +1,53 @@
+:root {
+  --bg-color: #e9ecef;
+  --text-color: #222;
+  --card-bg: #fff;
+  --card-border: #ddd;
+  --link-color: #007bff;
+  --link-hover: #0056b3;
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #f4f4f9;
+  --card-bg: #1e1e1e;
+  --card-border: #333;
+  --link-color: #66b2ff;
+  --link-hover: #99ccff;
+}
+
+[data-theme="blue"] {
+  --bg-color: #e6f0ff;
+  --text-color: #002b5c;
+  --card-bg: #ffffff;
+  --card-border: #99c2ff;
+  --link-color: #0047b3;
+  --link-hover: #003380;
+}
+
+[data-theme="green"] {
+  --bg-color: #e9f7ef;
+  --text-color: #1b4d3e;
+  --card-bg: #ffffff;
+  --card-border: #a3d9a5;
+  --link-color: #2e8b57;
+  --link-hover: #1c5c3a;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.curso-item {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+}
+
+a {
+  color: var(--link-color);
+}
+
+a:hover {
+  color: var(--link-hover);
+}

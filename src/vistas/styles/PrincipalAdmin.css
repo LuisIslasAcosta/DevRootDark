@@ -1,0 +1,270 @@
+/* Reset general */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Layout principal */
+.admin-layout {
+  display: flex;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  width: 100vw;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Barra lateral */
+.admin-sidebar {
+  width: 260px;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--card-border);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 20px 0 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+/* 🔹 Icono de temas fijo arriba a la derecha */
+.tema-icon {
+  position: fixed;       /* lo mantiene fijo en pantalla */
+  top: 20px;             /* distancia desde arriba */
+  right: 20px;           /* distancia desde la derecha */
+  z-index: 1000;         /* encima de otros elementos */
+}
+
+.tema-icon button {
+  background: none;
+  border: none;
+  color: var(--link-color);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  font-size: 1.4rem;
+}
+
+.tema-icon button:hover {
+  color: var(--link-hover);
+}
+
+/* Menú desplegable debajo del icono */
+.tema-menu {
+  position: absolute;
+  top: 40px; /* justo debajo del icono */
+  right: 0;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  width: 200px;
+  z-index: 999;
+}
+
+.tema-menu h4 {
+  margin-top: 0;
+  color: var(--text-color);
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.tema-menu button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: var(--link-color);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.tema-menu button:hover {
+  background-color: var(--link-hover);
+}
+
+.tema-menu label {
+  display: block;
+  margin-top: 10px;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.tema-menu input[type="color"] {
+  margin-left: 10px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+/* 🔹 Sección superior con perfil */
+.admin-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  border: 2px solid var(--link-color);
+  object-fit: cover;
+}
+
+.profile-name {
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* 🔹 Botones debajo del perfil */
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.edit-btn,
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--link-color);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.edit-btn svg,
+.logout-btn svg {
+  margin-right: 6px;
+}
+
+.edit-btn:hover,
+.logout-btn:hover {
+  color: var(--link-hover);
+}
+
+/* Marca */
+.admin-sidebar .brand {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Navegación lateral */
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-nav a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 14px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-nav a:hover {
+  background-color: var(--link-hover);
+  color: #fff;
+}
+
+/* Área principal */
+.admin-main {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Título dashboard */
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Tarjetas KPI */
+.dashboard-cards {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.kpi-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: 20px 30px;
+  text-align: center;
+  width: 240px;
+  transition: transform 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-6px);
+}
+
+.kpi-card h4 {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.kpi-card p {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--link-color);
+}
+
+/* Gráficas */
+.dashboard-charts {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.chart-box {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  width: 420px;
+}
+
+.chart-box h4 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
