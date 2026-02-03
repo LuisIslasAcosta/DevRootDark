@@ -1,4 +1,8 @@
 /* Reset general */
+body {
+  font-size: 19px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,9 +18,16 @@
   font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
+.dashboard-welcome {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-color);
+  margin-bottom: 20px;
+}
+
 /* Barra lateral */
 .admin-sidebar {
-  width: 260px;
+  width: 300px;
   background-color: var(--card-bg);
   border-right: 1px solid var(--card-border);
   padding: 30px 20px;
@@ -26,12 +37,12 @@
   position: relative;
 }
 
-/* 🔹 Icono de temas fijo arriba a la derecha */
+/* Icono de temas */
 .tema-icon {
-  position: fixed;       /* lo mantiene fijo en pantalla */
-  top: 20px;             /* distancia desde arriba */
-  right: 20px;           /* distancia desde la derecha */
-  z-index: 1000;         /* encima de otros elementos */
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
 }
 
 .tema-icon button {
@@ -47,10 +58,10 @@
   color: var(--link-hover);
 }
 
-/* Menú desplegable debajo del icono */
+/* Menú de temas */
 .tema-menu {
   position: absolute;
-  top: 40px; /* justo debajo del icono */
+  top: 40px;
   right: 0;
   background-color: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -99,7 +110,7 @@
   cursor: pointer;
 }
 
-/* 🔹 Sección superior con perfil */
+/* Sección superior con perfil */
 .admin-top {
   display: flex;
   flex-direction: column;
@@ -115,22 +126,22 @@
 }
 
 .profile-pic {
-  width: 80px;
-  height: 80px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  margin-bottom: 10px;
-  border: 2px solid var(--link-color);
+  margin-bottom: 12px;
+  border: 3px solid var(--link-color);
   object-fit: cover;
 }
 
 .profile-name {
   font-weight: 600;
   color: var(--text-color);
-  font-size: 1rem;
+  font-size: 1.2rem;
   text-align: center;
 }
 
-/* 🔹 Botones debajo del perfil */
+/* Botones debajo del perfil */
 .profile-actions {
   display: flex;
   flex-direction: column;
@@ -165,7 +176,7 @@
 
 /* Marca */
 .admin-sidebar .brand {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: var(--text-color);
   margin-bottom: 30px;
@@ -183,9 +194,11 @@
   color: var(--link-color);
   text-decoration: none;
   font-weight: 500;
-  padding: 10px 14px;
-  border-radius: 6px;
+  padding: 12px 16px;
+  border-radius: 8px;
   transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
 .admin-nav a:hover {
@@ -193,16 +206,20 @@
   color: #fff;
 }
 
+.admin-nav a svg {
+  margin-right: 10px;
+}
+
 /* Área principal */
 .admin-main {
   flex: 1;
-  padding: 20px;
+  padding: 30px;
   overflow-y: auto;
 }
 
 /* Título dashboard */
 .dashboard-title {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 600;
   color: var(--text-color);
   margin-bottom: 30px;
@@ -225,7 +242,7 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   padding: 20px 30px;
   text-align: center;
-  width: 240px;
+  width: 260px;
   transition: transform 0.2s ease;
 }
 
@@ -234,13 +251,13 @@
 }
 
 .kpi-card h4 {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--text-color);
   margin-bottom: 10px;
 }
 
 .kpi-card p {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: bold;
   color: var(--link-color);
 }
@@ -259,12 +276,41 @@
   border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   padding: 20px;
-  width: 420px;
+  width: 440px;
 }
 
 .chart-box h4 {
   text-align: center;
   margin-bottom: 15px;
   color: var(--text-color);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+}
+
+.dashboard-recent {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 40px auto;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-recent h4 {
+  font-size: 1.3rem;
+  color: var(--text-color);
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.dashboard-recent ul {
+  list-style: none;
+  padding-left: 0;
+  color: var(--text-color);
+}
+
+.dashboard-recent li {
+  margin-bottom: 10px;
+  font-size: 1rem;
 }

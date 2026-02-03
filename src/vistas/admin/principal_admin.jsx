@@ -11,7 +11,15 @@ import {
   CategoryScale,
   LinearScale
 } from "chart.js";
-import { FaSignOutAlt, FaUserEdit, FaPalette } from "react-icons/fa";
+import {
+  FaSignOutAlt,
+  FaUserEdit,
+  FaPalette,
+  FaHome,
+  FaBookOpen,
+  FaUsers,
+  FaDatabase
+} from "react-icons/fa";
 import "../styles/PrincipalAdmin.css";
 import "../../temas/temas.css";
 
@@ -28,12 +36,14 @@ function PrincipalAdmin() {
     cursos_creados: 0
   });
 
+  const [cursosRecientes, setCursosRecientes] = useState([]);
+  const [usuariosRecientes, setUsuariosRecientes] = useState([]);
+
   const [user, setUser] = useState(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
     return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
   });
 
-  // Refrescar usuario automáticamente cuando cambia localStorage
   useEffect(() => {
     const syncUser = () => {
       const usuarioActualizado = localStorage.getItem("usuario");
@@ -41,13 +51,11 @@ function PrincipalAdmin() {
         setUser(JSON.parse(usuarioActualizado));
       }
     };
-
     syncUser();
     window.addEventListener("storage", syncUser);
     return () => window.removeEventListener("storage", syncUser);
   }, []);
 
-  // Estadísticas con actualización periódica
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
 
@@ -58,8 +66,26 @@ function PrincipalAdmin() {
         .catch(error => console.error("Error al cargar estadísticas:", error));
     };
 
+    const fetchRecientes = () => {
+      fetch("http://127.0.0.1:5000/api/cursos/recientes")
+        .then(res => res.json())
+        .then(data => setCursosRecientes(data))
+        .catch(error => console.error("Error al cargar cursos recientes:", error));
+
+      fetch("http://127.0.0.1:5000/api/usuarios/recientes")
+        .then(res => res.json())
+        .then(data => setUsuariosRecientes(data))
+        .catch(error => console.error("Error al cargar usuarios recientes:", error));
+    };
+
     fetchEstadisticas();
-    const intervalId = setInterval(fetchEstadisticas, 5000);
+    fetchRecientes();
+
+    const intervalId = setInterval(() => {
+      fetchEstadisticas();
+      fetchRecientes();
+    }, 5000);
+
     return () => clearInterval(intervalId);
   }, [theme]);
 
@@ -127,7 +153,6 @@ function PrincipalAdmin() {
                 className="profile-pic"
               />
               <span className="profile-name">{user.nombre}</span>
-
               <div className="profile-actions">
                 <button className="edit-btn" onClick={() => navigate("/admin/editar-perfil")}>
                   <FaUserEdit /> Editar
@@ -139,43 +164,51 @@ function PrincipalAdmin() {
             </div>
           )}
         </div>
-
         <div className="brand">Panel de Administración</div>
         <nav className="admin-nav">
-          <a className="admin-link" onClick={() => navigate("/admin")}>Inicio</a>
-          <a className="admin-link" onClick={() => navigate("/admin/cursos")}>Cursos</a>
-          <a className="admin-link" onClick={() => navigate("/admin/usuarios")}>Usuarios</a>
-          <a className="admin-link" onClick={() => navigate("/admin/respaldo")}>Respaldo</a>
+          <a className="admin-link" onClick={() => navigate("/admin")}>
+            <FaHome /> Inicio
+          </a>
+          <a className="admin-link" onClick={() => navigate("/admin/cursos")}>
+            <FaBookOpen /> Cursos
+          </a>
+          <a className="admin-link" onClick={() => navigate("/admin/usuarios")}>
+            <FaUsers /> Usuarios
+          </a>
+          <a className="admin-link" onClick={() => navigate("/admin/respaldo")}>
+            <FaDatabase /> Respaldo
+          </a>
         </nav>
       </aside>
 
       <main className="admin-main">
         {location.pathname === "/admin" && (
           <>
-                  {/* Botón de temas */}
-        <div className="tema-icon">
-          <button onClick={() => setShowCustomizer(!showCustomizer)}>
-            <FaPalette size={22} />
-          </button>
-          {showCustomizer && (
-            <div className="tema-menu desplegado">
-              <h4>Seleccionar tema</h4>
-              <button onClick={() => changeTheme("light")}>Claro</button>
-              <button onClick={() => changeTheme("dark")}>Oscuro</button>
-              <button onClick={() => changeTheme("blue")}>Azul</button>
-              <button onClick={() => changeTheme("green")}>Verde</button>
-
-              <h4>Personalizar</h4>
-              <label>Fondo: <input type="color" name="--bg-color" onChange={handleCustomTheme} /></label>
-              <label>Texto: <input type="color" name="--text-color" onChange={handleCustomTheme} /></label>
-              <label>Tarjeta: <input type="color" name="--card-bg" onChange={handleCustomTheme} /></label>
-              <label>Borde tarjeta: <input type="color" name="--card-border" onChange={handleCustomTheme} /></label>
-              <label>Enlaces: <input type="color" name="--link-color" onChange={handleCustomTheme} /></label>
-              <label>Hover enlaces: <input type="color" name="--link-hover" onChange={handleCustomTheme} /></label>
+            <div className="tema-icon">
+              <button onClick={() => setShowCustomizer(!showCustomizer)}>
+                <FaPalette size={22} />
+              </button>
+              {showCustomizer && (
+                <div className="tema-menu desplegado">
+                  <h4>Seleccionar tema</h4>
+                  <button onClick={() => changeTheme("light")}>Claro</button>
+                  <button onClick={() => changeTheme("dark")}>Oscuro</button>
+                  <button onClick={() => changeTheme("blue")}>Azul</button>
+                  <button onClick={() => changeTheme("green")}>Verde</button>
+                  <h4>Personalizar</h4>
+                  <label>Fondo: <input type="color" name="--bg-color" onChange={handleCustomTheme} /></label>
+                  <label>Texto: <input type="color" name="--text-color" onChange={handleCustomTheme} /></label>
+                  <label>Tarjeta: <input type="color" name="--card-bg" onChange={handleCustomTheme} /></label>
+                  <label>Borde tarjeta: <input type="color" name="--card-border" onChange={handleCustomTheme} /></label>
+                  <label>Enlaces: <input type="color" name="--link-color" onChange={handleCustomTheme} /></label>
+                  <label>Hover enlaces: <input type="color" name="--link-hover" onChange={handleCustomTheme} /></label>
+                </div>
+              )}
             </div>
-          )}
-        </div>
             <h2 className="dashboard-title">Estadísticas de la plataforma</h2>
+            <p className="dashboard-welcome">
+              Bienvenido, {user?.nombre}. Aquí puedes visualizar el estado actual de la plataforma.
+            </p>
             <section className="dashboard-cards">
               <div className="card kpi-card">
                 <h4>Usuarios registrados</h4>
@@ -186,22 +219,34 @@ function PrincipalAdmin() {
                 <p>{estadisticas.cursos_creados}</p>
               </div>
             </section>
-            <section className="dashboard-charts">
-              <div className="chart-box">
-                <h4>Distribución general</h4>
-                <Bar data={barData} />
-              </div>
-              <div className="chart-box">
-                <h4>Proporción</h4>
-                <Pie data={pieData} />
-              </div>
-            </section>
-          </>
-        )}
-        <Outlet />
-      </main>
-    </div>
-  );
+            <section className="dashboard-recent">
+  <h4>Actividad reciente</h4>
+  <ul>
+    {cursosRecientes.map(curso => (
+      <li key={curso.id}>Curso agregado: {curso.nombre}</li>
+    ))}
+    {usuariosRecientes.map(usuario => (
+      <li key={usuario.id}>Nuevo usuario: {usuario.email}</li>
+    ))}
+  </ul>
+</section>
+
+<section className="dashboard-charts">
+  <div className="chart-box">
+    <h4>Distribución general</h4>
+    <Bar data={barData} />
+  </div>
+  <div className="chart-box">
+    <h4>Proporción</h4>
+    <Pie data={pieData} />
+  </div>
+</section>
+</>
+)}
+<Outlet />
+</main>
+</div>
+);
 }
 
 export default PrincipalAdmin;
