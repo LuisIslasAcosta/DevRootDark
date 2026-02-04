@@ -4,23 +4,23 @@ import axios from "axios";
 import '../styles/AdminVistas.css';
 import { Link } from "react-router-dom";
 
-function AdminCursos() {
-  const usuario = JSON.parse(localStorage.getItem("usuario")); // 👈 usuario autenticado
+function ProfesorCursos() {
   const [cursos, setCursos] = useState([]);
   const [nuevoCurso, setNuevoCurso] = useState({
     nombre: "",
     descripcion: "",
-    profesor_id: usuario ? usuario.id : "", // 👈 se autocompleta
     imagenes: [],
     videos: []
   });
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  // 🔹 Cargar solo los cursos del profesor autenticado
   const cargarCursos = () => {
-    fetch("http://127.0.0.1:5000/api/cursos")
-      .then(res => res.json())
-      .then(data => setCursos(data))
-      .catch(err => console.error("Error al cargar cursos:", err));
+    axios.get("http://127.0.0.1:5000/api/mis_cursos", {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
+    .then(res => setCursos(res.data))
+    .catch(err => console.error("Error al cargar cursos:", err));
   };
 
   useEffect(() => {
@@ -28,15 +28,14 @@ function AdminCursos() {
   }, []);
 
   const crearCurso = () => {
-    if (!nuevoCurso.nombre || !nuevoCurso.profesor_id) {
-      alert("Nombre y profesor son obligatorios");
+    if (!nuevoCurso.nombre) {
+      alert("El nombre del curso es obligatorio");
       return;
     }
 
     const formData = new FormData();
     formData.append("nombre", nuevoCurso.nombre);
     formData.append("descripcion", nuevoCurso.descripcion);
-    formData.append("profesor", nuevoCurso.profesor_id); // 👈 se envía automáticamente
 
     nuevoCurso.imagenes.forEach(img => {
       formData.append("imagenes", img);
@@ -48,7 +47,7 @@ function AdminCursos() {
 
     axios.post("http://127.0.0.1:5000/api/cursos", formData, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}` // 👈 JWT
+        Authorization: `Bearer ${localStorage.getItem("token")}`
       },
       onUploadProgress: (progressEvent) => {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -58,18 +57,19 @@ function AdminCursos() {
     .then(() => {
       alert("Curso creado correctamente");
       setUploadProgress(0);
-      cargarCursos();
+      cargarCursos(); // 👈 recarga solo los cursos del profesor
     })
     .catch(err => console.error("Error al crear curso:", err));
   };
 
   const eliminarCurso = (id) => {
     const confirmar = window.confirm("¿Estás seguro de que quieres eliminar este curso?");
-    if (!confirmar) {
-      return; // 👈 si el usuario cancela, no se elimina
-    }
+    if (!confirmar) return;
 
-    fetch(`http://127.0.0.1:5000/api/cursos/${id}`, { method: "DELETE" })
+    fetch(`http://127.0.0.1:5000/api/cursos/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
       .then(res => res.json())
       .then(() => {
         alert("Curso eliminado");
@@ -80,7 +80,7 @@ function AdminCursos() {
 
   return (
     <div className="admin-section">
-      <h2>Gestión de Cursos</h2>
+      <h2>Mis Cursos</h2>
       <Form className="mb-4">
         <Form.Group className="mb-2">
           <Form.Label>Nombre</Form.Label>
@@ -98,7 +98,6 @@ function AdminCursos() {
             onChange={e => setNuevoCurso({ ...nuevoCurso, descripcion: e.target.value })}
           />
         </Form.Group>
-        {/* 👇 Eliminamos el campo de Profesor ID */}
         <Form.Group className="mb-2">
           <Form.Label>Imágenes</Form.Label>
           <Form.Control
@@ -126,12 +125,12 @@ function AdminCursos() {
         </div>
       )}
 
-      <h3>Cursos existentes</h3>
+      <h3>Mis cursos existentes</h3>
       <Table striped bordered hover className="admin-table">
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Profesor</th> {/* 👈 CAMBIO: antes decía "Profesor ID" */}
+            <th>Profesor</th>
             <th>Imágenes</th>
             <th>Videos</th>
             <th>Acciones</th>
@@ -141,7 +140,7 @@ function AdminCursos() {
           {cursos.map((curso, index) => (
             <tr key={curso.id || index}>
               <td>{curso.nombre}</td>
-              <td>{curso.profesor}</td> {/* 👈 ya es el nombre */}
+              <td>{curso.profesor}</td>
               <td>
                 {curso.imagenes && curso.imagenes.map((img, i) => (
                   <img
@@ -166,7 +165,7 @@ function AdminCursos() {
                 ))}
               </td>
               <td>
-                <Link to={`/admin/curso/${curso.id}`}>
+                <Link to={`/profesor/curso/${curso.id}`}>
                   <Button variant="info" style={{ marginRight: "5px" }}>
                     Ver
                   </Button>
@@ -186,4 +185,4 @@ function AdminCursos() {
   );
 }
 
-export default AdminCursos;
+export default ProfesorCursos;

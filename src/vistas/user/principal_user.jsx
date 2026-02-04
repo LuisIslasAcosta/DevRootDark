@@ -112,7 +112,6 @@ function PrincipalUser() {
                 <span>{curso.descripcion}</span><br />
                 {curso.duracion && <p><b>Duración:</b> {curso.duracion}</p>}
                 {curso.profesor && <p><b>Profesor:</b> {curso.profesor}</p>}
-                {curso.fecha_inicio && <p><b>Fecha de inicio:</b> {curso.fecha_inicio}</p>}
                 <Link to={`/cursos/${curso.id}`} className="curso-link">Ver más</Link>
               </li>
             ))

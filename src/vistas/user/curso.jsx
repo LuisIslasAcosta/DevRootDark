@@ -41,8 +41,6 @@ function Cursos() {
         <p><b>Descripción:</b> {curso.descripcion}</p>
         {curso.duracion && <p><b>Duración:</b> {curso.duracion}</p>}
         {curso.profesor && <p><b>Profesor:</b> {curso.profesor}</p>}
-        {curso.fecha_inicio && <p><b>Fecha de inicio:</b> {curso.fecha_inicio}</p>}
-        {curso.fecha_fin && <p><b>Fecha de fin:</b> {curso.fecha_fin}</p>}
 
         {/* Mostrar imágenes */}
         {curso.imagenes && curso.imagenes.length > 0 && (

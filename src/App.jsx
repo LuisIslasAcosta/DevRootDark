@@ -12,9 +12,15 @@ import AdminUsuarios from './vistas/admin/AdminUsuarios';
 import EditarPerfil from './vistas/editar';
 import Respaldo from './vistas/admin/Respaldo';
 import CursoDetalle from './vistas/admin/CursoDetalle';
+import Examenes from './vistas/profesor/Examenes';
+import ProfesorPanel from './vistas/profesor/ProfesorPanel';
+import Inscripciones from './vistas/profesor/Insripciones';
+import ProfesorCursos from './vistas/profesor/CursosProfesor';
+import EditarCursoProfesor from './vistas/profesor/EditarCursoProfesor';
 
 import ProtectedRoute from './RutasProtegidas/ProtectedRoute';
 import AdminRoute from './RutasProtegidas/AdminRoute';
+import ProfesorRoute from './RutasProtegidas/ProfesorRoute';
 
 function App() {
   return (
@@ -51,6 +57,13 @@ function App() {
           <Route path="respaldo" element={<Respaldo />} />
           <Route path='editar-perfil' element={<EditarPerfil />} />
           <Route path="curso/:id" element={<CursoDetalle />} />
+        </Route>
+        <Route path="/profesor" element={<ProfesorRoute><ProfesorPanel /></ProfesorRoute>}>
+          <Route path="examenes" element={<Examenes />} />
+          <Route path="inscripciones" element={<Inscripciones />} />
+          <Route path="cursos" element={<ProfesorCursos />} />
+          <Route path="cursos/:id/editar" element={<EditarCursoProfesor />} />
+          <Route path='editar-perfil' element={<EditarPerfil />} />
         </Route>
       </Routes>
     </Router>

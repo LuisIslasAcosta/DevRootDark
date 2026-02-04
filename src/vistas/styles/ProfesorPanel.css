@@ -1,0 +1,103 @@
+.profesor-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-color, #f9f9f9);
+  color: var(--text-color, #333);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profesor-sidebar {
+  width: 250px;
+  background-color: var(--card-bg, #2c3e50);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.profesor-top {
+  margin-bottom: 20px;
+}
+
+.profile {
+  text-align: center;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--card-border, #fff);
+  object-fit: cover;
+}
+
+.profile-name {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.profile-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-btn,
+.logout-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.edit-btn:hover,
+.logout-btn:hover {
+  color: var(--link-hover, #ffc107);
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.profesor-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profesor-link {
+  color: var(--link-color, #fff);
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profesor-link:hover {
+  background-color: var(--link-hover, #34495e);
+}
+
+.profesor-main {
+  flex: 1;
+  padding: 20px;
+}
+
+.dashboard-title {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.table {
+  background-color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
