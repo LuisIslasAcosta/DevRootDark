@@ -45,6 +45,8 @@ const Login = () => {
         // 🔹 Redirigir según rol
         if (response.data.usuario.rol === "administrador") {
           navigate("/admin");
+        } else if (response.data.usuario.rol === "profesor") {
+          navigate("/profesor");
         } else {
           navigate("/principal");
         }
