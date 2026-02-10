@@ -1,0 +1,234 @@
+/* === Publicidad de Cursos Recientes === */
+
+.cursos-recientes {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.cursos-recientes h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+}
+
+/* === Tarjetas de cursos === */
+.cards-recientes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.card-publicidad {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 14px;
+  width: 280px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-publicidad:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+}
+
+.card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+}
+
+.card-body {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-body h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.card-body p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.btn-publicidad {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: var(--link-color);
+  color: var(--bg-color);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-publicidad:hover {
+  background: var(--link-hover);
+  color: var(--bg-color);
+}
+
+/* === Banner estilo anuncio === */
+.banners-recientes {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.banner-publicidad {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+  border: 2px solid var(--card-border);
+}
+
+.banner-left {
+  flex: 1;
+  background: var(--link-color);
+  color: var(--bg-color);
+  padding: 1rem;
+}
+
+.banner-left h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.banner-left p {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.banner-center {
+  flex: 2;
+  background: var(--card-bg);
+  color: var(--text-color);
+  text-align: center;
+  padding: 1rem;
+}
+
+.banner-oferta {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.banner-detalle {
+  display: block;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+.banner-right {
+  flex: 1;
+  background: var(--card-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.btn-banner {
+  background: var(--link-color);
+  color: var(--bg-color);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-banner:hover {
+  background: var(--link-hover);
+  color: var(--bg-color);
+}
+
+/* === Galería/Carrusel horizontal === */
+.carrusel-recientes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.carrusel-btn {
+  background: var(--link-color);
+  color: var(--bg-color);
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.carrusel-btn:hover {
+  background: var(--link-hover);
+}
+
+.carrusel-item {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+  width: 15cm;   /* ancho fijo */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.carrusel-img {
+  width: 100%;
+  max-width: 15cm;
+  height: 5cm;   /* alto fijo */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.carrusel-body {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.carrusel-body h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.carrusel-body p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.btn-carrusel {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: var(--link-color);
+  color: var(--bg-color);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn-carrusel:hover {
+  background: var(--link-hover);
+}

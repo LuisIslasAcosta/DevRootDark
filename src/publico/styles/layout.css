@@ -1,0 +1,23 @@
+/* === Layout Base === */
+.Cuerpo-completo {
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+:root {
+  --nav-h: 115px;
+}
+.nav {
+  height: var(--nav-h);
+}
+
+.nav-spacer {
+  height: var(--nav-h);
+}

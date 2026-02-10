@@ -154,10 +154,10 @@ function PrincipalAdmin() {
               />
               <span className="profile-name">{user.nombre}</span>
               <div className="profile-actions">
-                <button className="edit-btn" onClick={() => navigate("/admin/editar-perfil")}>
+                <button className="edit-bt" onClick={() => navigate("/admin/editar-perfil")}>
                   <FaUserEdit /> Editar
                 </button>
-                <button className="logout-btn" onClick={handleLogout}>
+                <button className="logout" onClick={handleLogout}>
                   <FaSignOutAlt /> Logout
                 </button>
               </div>

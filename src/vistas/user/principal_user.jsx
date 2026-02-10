@@ -1,39 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import '../styles/principaluser.css';
-import '../../temas/temas.css';
+import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
+import axios from "axios";
+import {
+  FaSignOutAlt,
+  FaPalette,
+  FaHome,
+  FaBookOpen,
+  FaUser
+} from "react-icons/fa";
 
-function PrincipalUser() {
-  const [cursos, setCursos] = useState([]);
+import "../styles/principaluser.css";
+import "../../temas/temas.css";
+
+function PrincipalAlumno() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
   const [showCustomizer, setShowCustomizer] = useState(false);
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
+  const [user, setUser] = useState(() => {
+    const usuarioGuardado = localStorage.getItem("usuario");
+    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
+  });
+
+  const [cursos, setCursos] = useState([]);
+  const [inscripciones, setInscripciones] = useState([]);
+
+  useEffect(() => {
+    const syncUser = () => {
+      const usuarioActualizado = localStorage.getItem("usuario");
+      if (usuarioActualizado) setUser(JSON.parse(usuarioActualizado));
+    };
+    syncUser();
+    window.addEventListener("storage", syncUser);
+    return () => window.removeEventListener("storage", syncUser);
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-
-    fetch('http://127.0.0.1:5000/api/cursos')
-      .then(res => res.json())
-      .then(data => setCursos(data))
-      .catch(err => console.error("Error al cargar cursos:", err));
   }, [theme]);
 
   const changeTheme = (newTheme) => {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-
-    // limpiar variables personalizadas al cambiar de tema
-    const customVars = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
-    customVars.forEach((variable) => {
-      document.documentElement.style.removeProperty(variable);
-      localStorage.removeItem(variable);
-    });
   };
 
   const handleCustomTheme = (e) => {
@@ -43,85 +53,170 @@ function PrincipalUser() {
   };
 
   useEffect(() => {
-    const customVars = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
-    customVars.forEach((variable) => {
-      const savedValue = localStorage.getItem(variable);
-      if (savedValue) {
-        document.documentElement.style.setProperty(variable, savedValue);
-      }
-    });
-  }, []);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    axios.get("http://127.0.0.1:5000/api/cursos", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => setCursos(res.data))
+      .catch(() => navigate("/login"));
+
+    if (user) {
+      axios.get(`http://127.0.0.1:5000/api/inscripciones/alumno/${user.id}`)
+        .then(res => setInscripciones(res.data.map(i => i.curso_id)));
+    }
+  }, [navigate, user]);
+
+  const inscribirse = async (cursoId) => {
+    if (!user) return alert("Usuario no encontrado");
+
+    try {
+      await axios.post("http://127.0.0.1:5000/api/inscripciones", {
+        curso_id: cursoId,
+        alumno_id: user.id
+      });
+      alert("Inscripción realizada");
+      setInscripciones(prev => [...prev, cursoId]);
+    } catch {
+      alert("Error al inscribirse");
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
   return (
-    <div className='Cuerpo-completo'>
-      <header className="admin-header">
-        <div className="brand">Plataforma de Cursos en Línea</div>
-        <nav className="admin-nav">
-          <Link className="admin-link" to="/principal">Inicio</Link>
-        </nav>
-        <div className="tema-dropdown">
-          <button onClick={() => setShowCustomizer(!showCustomizer)}>Temas</button>
-          {showCustomizer && (
-            <div className="tema-menu">
-              <h4>Seleccionar tema</h4>
-              <button onClick={() => changeTheme("light")}>Claro</button>
-              <button onClick={() => changeTheme("dark")}>Oscuro</button>
-              <button onClick={() => changeTheme("blue")}>Azul</button>
-              <button onClick={() => changeTheme("green")}>Verde</button>
+    <div className="dashboard-layout">
 
-              <h4>Personalizar</h4>
-              <label>
-                Fondo:
-                <input type="color" name="--bg-color" onChange={handleCustomTheme} />
-              </label>
-              <label>
-                Texto:
-                <input type="color" name="--text-color" onChange={handleCustomTheme} />
-              </label>
-              <label>
-                Tarjeta:
-                <input type="color" name="--card-bg" onChange={handleCustomTheme} />
-              </label>
-              <label>
-                Borde tarjeta:
-                <input type="color" name="--card-border" onChange={handleCustomTheme} />
-              </label>
-              <label>
-                Enlaces:
-                <input type="color" name="--link-color" onChange={handleCustomTheme} />
-              </label>
-              <label>
-                Hover enlaces:
-                <input type="color" name="--link-hover" onChange={handleCustomTheme} />
-              </label>
-            </div>
-          )}
+      {/* SIDEBAR */}
+      <aside className="dashboard-sidebar">
+        <div className="sidebar-profile">
+          <img
+            src={user?.foto_perfil
+              ? (user.foto_perfil.startsWith("data:image")
+                ? user.foto_perfil
+                : `data:image/png;base64,${user.foto_perfil}`)
+              : "/default-avatar.png"}
+            alt="Perfil"
+            className="profile-pic"
+          />
+          <h5>{user?.nombre}</h5>
+
+          <button onClick={() => navigate("/alumno/perfil")} className="theme-btn icon-btn">
+            <FaUser />
+          </button>
         </div>
-        <button className="admin-button" onClick={handleLogout}>Logout</button>
-      </header>
 
-      <Container className="cursos-1">
-        <h2>Todos los cursos disponibles</h2>
-        <p>Información completa de cada curso:</p>
+        <h4 className="sidebar-brand">Panel del Alumno</h4>
 
-        <ul className="cursos-completos">
-          {cursos.length > 0 ? (
-            cursos.map((curso) => (
-              <li key={curso.id} className="curso-item">
-                <strong>{curso.nombre}</strong><br />
-                <span>{curso.descripcion}</span><br />
-                {curso.duracion && <p><b>Duración:</b> {curso.duracion}</p>}
-                {curso.profesor && <p><b>Profesor:</b> {curso.profesor}</p>}
-                <Link to={`/cursos/${curso.id}`} className="curso-link">Ver más</Link>
-              </li>
-            ))
-          ) : (
-            <p>No hay cursos disponibles en este momento.</p>
-          )}
-        </ul>
-      </Container>
+        <nav className="sidebar-nav">
+          <button onClick={() => navigate("/principal")}>
+            <FaHome /> Inicio
+          </button>
+          <button onClick={() => navigate("/principal/alumno/mis-cursos")}>
+            <FaBookOpen /> Mis Cursos
+          </button>
+        </nav>
+
+        <div className="sidebar-profile">
+          <button onClick={handleLogout} className="logout-btn">
+            <FaSignOutAlt /> Salir
+          </button>
+        </div>
+      </aside>
+
+      {/* MAIN */}
+      <main className="dashboard-main">
+
+        {/* TOPBAR */}
+        <div className="dashboard-topbar">
+          <div>
+            <h2>Bienvenido, {user?.nombre}</h2>
+            <p>Explora todos los cursos y inscríbete</p>
+          </div>
+
+          <div className="tema-dropdown">
+            <button onClick={() => setShowCustomizer(!showCustomizer)}>
+              <FaPalette />
+            </button>
+
+            {showCustomizer && (
+              <div className="tema-menu">
+                <button onClick={() => changeTheme("light")}>Claro</button>
+                <button onClick={() => changeTheme("dark")}>Oscuro</button>
+                <button onClick={() => changeTheme("blue")}>Azul</button>
+                <button onClick={() => changeTheme("green")}>Verde</button>
+
+                <label>Fondo <input type="color" name="--bg-color" onChange={handleCustomTheme} /></label>
+                <label>Texto <input type="color" name="--text-color" onChange={handleCustomTheme} /></label>
+                <label>Tarjeta <input type="color" name="--card-bg" onChange={handleCustomTheme} /></label>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* LISTA DE CURSOS */}
+        {location.pathname === "/principal" && (
+          <div className="file-grid">
+            {cursos.map(curso => (
+              <div key={curso.id} className="curso-form-card">
+
+                {curso.imagenes?.map((img, i) => (
+                  <img
+                    key={i}
+                    src={`http://127.0.0.1:5000/api/uploads/imagenes/${img}`}
+                    className="curso-thumb"
+                  />
+                ))}
+
+                <h3>{curso.nombre}</h3>
+                <p>{curso.descripcion}</p>
+
+                {inscripciones.includes(curso.id) ? (
+                  <button className="btn-modern" disabled>Inscrito</button>
+                ) : (
+                  <button className="btn-modern" onClick={() => inscribirse(curso.id)}>
+                    Inscribirse
+                  </button>
+                )}
+
+                <Link to={`/principal/cursos/${curso.id}`} className="btn-modern">
+                  Ver Curso
+                </Link>
+
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* MIS CURSOS */}
+        {location.pathname === "/alumno/cursos" && (
+          <div className="file-grid">
+            {cursos.filter(c => inscripciones.includes(c.id)).map(curso => (
+              <div key={curso.id} className="curso-form-card">
+                <h3>{curso.nombre}</h3>
+                <p>{curso.descripcion}</p>
+                <button className="btn-modern" disabled>Inscrito</button>
+                <Link to={`/cursos/${curso.id}`} className="btn-modern">
+                  Ver Curso
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* AQUÍ SE CARGA CURSO DETALLE */}
+        <Outlet />
+
+      </main>
     </div>
   );
 }
 
-export default PrincipalUser;
+export default PrincipalAlumno;

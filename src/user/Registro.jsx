@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { registrarUsuario } from "../service/api";
 import { Link } from "react-router-dom";
-import "./styles/registro.css";
+import "./styles/login.css"; // 👈 usamos login.css en lugar de registro.css
 
 const Registro = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const Registro = () => {
 
   const [mensaje, setMensaje] = useState("");
 
-  const [theme, ] = useState(() => localStorage.getItem("theme") || "light");
+  const [theme] = useState(() => localStorage.getItem("theme") || "light");
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -48,8 +48,8 @@ const Registro = () => {
   };
 
   return (
-    <div className="registro-container">
-      <div className="registro-box">
+    <div className="login-container">
+      <div className="login-box">
         <h2>Registro de Usuario</h2>
         <form onSubmit={handleSubmit}>
           <input type="text" name="nombre" placeholder="Nombre" onChange={handleChange} required />
@@ -66,11 +66,11 @@ const Registro = () => {
           <input type="text" name="respuesta_seguridad" placeholder="Respuesta de seguridad" onChange={handleChange} required />
           <input type="tel" name="telefono" placeholder="Teléfono" onChange={handleChange} />
 
-          <button type="submit">Registrar</button>
+          <button type="submit" className="btn-primary">Registrar</button>
         </form>
         <br />
-      <Link to="/"> <button>Regresar a la página principal</button></Link>
-        {mensaje && <p>{mensaje}</p>}
+        <Link to="/"><button>Regresar a la página principal</button></Link>
+        {mensaje && <p className="mensaje">{mensaje}</p>}
         <Link to={`/login`} className="curso-link">¿Ya tienes cuenta?</Link>
       </div>
     </div>

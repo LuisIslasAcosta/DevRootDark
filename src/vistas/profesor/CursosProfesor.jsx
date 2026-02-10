@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Form, ProgressBar } from "react-bootstrap";
 import axios from "axios";
-import '../styles/AdminVistas.css';
 import { Link } from "react-router-dom";
+import "../styles/CursosExistentes.css";
 
 function ProfesorCursos() {
   const [cursos, setCursos] = useState([]);
@@ -46,9 +45,7 @@ function ProfesorCursos() {
     });
 
     axios.post("http://127.0.0.1:5000/api/cursos", formData, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       onUploadProgress: (progressEvent) => {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
         setUploadProgress(percentCompleted);
@@ -57,7 +54,7 @@ function ProfesorCursos() {
     .then(() => {
       alert("Curso creado correctamente");
       setUploadProgress(0);
-      cargarCursos(); // 👈 recarga solo los cursos del profesor
+      cargarCursos();
     })
     .catch(err => console.error("Error al crear curso:", err));
   };
@@ -81,52 +78,57 @@ function ProfesorCursos() {
   return (
     <div className="admin-section">
       <h2>Mis Cursos</h2>
-      <Form className="mb-4">
-        <Form.Group className="mb-2">
-          <Form.Label>Nombre</Form.Label>
-          <Form.Control
+
+      <form className="curso-form" onSubmit={e => e.preventDefault()}>
+        <div className="form-group">
+          <label>Nombre</label>
+          <input
             type="text"
             value={nuevoCurso.nombre}
             onChange={e => setNuevoCurso({ ...nuevoCurso, nombre: e.target.value })}
           />
-        </Form.Group>
-        <Form.Group className="mb-2">
-          <Form.Label>Descripción</Form.Label>
-          <Form.Control
+        </div>
+        <div className="form-group">
+          <label>Descripción</label>
+          <input
             type="text"
             value={nuevoCurso.descripcion}
             onChange={e => setNuevoCurso({ ...nuevoCurso, descripcion: e.target.value })}
           />
-        </Form.Group>
-        <Form.Group className="mb-2">
-          <Form.Label>Imágenes</Form.Label>
-          <Form.Control
+        </div>
+        <div className="form-group">
+          <label>Imágenes</label>
+          <input
             type="file"
             accept="image/*"
             multiple
             onChange={e => setNuevoCurso({ ...nuevoCurso, imagenes: Array.from(e.target.files) })}
           />
-        </Form.Group>
-        <Form.Group className="mb-2">
-          <Form.Label>Videos</Form.Label>
-          <Form.Control
+        </div>
+        <div className="form-group">
+          <label>Videos</label>
+          <input
             type="file"
             accept="video/*"
             multiple
             onChange={e => setNuevoCurso({ ...nuevoCurso, videos: Array.from(e.target.files) })}
           />
-        </Form.Group>
-        <Button variant="primary" onClick={crearCurso}>Crear Curso</Button>
-      </Form>
+        </div>
+        <button className="custom-btn btn-crear" onClick={crearCurso}>
+          Crear Curso
+        </button>
+      </form>
 
       {uploadProgress > 0 && (
-        <div style={{ marginTop: "15px" }}>
-          <ProgressBar now={uploadProgress} label={`${uploadProgress}%`} />
+        <div className="progress-bar-container">
+          <div className="progress-bar" style={{ width: `${uploadProgress}%` }}>
+            {uploadProgress}%
+          </div>
         </div>
       )}
 
       <h3>Mis cursos existentes</h3>
-      <Table striped bordered hover className="admin-table">
+      <table className="admin-table">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -147,7 +149,7 @@ function ProfesorCursos() {
                     key={i}
                     src={`http://127.0.0.1:5000/api/uploads/imagenes/${img}`}
                     alt={`Imagen ${i+1} del curso ${curso.nombre}`}
-                    style={{ width: "80px", marginRight: "5px" }}
+                    className="curso-img"
                   />
                 ))}
               </td>
@@ -157,8 +159,7 @@ function ProfesorCursos() {
                     key={i}
                     src={`http://127.0.0.1:5000/api/uploads/videos/${vid}`}
                     controls
-                    width="150"
-                    style={{ marginRight: "5px" }}
+                    className="curso-video"
                   >
                     Tu navegador no soporta video
                   </video>
@@ -166,21 +167,20 @@ function ProfesorCursos() {
               </td>
               <td>
                 <Link to={`/profesor/curso/${curso.id}`}>
-                  <Button variant="info" style={{ marginRight: "5px" }}>
-                    Ver
-                  </Button>
+                  <button className="custom-btn btn-ver">Ver</button>
                 </Link>
-                <Button
-                  variant="danger"
+                <button
+                  className="custom-btn btn-eliminar"
                   onClick={() => eliminarCurso(curso.id)}
+                  style={{ marginLeft: "5px" }}
                 >
                   Eliminar
-                </Button>
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

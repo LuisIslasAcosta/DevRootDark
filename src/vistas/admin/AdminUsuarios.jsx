@@ -20,7 +20,7 @@ function AdminUsuarios() {
       .then((res) => res.json())
       .then(() => {
         alert("Usuario eliminado");
-        setUsuarios((prev) => prev.filter((u) => u._id !== id));
+        setUsuarios((prev) => prev.filter((u) => u.id !== id));
       })
       .catch((err) => console.error("Error al eliminar usuario:", err));
   };
@@ -32,14 +32,29 @@ function AdminUsuarios() {
   };
 
   const actualizarUsuario = () => {
-    fetch(`http://127.0.0.1:5000/api/usuarios/${usuarioSeleccionado._id}`, {
+    const datosActualizados = {};
+    if (formData.rol && formData.rol !== usuarioSeleccionado.rol) {
+      datosActualizados.rol = formData.rol;
+    }
+    if (formData.password && formData.password.trim() !== "") {
+      datosActualizados.password = formData.password;
+    }
+
+    fetch(`http://127.0.0.1:5000/api/usuarios/${usuarioSeleccionado.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(datosActualizados),
     })
       .then((res) => res.json())
       .then(() => {
         alert("Usuario actualizado");
+        setUsuarios((prev) =>
+          prev.map((u) =>
+            u.id === usuarioSeleccionado.id
+              ? { ...u, ...datosActualizados }
+              : u
+          )
+        );
         setShowModal(false);
       })
       .catch((err) => console.error("Error al actualizar usuario:", err));
@@ -52,6 +67,8 @@ function AdminUsuarios() {
         <thead>
           <tr>
             <th>Nombre</th>
+            <th>Apellido Paterno</th>
+            <th>Apellido Materno</th>
             <th>Email</th>
             <th>Rol</th>
             <th>Acciones</th>
@@ -59,8 +76,10 @@ function AdminUsuarios() {
         </thead>
         <tbody>
           {usuarios.map((usuario) => (
-            <tr key={usuario._id}>
+            <tr key={usuario.id}>
               <td>{usuario.nombre}</td>
+              <td>{usuario.apellidop}</td>
+              <td>{usuario.apellidom}</td>
               <td>{usuario.email}</td>
               <td>{usuario.rol}</td>
               <td>
@@ -72,7 +91,7 @@ function AdminUsuarios() {
                 </Button>{" "}
                 <Button
                   variant="danger"
-                  onClick={() => eliminarUsuario(usuario._id)}
+                  onClick={() => eliminarUsuario(usuario.id)}
                 >
                   Eliminar
                 </Button>
@@ -82,15 +101,25 @@ function AdminUsuarios() {
         </tbody>
       </Table>
 
-      {/* Modal para edición */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Editar Usuario</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {usuarioSeleccionado && (
+            <>
+              <p>
+                <strong>Nombre:</strong> {usuarioSeleccionado.nombre}{" "}
+                {usuarioSeleccionado.apellidop} {usuarioSeleccionado.apellidom}
+              </p>
+              <p>
+                <strong>Rol actual:</strong> {usuarioSeleccionado.rol}
+              </p>
+            </>
+          )}
           <Form>
             <Form.Group>
-              <Form.Label>Rol</Form.Label>
+              <Form.Label>Nuevo Rol</Form.Label>
               <Form.Select
                 value={formData.rol}
                 onChange={(e) =>
@@ -99,6 +128,7 @@ function AdminUsuarios() {
               >
                 <option value="usuario">Usuario</option>
                 <option value="administrador">Administrador</option>
+                <option value="profesor">Profesor</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className="mt-3">

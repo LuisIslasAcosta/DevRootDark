@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/EditarCursoProfesor.css"; 
 
 function EditarCursoProfesor() {
-  const { id } = useParams(); // id del curso desde la URL
+  const { id } = useParams(); 
   const navigate = useNavigate();
 
   const [curso, setCurso] = useState({
@@ -11,10 +12,9 @@ function EditarCursoProfesor() {
     descripcion: "",
     imagenes: [],
     videos: [],
-    profesor: "" // 👈 añadimos profesor
+    profesor: ""
   });
 
-  // Cargar datos del curso
   useEffect(() => {
     axios.get(`http://127.0.0.1:5000/api/cursos/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -22,7 +22,6 @@ function EditarCursoProfesor() {
     .then(res => {
       const cursoRecibido = res.data;
       const usuario = JSON.parse(localStorage.getItem("usuario"));
-      // 👇 aseguramos que el curso mantenga el profesor correcto
       setCurso({ ...cursoRecibido, profesor: usuario.id });
     })
     .catch(err => console.error("Error al cargar curso:", err));
@@ -40,34 +39,40 @@ function EditarCursoProfesor() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       alert("Curso actualizado correctamente ✅");
-      navigate("/profesor/cursos"); // regresa a la lista de cursos
+      navigate("/profesor/cursos");
     } catch (err) {
-      console.error("Error al actualizar curso:", err); // 👈 usamos la variable
+      console.error("Error al actualizar curso:", err);
       alert("Error al actualizar curso ❌");
     }
   };
 
   return (
-    <div>
+    <div className="editar-section">
       <h2>Editar Curso</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Nombre</label>
-        <input
-          type="text"
-          name="nombre"
-          value={curso.nombre}
-          onChange={handleChange}
-        />
-
-        <label>Descripción</label>
-        <input
-          type="text"
-          name="descripcion"
-          value={curso.descripcion}
-          onChange={handleChange}
-        />
-
-        <button type="submit">Guardar cambios</button>
+      <form className="editar-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Nombre</label>
+          <input
+            type="text"
+            name="nombre"
+            value={curso.nombre}
+            onChange={handleChange}
+          />
+        </div>
+        <br />
+        <div className="form-group">
+          <label>Descripción</label>
+          <input
+            type="text"
+            name="descripcion"
+            value={curso.descripcion}
+            onChange={handleChange}
+          />
+        </div>
+        <br /><br />
+        <button type="submit" className="custom-btn btn-guardar">
+          Guardar cambios
+        </button>
       </form>
     </div>
   );
