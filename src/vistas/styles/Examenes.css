@@ -1,0 +1,88 @@
+.examenes-panel {
+  width: 100%;
+  max-width: 100%;
+  padding: 28px;
+  color: var(--text-color);
+}
+
+/* Header */
+.examenes-header {
+  margin-bottom: 22px;
+}
+
+.examenes-header h2 {
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.examenes-header p {
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+/* Table Card */
+.examenes-table-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+/* Table */
+.examenes-table {
+  color: var(--text-color);
+  margin-top: 4px;
+}
+
+.examenes-table thead {
+  background: rgba(0,0,0,0.05);
+}
+
+.examenes-table th {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+/* Text emphasis */
+.curso-name {
+  font-weight: 600;
+}
+
+.exam-title {
+  font-weight: 500;
+}
+
+/* Empty */
+.empty-row {
+  text-align: center;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* Actions */
+.actions-col {
+  width: 120px;
+}
+
+.actions-cell {
+  display: flex;
+  justify-content: center;
+}
+
+/* Button delete */
+.btn-delete {
+  background: #dc2626;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 10px;
+  color: white;
+  font-size: 13px;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.btn-delete:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}

@@ -96,3 +96,49 @@
   margin-bottom: 20px;
   color: green;
 }
+
+.tabla-respaldos {
+  width: 100%;
+  border-collapse: collapse; /* Hace que las líneas sean continuas */
+  margin-top: 10px;
+}
+
+.tabla-respaldos th, .tabla-respaldos td {
+  border: 1px solid #ccc; /* Línea divisoria */
+  padding: 8px;
+  text-align: left;
+}
+
+.tabla-respaldos th {
+  background-color: #f0f0f0;
+}
+
+.tabla-respaldos tr:nth-child(even) {
+  background-color: #fafafa; /* Rayas suaves para mejor visibilidad */
+}
+
+.tabla-respaldos button {
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.mensaje-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mensaje-contenido {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}

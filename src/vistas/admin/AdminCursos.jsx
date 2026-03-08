@@ -5,13 +5,12 @@ import '../styles/AdminVistas.css';
 import { Link } from "react-router-dom";
 
 function AdminCursos() {
+  const usuario = JSON.parse(localStorage.getItem("usuario")); // 👈 usuario autenticado
   const [cursos, setCursos] = useState([]);
   const [nuevoCurso, setNuevoCurso] = useState({
     nombre: "",
     descripcion: "",
-    profesor: "",
-    fecha_inicio: "",
-    fecha_fin: "",
+    profesor_id: usuario ? usuario.id : "", // 👈 se autocompleta
     imagenes: [],
     videos: []
   });
@@ -29,7 +28,7 @@ function AdminCursos() {
   }, []);
 
   const crearCurso = () => {
-    if (!nuevoCurso.nombre || !nuevoCurso.profesor) {
+    if (!nuevoCurso.nombre || !nuevoCurso.profesor_id) {
       alert("Nombre y profesor son obligatorios");
       return;
     }
@@ -37,9 +36,7 @@ function AdminCursos() {
     const formData = new FormData();
     formData.append("nombre", nuevoCurso.nombre);
     formData.append("descripcion", nuevoCurso.descripcion);
-    formData.append("profesor", nuevoCurso.profesor);
-    formData.append("fecha_inicio", nuevoCurso.fecha_inicio);
-    formData.append("fecha_fin", nuevoCurso.fecha_fin);
+    formData.append("profesor", nuevoCurso.profesor_id); // 👈 se envía automáticamente
 
     nuevoCurso.imagenes.forEach(img => {
       formData.append("imagenes", img);
@@ -50,6 +47,9 @@ function AdminCursos() {
     });
 
     axios.post("http://127.0.0.1:5000/api/cursos", formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}` // 👈 JWT
+      },
       onUploadProgress: (progressEvent) => {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
         setUploadProgress(percentCompleted);
@@ -57,13 +57,18 @@ function AdminCursos() {
     })
     .then(() => {
       alert("Curso creado correctamente");
-      setUploadProgress(0); // reinicia barra
+      setUploadProgress(0);
       cargarCursos();
     })
     .catch(err => console.error("Error al crear curso:", err));
   };
 
   const eliminarCurso = (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que quieres eliminar este curso?");
+    if (!confirmar) {
+      return; // 👈 si el usuario cancela, no se elimina
+    }
+
     fetch(`http://127.0.0.1:5000/api/cursos/${id}`, { method: "DELETE" })
       .then(res => res.json())
       .then(() => {
@@ -93,14 +98,7 @@ function AdminCursos() {
             onChange={e => setNuevoCurso({ ...nuevoCurso, descripcion: e.target.value })}
           />
         </Form.Group>
-        <Form.Group className="mb-2">
-          <Form.Label>Profesor</Form.Label>
-          <Form.Control
-            type="text"
-            value={nuevoCurso.profesor}
-            onChange={e => setNuevoCurso({ ...nuevoCurso, profesor: e.target.value })}
-          />
-        </Form.Group>
+        {/* 👇 Eliminamos el campo de Profesor ID */}
         <Form.Group className="mb-2">
           <Form.Label>Imágenes</Form.Label>
           <Form.Control
@@ -133,7 +131,7 @@ function AdminCursos() {
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Profesor</th>
+            <th>Profesor</th> {/* 👈 CAMBIO: antes decía "Profesor ID" */}
             <th>Imágenes</th>
             <th>Videos</th>
             <th>Acciones</th>
@@ -143,7 +141,7 @@ function AdminCursos() {
           {cursos.map((curso, index) => (
             <tr key={curso.id || index}>
               <td>{curso.nombre}</td>
-              <td>{curso.profesor}</td>
+              <td>{curso.profesor}</td> {/* 👈 ya es el nombre */}
               <td>
                 {curso.imagenes && curso.imagenes.map((img, i) => (
                   <img

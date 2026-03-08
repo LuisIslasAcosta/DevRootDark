@@ -1,80 +1,165 @@
-.admin-header {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 15px 30px;
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* SIDEBAR */
+.dashboard-sidebar {
+  width: 220px;
+  background: var(--card-bg);
+  border-right: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.sidebar-profile {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--link-color);
+  margin-bottom: 8px;
+}
+
+.sidebar-brand {
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.sidebar-nav button {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.admin-header .brand {
+  gap: 10px;
+  padding: 10px 12px;
+  width: 100%;
+  background: transparent;
+  border: none;
   color: var(--text-color);
-  font-weight: bold;
-  font-size: 1.4rem;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 6px;
 }
 
-.admin-nav {
+.sidebar-nav button:hover {
+  background: var(--link-color);
+  color: white;
+}
+
+/* LOGOUT */
+.logout-btn {
   display: flex;
-  gap: 20px;
-}
-
-.admin-nav a {
-  color: var(--link-color);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-  cursor: pointer;
-}
-
-.admin-nav a:hover {
-  color: var(--link-hover);
-}
-
-.admin-button {
-  background-color: var(--link-color);
+  align-items: center;
+  gap: 8px;
+  background: #dc2626;
+  color: white;
   border: none;
-  border-radius: 6px;
-  color: #fff;
-  font-size: 1rem;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.admin-button:hover {
-  background-color: var(--link-hover);
-}
-
-.tema-dropdown { position: relative; margin-left: 20px; }
-.tema-dropdown > button {
-  background-color: var(--link-color);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
   padding: 8px 12px;
+  border-radius: 10px;
+  margin-top: auto;
   cursor: pointer;
-  font-weight: 500;
 }
-.tema-menu {
-  position: absolute;
-  top: 110%;
-  right: 0;
-  z-index: 1000;
-  background-color: var(--card-bg);
+
+.logout-btn:hover {
+  opacity: 0.85;
+}
+
+/* MAIN */
+.dashboard-main {
+  flex: 1;
+  padding: 28px;
+}
+
+/* TOPBAR */
+.dashboard-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* GRID DE CURSOS */
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+}
+
+/* TARJETA DE CURSO */
+.curso-form-card {
+  background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  padding: 20px;
-  min-width: 220px;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.tema-menu h4 { margin-top: 0; color: var(--text-color); font-size: 1rem; margin-bottom: 10px; }
-.tema-menu button {
-  display: block; width: 100%; margin-bottom: 10px; padding: 8px;
-  background-color: var(--link-color); color: #fff; border: none; border-radius: 6px;
-  cursor: pointer; font-weight: 500; transition: background-color 0.2s ease;
+
+.curso-form-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 }
-.tema-menu button:hover { background-color: var(--link-hover); }
-.tema-menu label { display: block; margin-top: 10px; color: var(--text-color); font-size: 0.9rem; }
-.tema-menu input[type="color"] { margin-left: 10px; vertical-align: middle; cursor: pointer; }
+
+.curso-thumb {
+  width: 100%;
+  height: 150px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 12px;
+  border: 1px solid var(--card-border);
+}
+
+.curso-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.btn-modern {
+  background: linear-gradient(135deg, var(--link-color), var(--link-hover));
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* BOTÓN DE EDITAR PERFIL EN SIDEBAR */
+.sidebar-profile .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--link-color);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 1.2rem;
+}
+
+.sidebar-profile .icon-btn:hover {
+  background: var(--link-hover);
+  transform: scale(1.1);
+}
+

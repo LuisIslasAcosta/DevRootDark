@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { registrarUsuario } from "../service/api";
 import { Link } from "react-router-dom";
-import "./styles/registro.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // ✅ íconos de ojo
+import "./styles/login.css"; // usamos el mismo login.css para mantener consistencia
 
 const Registro = () => {
   const [formData, setFormData] = useState({
@@ -21,8 +22,10 @@ const Registro = () => {
   });
 
   const [mensaje, setMensaje] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const [theme, ] = useState(() => localStorage.getItem("theme") || "light");
+  const [theme] = useState(() => localStorage.getItem("theme") || "light");
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -48,8 +51,8 @@ const Registro = () => {
   };
 
   return (
-    <div className="registro-container">
-      <div className="registro-box">
+    <div className="login-container">
+      <div className="login-box">
         <h2>Registro de Usuario</h2>
         <form onSubmit={handleSubmit}>
           <input type="text" name="nombre" placeholder="Nombre" onChange={handleChange} required />
@@ -59,18 +62,45 @@ const Registro = () => {
           <input type="text" name="pais" placeholder="País" onChange={handleChange} required />
           <input type="text" name="ciudad" placeholder="Ciudad" onChange={handleChange} required />
           <input type="email" name="email" placeholder="Correo electrónico" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Contraseña" onChange={handleChange} required />
-          <input type="password" name="verificar_password" placeholder="Confirmar contraseña" onChange={handleChange} required />
+
+          {/* Contraseña con ojo */}
+          <div className="input-eye-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Contraseña"
+              onChange={handleChange}
+              required
+            />
+            <span onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+
+          {/* Confirmar contraseña con ojo */}
+          <div className="input-eye-container">
+            <input
+              type={showConfirm ? "text" : "password"}
+              name="verificar_password"
+              placeholder="Confirmar contraseña"
+              onChange={handleChange}
+              required
+            />
+            <span onClick={() => setShowConfirm(!showConfirm)}>
+              {showConfirm ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+
           <input type="file" name="imagen" accept="image/*" onChange={handleChange} />
           <input type="text" name="pregunta_seguridad" placeholder="Pregunta de seguridad" onChange={handleChange} required />
           <input type="text" name="respuesta_seguridad" placeholder="Respuesta de seguridad" onChange={handleChange} required />
           <input type="tel" name="telefono" placeholder="Teléfono" onChange={handleChange} />
 
-          <button type="submit">Registrar</button>
+          <button type="submit" className="btn-primary">Registrar</button>
         </form>
         <br />
-      <Link to="/"> <button>Regresar a la página principal</button></Link>
-        {mensaje && <p>{mensaje}</p>}
+        <Link to="/"><button>Regresar a la página principal</button></Link>
+        {mensaje && <p className="mensaje">{mensaje}</p>}
         <Link to={`/login`} className="curso-link">¿Ya tienes cuenta?</Link>
       </div>
     </div>

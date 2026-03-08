@@ -1,3 +1,6 @@
+/* ===========================
+   VARIABLES DE TEMAS
+=========================== */
 :root {
   --bg-color: #e9ecef;
   --text-color: #222;
@@ -34,20 +37,135 @@
   --link-hover: #1c5c3a;
 }
 
+/* ===========================
+   BODY Y CONTENIDO
+=========================== */
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .curso-item {
   background-color: var(--card-bg);
   border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
 }
 
 a {
   color: var(--link-color);
+  text-decoration: none;
 }
 
 a:hover {
   color: var(--link-hover);
+  text-decoration: underline;
+}
+
+/* ===========================
+   DROPDOWN DE TEMAS
+=========================== */
+.tema-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.tema-dropdown button {
+  background-color: #007bff; /* Botón principal azul */
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tema-dropdown button:hover {
+  background-color: #0056b3;
+}
+
+.tema-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 110%;
+  left: 500;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 10;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Títulos dentro del dropdown */
+.tema-menu h4 {
+  margin: 8px 0;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+/* Botones de selección de tema fijos */
+.tema-menu button {
+  margin: 4px 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+/* Colores fijos por tema */
+.tema-menu button:nth-child(2) { /* Claro */
+  background-color: #e9ecef;
+  color: #222;
+}
+.tema-menu button:nth-child(2):hover {
+  background-color: #000000;
+}
+
+.tema-menu button:nth-child(3) { /* Oscuro */
+  background-color: #121212;
+  color: #f4f4f9;
+}
+.tema-menu button:nth-child(3):hover {
+  background-color: #1e1e1e;
+}
+
+.tema-menu button:nth-child(4) { /* Azul */
+  background-color: #007bff;
+}
+.tema-menu button:nth-child(4):hover {
+  background-color: #0056b3;
+}
+
+.tema-menu button:nth-child(5) { /* Verde */
+  background-color: #2e8b57;
+}
+.tema-menu button:nth-child(5):hover {
+  background-color: #1c5c3a;
+}
+
+/* Inputs de personalización */
+.tema-menu label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--text-color);
+}
+
+.tema-menu input[type="color"] {
+  border: none;
+  width: 35px;
+  height: 25px;
+  cursor: pointer;
 }
