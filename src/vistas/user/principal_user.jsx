@@ -16,27 +16,36 @@ function PrincipalAlumno() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // ================= THEME =================
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
   const [showCustomizer, setShowCustomizer] = useState(false);
 
-  const [user, setUser] = useState(() => {
-    const usuarioGuardado = localStorage.getItem("usuario");
-    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
-  });
+  // ================= USER =================
+  const [user, setUser] = useState(null);
 
+  // ================= DATA =================
   const [cursos, setCursos] = useState([]);
   const [inscripciones, setInscripciones] = useState([]);
 
+  // ================= LOAD USER =================
   useEffect(() => {
-    const syncUser = () => {
-      const usuarioActualizado = localStorage.getItem("usuario");
-      if (usuarioActualizado) setUser(JSON.parse(usuarioActualizado));
+    const cargarUsuario = () => {
+      const usuarioGuardado = localStorage.getItem("usuario");
+      if (usuarioGuardado) {
+        try {
+          setUser(JSON.parse(usuarioGuardado));
+        } catch {
+          setUser(null);
+        }
+      }
     };
-    syncUser();
-    window.addEventListener("storage", syncUser);
-    return () => window.removeEventListener("storage", syncUser);
+
+    cargarUsuario();
+    window.addEventListener("storage", cargarUsuario);
+    return () => window.removeEventListener("storage", cargarUsuario);
   }, []);
 
+  // ================= APPLY THEME =================
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
@@ -52,6 +61,7 @@ function PrincipalAlumno() {
     localStorage.setItem(name, value);
   };
 
+  // ================= LOAD COURSES & INSCRIPTIONS =================
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -59,33 +69,60 @@ function PrincipalAlumno() {
       return;
     }
 
-    axios.get("http://127.0.0.1:5000/api/cursos", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => setCursos(res.data))
-      .catch(() => navigate("/login"));
+    const cargarCursos = async () => {
+      try {
+        const cursosRes = await axios.get("http://127.0.0.1:5000/api/cursos", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-    if (user) {
-      axios.get(`http://127.0.0.1:5000/api/inscripciones/alumno/${user.id}`)
-        .then(res => setInscripciones(res.data.map(i => i.curso_id)));
-    }
+        setCursos(Array.isArray(cursosRes.data) ? cursosRes.data : []);
+      } catch {
+        navigate("/login");
+      }
+    };
+
+    const cargarInscripciones = async () => {
+      if (!user?.id) return;
+
+      try {
+        const insRes = await axios.get(
+          `http://127.0.0.1:5000/api/inscripciones/alumno/${user.id}`
+        );
+
+        const ids = Array.isArray(insRes.data)
+          ? insRes.data.map(i => i.curso_id)
+          : [];
+
+        setInscripciones(ids);
+      } catch {
+        setInscripciones([]);
+      }
+    };
+
+    cargarCursos();
+    cargarInscripciones();
+
   }, [navigate, user]);
 
+  // ================= INSCRIBIRSE =================
   const inscribirse = async (cursoId) => {
-    if (!user) return alert("Usuario no encontrado");
+    if (!user?.id) return alert("Usuario no válido");
 
     try {
       await axios.post("http://127.0.0.1:5000/api/inscripciones", {
         curso_id: cursoId,
         alumno_id: user.id
       });
-      alert("Inscripción realizada");
+
+      alert("Inscripción realizada ");
       setInscripciones(prev => [...prev, cursoId]);
+
     } catch {
-      alert("Error al inscribirse");
+      alert("Error al inscribirse ");
     }
   };
 
+  // ================= LOGOUT =================
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
@@ -94,19 +131,23 @@ function PrincipalAlumno() {
   return (
     <div className="dashboard-layout">
 
-      {/* SIDEBAR */}
+      {/* ================= SIDEBAR ================= */}
       <aside className="dashboard-sidebar">
+
         <div className="sidebar-profile">
           <img
-            src={user?.foto_perfil
-              ? (user.foto_perfil.startsWith("data:image")
-                ? user.foto_perfil
-                : `data:image/png;base64,${user.foto_perfil}`)
-              : "/default-avatar.png"}
+            src={
+              user?.foto_perfil
+                ? (user.foto_perfil.startsWith("data:image")
+                  ? user.foto_perfil
+                  : `data:image/png;base64,${user.foto_perfil}`)
+                : "/default-avatar.png"
+            }
             alt="Perfil"
             className="profile-pic"
           />
-          <h5>{user?.nombre}</h5>
+
+          <h5>{user?.nombre || user?.username || "Alumno"}</h5>
 
           <button onClick={() => navigate("/alumno/perfil")} className="theme-btn icon-btn">
             <FaUser />
@@ -119,7 +160,8 @@ function PrincipalAlumno() {
           <button onClick={() => navigate("/principal")}>
             <FaHome /> Inicio
           </button>
-          <button onClick={() => navigate("/principal/alumno/mis-cursos")}>
+
+          <button onClick={() => navigate("/principal/mis-cursos")}>
             <FaBookOpen /> Mis Cursos
           </button>
         </nav>
@@ -129,16 +171,17 @@ function PrincipalAlumno() {
             <FaSignOutAlt /> Salir
           </button>
         </div>
+
       </aside>
 
-      {/* MAIN */}
+      {/* ================= MAIN ================= */}
       <main className="dashboard-main">
 
-        {/* TOPBAR */}
+        {/* ================= TOPBAR ================= */}
         <div className="dashboard-topbar">
           <div>
-            <h2>Bienvenido, {user?.nombre}</h2>
-            <p>Explora todos los cursos y inscríbete</p>
+            <h2>Bienvenido, {user?.nombre || user?.username || "Alumno"}</h2>
+            <p>Explora cursos y gestiona tus inscripciones</p>
           </div>
 
           <div className="tema-dropdown">
@@ -161,57 +204,46 @@ function PrincipalAlumno() {
           </div>
         </div>
 
-        {/* LISTA DE CURSOS */}
+        {/* ================= TODOS LOS CURSOS ================= */}
         {location.pathname === "/principal" && (
           <div className="file-grid">
-            {cursos.map(curso => (
-              <div key={curso.id} className="curso-form-card">
+            {cursos.length === 0 ? (
+              <p className="empty-text">No hay cursos disponibles</p>
+            ) : (
+              cursos.map(curso => (
+                <div key={curso.id} className="curso-form-card">
 
-                {curso.imagenes?.map((img, i) => (
-                  <img
-                    key={i}
-                    src={`http://127.0.0.1:5000/api/uploads/imagenes/${img}`}
-                    className="curso-thumb"
-                  />
-                ))}
+                  {curso.imagenes?.map((img, i) => (
+                    <img
+                      key={i}
+                      src={`http://127.0.0.1:5000/api/uploads/imagenes/${img}`}
+                      className="curso-thumb"
+                      alt="Curso"
+                    />
+                  ))}
 
-                <h3>{curso.nombre}</h3>
-                <p>{curso.descripcion}</p>
+                  <h3>{curso.nombre}</h3>
+                  <p>{curso.descripcion}</p>
 
-                {inscripciones.includes(curso.id) ? (
-                  <button className="btn-modern" disabled>Inscrito</button>
-                ) : (
-                  <button className="btn-modern" onClick={() => inscribirse(curso.id)}>
-                    Inscribirse
-                  </button>
-                )}
+                  {inscripciones.includes(curso.id) ? (
+                    <button className="btn-modern" disabled>Inscrito</button>
+                  ) : (
+                    <button className="btn-modern" onClick={() => inscribirse(curso.id)}>
+                      Inscribirse
+                    </button>
+                  )}
 
-                <Link to={`/principal/cursos/${curso.id}`} className="btn-modern">
-                  Ver Curso
-                </Link>
+                  <Link to={`/principal/cursos/${curso.id}`} className="btn-modern">
+                    Ver Curso
+                  </Link>
 
-              </div>
-            ))}
+                </div>
+              ))
+            )}
           </div>
         )}
 
-        {/* MIS CURSOS */}
-        {location.pathname === "/alumno/cursos" && (
-          <div className="file-grid">
-            {cursos.filter(c => inscripciones.includes(c.id)).map(curso => (
-              <div key={curso.id} className="curso-form-card">
-                <h3>{curso.nombre}</h3>
-                <p>{curso.descripcion}</p>
-                <button className="btn-modern" disabled>Inscrito</button>
-                <Link to={`/cursos/${curso.id}`} className="btn-modern">
-                  Ver Curso
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
 
-        {/* AQUÍ SE CARGA CURSO DETALLE */}
         <Outlet />
 
       </main>

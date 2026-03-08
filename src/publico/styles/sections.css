@@ -1,6 +1,6 @@
 /* === Hero Section === */
 .hero-section {
-  background: rgba(255, 255, 255, 0.751); 
+  background: rgba(190, 191, 212, 0.751); 
   color: var(--text-color);
   text-align: center;
   margin-top: var(--nav-h);
@@ -40,11 +40,11 @@
 
 /* === Cursos === */
 .cursos-1 {
-  background: rgba(255, 255, 255, 0.751); 
-  min-height: 100vh;
+  background: rgba(190, 191, 212, 0.751); 
+  min-height: 10vh;
   width: 100vw;
   margin: 0;
-  padding: 40px 5vw;
+  padding: 40px 2vw;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -63,7 +63,7 @@
 
 .curso-item {
   background: rgba(255, 255, 255, 0.6); /* medio blanco */
-  border: 2px solid rgba(255, 255, 255, 0.4); /* contorno */
+  border: 2px solid rgba(160, 65, 65, 0.4); /* contorno */
   border-radius: 12px;
   padding: 25px;
   text-align: center;
@@ -125,7 +125,7 @@
 .politicas-link {
   margin-top: 40px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.4); /* translúcido */
+  background: rgba(217, 3, 3, 0.4); /* translúcido */
   padding: 20px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.3);

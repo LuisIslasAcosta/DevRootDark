@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { registrarUsuario } from "../service/api";
 import { Link } from "react-router-dom";
-import "./styles/login.css"; // 👈 usamos login.css en lugar de registro.css
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // ✅ íconos de ojo
+import "./styles/login.css"; // usamos el mismo login.css para mantener consistencia
 
 const Registro = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,8 @@ const Registro = () => {
   });
 
   const [mensaje, setMensaje] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const [theme] = useState(() => localStorage.getItem("theme") || "light");
 
@@ -59,8 +62,35 @@ const Registro = () => {
           <input type="text" name="pais" placeholder="País" onChange={handleChange} required />
           <input type="text" name="ciudad" placeholder="Ciudad" onChange={handleChange} required />
           <input type="email" name="email" placeholder="Correo electrónico" onChange={handleChange} required />
-          <input type="password" name="password" placeholder="Contraseña" onChange={handleChange} required />
-          <input type="password" name="verificar_password" placeholder="Confirmar contraseña" onChange={handleChange} required />
+
+          {/* Contraseña con ojo */}
+          <div className="input-eye-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Contraseña"
+              onChange={handleChange}
+              required
+            />
+            <span onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+
+          {/* Confirmar contraseña con ojo */}
+          <div className="input-eye-container">
+            <input
+              type={showConfirm ? "text" : "password"}
+              name="verificar_password"
+              placeholder="Confirmar contraseña"
+              onChange={handleChange}
+              required
+            />
+            <span onClick={() => setShowConfirm(!showConfirm)}>
+              {showConfirm ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+
           <input type="file" name="imagen" accept="image/*" onChange={handleChange} />
           <input type="text" name="pregunta_seguridad" placeholder="Pregunta de seguridad" onChange={handleChange} required />
           <input type="text" name="respuesta_seguridad" placeholder="Respuesta de seguridad" onChange={handleChange} required />

@@ -1,81 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../styles/Examenes.css";
 
 function VerExamenes() {
-  const [cursos, setCursos] = useState([]);
-  const [cursoSeleccionado, setCursoSeleccionado] = useState("");
+  const { cursoId } = useParams(); 
   const [examenes, setExamenes] = useState([]);
+  const [cursoNombre, setCursoNombre] = useState("");
 
-  // 🔹 Cargar cursos del profesor
+  // 🔹 Cargar información del curso
   useEffect(() => {
-    const cargarCursos = async () => {
-      try {
-        const res = await axios.get("http://127.0.0.1:5000/api/mis_cursos", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        });
-        setCursos(res.data);
-      } catch (err) {
-        console.error("Error al cargar cursos:", err);
-      }
-    };
-    cargarCursos();
-  }, []);
+    const token = localStorage.getItem("token");
+    if (!cursoId) return;
 
-  // 🔹 Cargar exámenes del curso seleccionado
+    axios.get(`http://127.0.0.1:5000/api/cursos/${cursoId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(res => setCursoNombre(res.data.nombre || "Curso"))
+    .catch(() => setCursoNombre("Curso"));
+  }, [cursoId]);
+
+  // 🔹 Cargar exámenes del curso
   useEffect(() => {
-    const cargarExamenes = async () => {
-      if (!cursoSeleccionado) {
-        setExamenes([]);
-        return;
-      }
+    const token = localStorage.getItem("token");
+    if (!cursoId) return;
 
-      try {
-        const res = await axios.get(
-          `http://127.0.0.1:5000/api/examenes/curso/${cursoSeleccionado}`,
-          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
-        setExamenes(res.data);
-      } catch (err) {
-        console.error("Error al cargar exámenes:", err);
-      }
-    };
-    cargarExamenes();
-  }, [cursoSeleccionado]);
+    axios.get(`http://127.0.0.1:5000/api/examenes/curso/${cursoId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    .then(res => setExamenes(res.data || []))
+    .catch(() => alert("Error al cargar exámenes"));
+  }, [cursoId]);
 
   // 🔹 Eliminar examen
   const eliminarExamen = async (id) => {
-    const confirmar = window.confirm("¿Deseas eliminar este examen?");
-    if (!confirmar) return;
+    if (!window.confirm("¿Deseas eliminar este examen?")) return;
 
     try {
+      const token = localStorage.getItem("token");
       await axios.delete(`http://127.0.0.1:5000/api/examenes/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
-      alert("Examen eliminado ✅");
-      setExamenes(examenes.filter(ex => ex.id !== id));
+      alert("Examen eliminado ");
+      setExamenes(prev => prev.filter(ex => ex.id !== id));
     } catch (err) {
       console.error(err);
-      alert("Error al eliminar examen ❌");
+      alert("Error al eliminar examen ");
     }
   };
 
   return (
     <div className="examen-section">
-      <h2>Ver Exámenes</h2>
-
-      <div className="form-group">
-        <label>Selecciona un curso</label>
-        <select
-          value={cursoSeleccionado}
-          onChange={e => setCursoSeleccionado(e.target.value)}
-        >
-          <option value="">-- Selecciona un curso --</option>
-          {cursos.map(curso => (
-            <option key={curso.id} value={curso.id}>{curso.nombre}</option>
-          ))}
-        </select>
-      </div>
+      <h2>Exámenes del curso: {cursoNombre}</h2>
 
       {examenes.length > 0 ? (
         <table className="admin-table">
@@ -92,7 +68,7 @@ function VerExamenes() {
               <tr key={ex.id}>
                 <td>{ex.titulo}</td>
                 <td>{ex.fecha}</td>
-                <td>{ex.preguntas.length}</td>
+                <td>{ex.preguntas?.length || 0}</td>
                 <td>
                   <button
                     className="custom-btn btn-eliminar"
@@ -106,7 +82,7 @@ function VerExamenes() {
           </tbody>
         </table>
       ) : (
-        cursoSeleccionado && <p>No hay exámenes en este curso.</p>
+        <p>No hay exámenes en este curso.</p>
       )}
     </div>
   );

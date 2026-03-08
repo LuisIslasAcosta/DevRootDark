@@ -1,7 +1,7 @@
 /* Contenedor del formulario */
 .login-container {
   font-family: Arial, sans-serif;
-  background-image: url('/src/publico/styles/login.jpg'); /* tu imagen */
+  background-image: url('/src/publico/styles/login.jpg');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -15,12 +15,12 @@
 
 /* Caja del formulario */
 .login-box {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.557);
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 12px 40px rgba(0,0,0,0.5);
   width: 100%;
-  max-width: 500px; /* tamaño más compacto */
+  max-width: 500px;
   backdrop-filter: blur(14px);
   color: #fff;
   text-align: center;
@@ -42,11 +42,12 @@
 
 /* Inputs */
 .login-box input {
+  width: 100%;
   padding: 14px;
-  border: 1px solid rgba(255,255,255,0.4);
+  border: 1px solid rgba(151, 145, 145, 0.4);
   border-radius: 8px;
   font-size: 1rem;
-  background: rgba(255,255,255,0.25);
+  background: rgba(108, 106, 106, 0.637);
   color: #fff;
 }
 
@@ -57,6 +58,30 @@
 .login-box input:focus {
   border-color: #8e2de2;
   outline: none;
+}
+
+/* Contenedor del input con ojo */
+.input-eye-container {
+  position: relative;
+}
+
+.input-eye-container input {
+  padding-right: 45px; /* espacio para el ícono dentro */
+}
+
+.input-eye-container span {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #fff;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.input-eye-container span:hover {
+  color: #ffd700;
 }
 
 /* Botón principal */
@@ -84,21 +109,10 @@
   color: #fff;
 }
 
-/* Texto de registro */
-.signup-text {
-  margin-top: 20px;
-  font-size: 0.95rem;
-  color: #fff;
-}
-
-.signup-text a {
-  color: #ffd700;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-/* Link switch */
+/* Links */
 .link-switch {
+  display: block;
+  margin-top: 10px;
   color: #67b8ef;
   font-weight: 600;
   cursor: pointer;

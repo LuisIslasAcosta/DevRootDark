@@ -139,7 +139,11 @@
 /* === Cursos dinámicos === */
 .cursos-1 {
   padding: 20px;
+  width: 100%;          /* ancho controlado */
+  max-width: 1200px;   /* límite máximo */
+  margin: 40px auto;   /* centra horizontalmente */
 }
+
 
 .cursos-1 h2 {
   margin-bottom: 20px;
@@ -193,4 +197,6 @@
   background-color: var(--card-bg);
   border-top: 1px solid var(--card-border);
   margin-top: 40px;
+  width: 100%;
+  box-sizing: border-box;
 }
