@@ -12,6 +12,8 @@ import {
   FaChartBar
 } from "react-icons/fa";
 
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
 import "../styles/ProfesorPanel.css";
 import "../../temas/temas.css";
 
@@ -31,6 +33,11 @@ function ProfesorPanel() {
 
   // ================= DATA =================
   const [cursos, setCursos] = useState([]);
+
+  // ================= KMEANS =================
+  const [kmeansData, setKmeansData] = useState(null);
+  const [loadingKmeans, setLoadingKmeans] = useState(false);
+  const [errorKmeans, setErrorKmeans] = useState(null);
 
   // ================= SYNC USER =================
   useEffect(() => {
@@ -101,6 +108,23 @@ function ProfesorPanel() {
       });
   }, [navigate]);
 
+  // ================= LOAD KMEANS =================
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    setLoadingKmeans(true);
+    axios.get("http://localhost:5000/api/kmeans", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => setKmeansData(res.data))
+      .catch(err => {
+        console.error("Error KMeans:", err);
+        setErrorKmeans("No se pudo cargar KMeans");
+      })
+      .finally(() => setLoadingKmeans(false));
+  }, []);
+
   // ================= LOGOUT =================
   const handleLogout = () => {
     localStorage.clear();
@@ -151,7 +175,6 @@ function ProfesorPanel() {
 
       {/* ================= MAIN ================= */}
       <main className="dashboard-main">
-
         {/* ================= TOPBAR ================= */}
         <div className="dashboard-topbar">
           <div>
@@ -218,6 +241,48 @@ function ProfesorPanel() {
                 })
               )}
             </div>
+
+            {/* ================= KMEANS CHART ================= */}
+            <h3 className="section-title">Análisis KMeans</h3>
+            {loadingKmeans && <p>Cargando análisis...</p>}
+            {errorKmeans && <p>{errorKmeans}</p>}
+            {kmeansData && (
+              <>
+                <div className="kmeans-chart">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={kmeansData.distribucion}>
+                      <XAxis dataKey="cluster" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="count" fill="#8884d8" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                  <h4>Silhouette Score: {kmeansData.silhouette}</h4>
+                </div>
+
+                {/* ================= KMEANS TABLE ================= */}
+                <div className="kmeans-table">
+                  <h4>Distribución de Clusters (Tabla)</h4>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Cluster</th>
+                        <th>Registros</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {kmeansData.distribucion.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.cluster}</td>
+                          <td>{item.count}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <h4>Silhouette Score: {kmeansData.silhouette}</h4>
+                </div>
+              </>
+            )}
           </>
         )}
 
