@@ -164,6 +164,7 @@ function ProfesorPanel() {
           <button onClick={() => navigate("/profesor/cursos")}><FaBookOpen /> Cursos</button>
           <button onClick={() => navigate("/profesor/examenes")}><FaClipboardList /> Exámenes</button>
           <button onClick={() => navigate("/profesor/reportes")}><FaChartBar /> Reportes</button>
+          <button onClick={() => navigate("/profesor/ventas")}> <FaChartBar /> Ventas</button>
         </nav>
 
         <div className="sidebar-profile">
@@ -248,38 +249,49 @@ function ProfesorPanel() {
             {errorKmeans && <p>{errorKmeans}</p>}
             {kmeansData && (
               <>
-                <div className="kmeans-chart">
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={kmeansData.distribucion}>
-                      <XAxis dataKey="cluster" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="count" fill="#8884d8" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                  <h4>Silhouette Score: {kmeansData.silhouette}</h4>
-                </div>
+                <div className="kmeans-grid">
+                  
+                  {/* CHART */}
+                  <div className="kmeans-chart">
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={kmeansData.distribucion}>
+                        <XAxis dataKey="cluster" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="count" fill="#8884d8" />
+                      </BarChart>
+                    </ResponsiveContainer>
 
-                {/* ================= KMEANS TABLE ================= */}
-                <div className="kmeans-table">
-                  <h4>Distribución de Clusters (Tabla)</h4>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Cluster</th>
-                        <th>Registros</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {kmeansData.distribucion.map((item, index) => (
-                        <tr key={index}>
-                          <td>{item.cluster}</td>
-                          <td>{item.count}</td>
+                    <div className="silhouette-box">
+                      Silhouette Score: {kmeansData.silhouette}
+                    </div>
+                  </div>
+
+                  {/* TABLE */}
+                  <div className="kmeans-table">
+                    <h4>Clusters</h4>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Cluster</th>
+                          <th>Registros</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <h4>Silhouette Score: {kmeansData.silhouette}</h4>
+                      </thead>
+                      <tbody>
+                        {kmeansData.distribucion.map((item, index) => (
+                          <tr key={index}>
+                            <td>
+                              <span className={`cluster-badge cluster-${item.cluster}`}>
+                                Cluster {item.cluster}
+                              </span>
+                            </td>
+                            <td>{item.count}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
                 </div>
               </>
             )}

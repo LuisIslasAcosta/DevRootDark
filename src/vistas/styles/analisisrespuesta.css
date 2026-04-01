@@ -1,0 +1,13 @@
+.grafica-container {
+  margin-top: 20px;
+  width: 100%;
+  height: 300px;
+}
+
+.prediccion-box {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+}

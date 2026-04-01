@@ -37,6 +37,7 @@ import VerLeccionesProfesor from './vistas/profesor/VerLeccionesProfesor';
 import ReportesProfesor from './vistas/profesor/ReportesProfesor';
 import VerNivelesProfesor from './vistas/profesor/VerNivelesProfesor';
 import CrearNivelProfesor from './vistas/profesor/CrearNivelProfesor';
+import Ventas from './vistas/profesor/Ventas';
 
 // ================= RUTAS PROTEGIDAS =================
 import ProtectedRoute from './RutasProtegidas/ProtectedRoute';
@@ -138,6 +139,8 @@ function App() {
 
           {/* PERFIL */}
           <Route path="editar-perfil" element={<EditarPerfil />} />
+
+          <Route path="ventas" element={<Ventas />} />
         </Route>
 
       </Routes>
