@@ -344,3 +344,41 @@ html, body {
     padding: 20px;
   }
 }
+
+
+/* ===== KMeans Chart ===== */
+.kmeans-chart {
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* ===== KMeans Table ===== */
+.kmeans-table {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.kmeans-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.kmeans-table th, .kmeans-table td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.kmeans-table th {
+  background-color: var(--card-bg, #f0f0f0);
+  color: var(--text-color, #333);
+}
+
+.kmeans-table tr:nth-child(even) {
+  background-color: rgba(0,0,0,0.03);
+}
+
+.kmeans-table h4 {
+  margin: 10px 0;
+}
