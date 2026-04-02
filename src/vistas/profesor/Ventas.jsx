@@ -4,13 +4,13 @@ import "../styles/ventas.css";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer
 } from "recharts";
+import Tree from "react-d3-tree";
 
 function Ventas() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ================= CONSUMIR API =================
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -20,27 +20,20 @@ function Ventas() {
       return;
     }
 
-    axios.get("http://127.0.0.1:5000/api/ventas", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+    axios.get("http://localhost:5000/api/ventas/decision-tree", {
+      headers: { Authorization: `Bearer ${token}` }
     })
-      .then(res => {
-        setData(res.data);
-      })
+      .then(res => setData(res.data))
       .catch(err => {
         console.error(err);
-        setError("Error al cargar ventas");
+        setError("Error al cargar datos de ventas");
       })
       .finally(() => setLoading(false));
-
   }, []);
 
-  // ================= LOADING =================
-  if (loading) return <p>Cargando ventas...</p>;
+  if (loading) return <p>Cargando análisis de ventas...</p>;
   if (error) return <p>{error}</p>;
 
-  // 🔥 Filtrar solo cursos con ingresos (para que la gráfica se vea bien)
   const cursosConVentas = data.resumen.filter(c => c.ingreso_total > 0);
 
   return (
@@ -72,7 +65,7 @@ function Ventas() {
         </tbody>
       </table>
 
-      {/* ================= GRAFICA INGRESOS ================= */}
+      {/* ================= GRAFICAS ================= */}
       <h3 style={{ marginTop: "40px" }}>Ingresos por Curso</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={cursosConVentas}>
@@ -83,7 +76,6 @@ function Ventas() {
         </BarChart>
       </ResponsiveContainer>
 
-      {/* ================= GRAFICA VENTAS ================= */}
       <h3 style={{ marginTop: "40px" }}>Ventas por Curso</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={cursosConVentas}>
@@ -94,6 +86,33 @@ function Ventas() {
         </BarChart>
       </ResponsiveContainer>
 
+      {/* ================= ÁRBOL DE DECISIÓN ================= */}
+      <h2 style={{ marginTop: "60px" }}>Árbol de Decisión</h2>
+      <p><strong>Accuracy:</strong> {data.accuracy}</p>
+
+      <div style={{ width: "100%", height: "400px", border: "1px solid #ddd", marginTop: "20px" }}>
+        <Tree data={data.arbol} orientation="vertical" />
+      </div>
+
+      <h3>Ejemplo de Predicciones</h3>
+      <table className="ventas-table">
+        <thead>
+          <tr>
+            <th>Features</th>
+            <th>Label</th>
+            <th>Prediction</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.ejemplo_predicciones.map((p, i) => (
+            <tr key={i}>
+              <td>{p.features_str}</td>
+              <td>{p.label}</td>
+              <td>{p.prediction}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
