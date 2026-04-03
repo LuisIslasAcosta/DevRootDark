@@ -160,11 +160,15 @@ function ProfesorPanel() {
         <h4 className="sidebar-brand">Panel del Profesor</h4>
 
         <nav className="sidebar-nav">
-          <button onClick={() => navigate("/profesor")}><FaHome /> Inicio</button>
-          <button onClick={() => navigate("/profesor/cursos")}><FaBookOpen /> Cursos</button>
-          <button onClick={() => navigate("/profesor/examenes")}><FaClipboardList /> Exámenes</button>
-          <button onClick={() => navigate("/profesor/reportes")}><FaChartBar /> Reportes</button>
-          <button onClick={() => navigate("/profesor/ventas")}> <FaChartBar /> Ventas</button>
+          <button 
+            className={location.pathname === "/profesor" ? "active" : ""}
+            onClick={() => navigate("/profesor")}
+          >
+            <FaHome /> Inicio
+          </button>
+          <button className={location.pathname.includes("/profesor/cursos") ? "active" : ""} onClick={() => navigate("/profesor/cursos")}><FaBookOpen /> Cursos</button>
+          <button className={location.pathname.includes("/profesor/reportes") ? "active" : ""} onClick={() => navigate("/profesor/reportes")}><FaClipboardList /> Reportes</button>
+          <button className={location.pathname.includes("/profesor/ventas") ? "active" : ""} onClick={() => navigate("/profesor/ventas")}> <FaChartBar /> Ventas</button>
         </nav>
 
         <div className="sidebar-profile">

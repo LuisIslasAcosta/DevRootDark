@@ -16,28 +16,26 @@ function ProfesorCursos() {
   });
 
   const [cursoEditando, setCursoEditando] = useState(null);
+  const [mostrarCrear, setMostrarCrear] = useState(false);
 
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const cargarCursos = () => {
-
     axios.get("http://127.0.0.1:5000/api/mis_cursos", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setCursos(res.data))
-    .catch(err => console.error("Error al cargar cursos:", err));
-
+    .catch(err => console.error(err));
   };
 
   useEffect(() => {
     cargarCursos();
   }, []);
 
-
   const crearCurso = () => {
 
     if (!nuevoCurso.nombre) {
-      alert("El nombre del curso es obligatorio");
+      alert("El nombre es obligatorio");
       return;
     }
 
@@ -47,31 +45,20 @@ function ProfesorCursos() {
     formData.append("descripcion", nuevoCurso.descripcion);
     formData.append("precio", nuevoCurso.precio);
 
-    nuevoCurso.imagenes.forEach(img => {
-      formData.append("imagenes", img);
-    });
-
-    nuevoCurso.videos.forEach(video => {
-      formData.append("videos", video);
-    });
+    nuevoCurso.imagenes.forEach(img => formData.append("imagenes", img));
+    nuevoCurso.videos.forEach(v => formData.append("videos", v));
 
     axios.post("http://127.0.0.1:5000/api/cursos", formData, {
-
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-
-      onUploadProgress: (progressEvent) => {
-
-        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-
-        setUploadProgress(percentCompleted);
+      onUploadProgress: (e) => {
+        const percent = Math.round((e.loaded * 100) / e.total);
+        setUploadProgress(percent);
       }
-
     })
     .then(() => {
-
-      alert("Curso creado correctamente");
-
+      alert("Curso creado");
       setUploadProgress(0);
+      setMostrarCrear(false);
 
       setNuevoCurso({
         nombre:"",
@@ -82,51 +69,33 @@ function ProfesorCursos() {
       });
 
       cargarCursos();
-
     })
-    .catch(err => console.error("Error al crear curso:", err));
-
+    .catch(err => console.error(err));
   };
 
-
   const eliminarCurso = (id) => {
-
-    const confirmar = window.confirm("¿Estás seguro de que quieres eliminar este curso?");
-    if (!confirmar) return;
+    if (!window.confirm("¿Eliminar?")) return;
 
     fetch(`http://127.0.0.1:5000/api/cursos/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
-    .then(res => res.json())
-    .then(() => {
-
-      alert("Curso eliminado");
-
-      setCursos(cursos.filter(c => c.id !== id));
-
-    })
-    .catch(err => console.error("Error al eliminar curso:", err));
-
+    .then(() => setCursos(cursos.filter(c => c.id !== id)))
+    .catch(err => console.error(err));
   };
 
-
   const editarCurso = (curso) => {
-
     setCursoEditando({
       id: curso.id,
       nombre: curso.nombre,
       descripcion: curso.descripcion,
       precio: curso.precio
     });
-
   };
-
 
   const guardarEdicion = () => {
 
     const formData = new FormData();
-
     formData.append("nombre", cursoEditando.nombre);
     formData.append("descripcion", cursoEditando.descripcion);
     formData.append("precio", cursoEditando.precio);
@@ -134,84 +103,40 @@ function ProfesorCursos() {
     axios.put(
       `http://127.0.0.1:5000/api/cursos/${cursoEditando.id}`,
       formData,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      }
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     )
     .then(() => {
-
-      alert("Curso actualizado");
-
+      alert("Actualizado");
       setCursoEditando(null);
-
       cargarCursos();
-
     })
-    .catch(err => console.error("Error al actualizar curso:", err));
-
+    .catch(err => console.error(err));
   };
 
-
   return (
-
     <div className="admin-section">
 
       <h2>Mis Cursos</h2>
 
-
-      <form className="curso-form" onSubmit={e => e.preventDefault()}>
-
-        <div className="form-group">
-          <label>Nombre</label>
-          <input type="text" value={nuevoCurso.nombre} onChange={e => setNuevoCurso({ ...nuevoCurso, nombre: e.target.value })}/>
-        </div>
-
-        <div className="form-group">
-          <label>Descripción</label>
-          <input type="text" value={nuevoCurso.descripcion} onChange={e => setNuevoCurso({ ...nuevoCurso, descripcion: e.target.value })}/>
-        </div>
-
-        <div className="form-group">
-          <label>Precio</label>
-          <input type="number" value={nuevoCurso.precio} onChange={e => setNuevoCurso({ ...nuevoCurso, precio: e.target.value })}/>
-        </div>
-
-        <div className="form-group">
-          <label>Imágenes</label>
-          <input type="file" accept="image/*" multiple onChange={e => setNuevoCurso({ ...nuevoCurso, imagenes: Array.from(e.target.files) })}/>
-        </div>
-
-        <div className="form-group">
-          <label>Videos</label>
-          <input type="file" accept="video/*" multiple onChange={e => setNuevoCurso({ ...nuevoCurso, videos: Array.from(e.target.files) })}/>
-        </div>
-
-        <button className="custom-btn btn-crear" onClick={crearCurso}>
-          Crear Curso
+      {/* 🔥 BOTÓN CREAR */}
+      <div style={{textAlign:"center", marginBottom:"20px"}}>
+        <button className="custom-btn btn-crear" onClick={()=>setMostrarCrear(true)}>
+          + Crear Curso
         </button>
-
-      </form>
-
+      </div>
 
       {uploadProgress > 0 && (
-
         <div className="progress-bar-container">
-
           <div className="progress-bar" style={{ width: `${uploadProgress}%` }}>
             {uploadProgress}%
           </div>
-
         </div>
-
       )}
-
 
       <h3>Mis cursos existentes</h3>
 
       <table className="admin-table">
-
         <thead>
-
           <tr>
             <th>Nombre</th>
             <th>Precio</th>
@@ -220,111 +145,94 @@ function ProfesorCursos() {
             <th>Videos</th>
             <th>Acciones</th>
           </tr>
-
         </thead>
 
         <tbody>
-
-          {cursos.map((curso, index) => (
-
-            <tr key={curso.id || index}>
-
+          {cursos.map((curso) => (
+            <tr key={curso.id}>
               <td>{curso.nombre}</td>
-
               <td>${curso.precio}</td>
-
               <td>{curso.profesor}</td>
 
-
               <td>
-
-                {curso.imagenes && curso.imagenes.map((img, i) => (
-
-                  <img
-                    key={i}
-                    src={`http://127.0.0.1:5000/api/uploads/imagenes/${img}`}
-                    alt="curso"
-                    className="curso-img"
-                  />
-
+                {curso.imagenes?.map((img, i) => (
+                  <img key={i} src={`http://127.0.0.1:5000/api/uploads/imagenes/${img}`} className="curso-img" />
                 ))}
-
               </td>
 
-
               <td>
-
-                {curso.videos && curso.videos.map((vid, i) => (
-
-                  <video
-                    key={i}
-                    src={`http://127.0.0.1:5000/api/uploads/videos/${vid}`}
-                    controls
-                    className="curso-video"
-                  />
-
+                {curso.videos?.map((vid, i) => (
+                  <video key={i} src={`http://127.0.0.1:5000/api/uploads/videos/${vid}`} controls className="curso-video" />
                 ))}
-
               </td>
 
-
               <td>
+                <div className="acciones-btns">
 
-                <Link to={`/profesor/curso/${curso.id}`}>
-                  <button className="custom-btn btn-ver">Ver</button>
-                </Link>
+                  <Link to={`/profesor/curso/${curso.id}`}>
+                    <button className="custom-btn btn-ver">Ver</button>
+                  </Link>
 
-                <button
-                  className="custom-btn"
-                  style={{marginLeft:"5px"}}
-                  onClick={()=>editarCurso(curso)}
-                >
-                  Editar
-                </button>
+                  <button className="custom-btn" onClick={()=>editarCurso(curso)}>
+                    Editar
+                  </button>
 
-                <button
-                  className="custom-btn btn-eliminar"
-                  onClick={()=>eliminarCurso(curso.id)}
-                  style={{marginLeft:"5px"}}
-                >
-                  Eliminar
-                </button>
+                  <button className="custom-btn btn-eliminarc" onClick={()=>eliminarCurso(curso.id)}>
+                    Eliminar
+                  </button>
 
+                </div>
               </td>
 
             </tr>
-
           ))}
-
         </tbody>
-
       </table>
 
+      {/* 🔥 MODAL CREAR */}
+      {mostrarCrear && (
+        <div className="modal-overlay" onClick={()=>setMostrarCrear(false)}>
+          <div className="edit-panel" onClick={(e)=>e.stopPropagation()}>
 
-      {cursoEditando && (
+            <h3>Crear Curso</h3>
 
-        <div className="edit-panel">
+            <input type="text" placeholder="Nombre" value={nuevoCurso.nombre} onChange={e => setNuevoCurso({ ...nuevoCurso, nombre: e.target.value })}/>
+            <input type="text" placeholder="Descripción" value={nuevoCurso.descripcion} onChange={e => setNuevoCurso({ ...nuevoCurso, descripcion: e.target.value })}/>
+            <input type="number" placeholder="Precio" value={nuevoCurso.precio} onChange={e => setNuevoCurso({ ...nuevoCurso, precio: e.target.value })}/>
+            <input type="file" multiple onChange={e => setNuevoCurso({ ...nuevoCurso, imagenes: Array.from(e.target.files) })}/>
+            <input type="file" multiple onChange={e => setNuevoCurso({ ...nuevoCurso, videos: Array.from(e.target.files) })}/>
 
-          <h3>Editar Curso</h3>
+            <div className="modal-actions">
+              <button className="custom-btn btn-crear" onClick={crearCurso}>Crear</button>
+              <button className="custom-btn btn-eliminarc" onClick={()=>setMostrarCrear(false)}>Cancelar</button>
+            </div>
 
-          <input type="text" value={cursoEditando.nombre} onChange={e=>setCursoEditando({...cursoEditando,nombre:e.target.value})}/>
-
-          <input type="text" value={cursoEditando.descripcion} onChange={e=>setCursoEditando({...cursoEditando,descripcion:e.target.value})}/>
-
-          <input type="number" value={cursoEditando.precio} onChange={e=>setCursoEditando({...cursoEditando,precio:e.target.value})}/>
-
-          <button className="custom-btn btn-ver" onClick={guardarEdicion}>
-            Guardar
-          </button>
-
+          </div>
         </div>
+      )}
 
+      {/* 🔥 MODAL EDITAR */}
+      {cursoEditando && (
+        <div className="modal-overlay" onClick={()=>setCursoEditando(null)}>
+          <div className="edit-panel" onClick={(e)=>e.stopPropagation()}>
+
+            <h3>Editar Curso</h3>
+
+            <input type="text" value={cursoEditando.nombre} onChange={e=>setCursoEditando({...cursoEditando,nombre:e.target.value})}/>
+            <input type="text" value={cursoEditando.descripcion} onChange={e=>setCursoEditando({...cursoEditando,descripcion:e.target.value})}/>
+            <input type="number" value={cursoEditando.precio} onChange={e=>setCursoEditando({...cursoEditando,precio:e.target.value})}/>
+
+            <div className="modal-actions">
+              <button className="custom-btn btn-ver" onClick={guardarEdicion}>Guardar</button>
+              <button className="custom-btn btn-eliminarc" onClick={()=>setCursoEditando(null)}>Cancelar</button>
+            </div>
+
+          </div>
+        </div>
       )}
 
     </div>
-
   );
-
 }
 
 export default ProfesorCursos;

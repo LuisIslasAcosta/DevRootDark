@@ -1,80 +1,95 @@
-/* Sección principal: ancho completo, altura mínima de pantalla */
+/* ========================= */
+/* SECCION GENERAL */
+/* ========================= */
 .admin-section {
   width: 100%;
   min-height: 100vh;
-  padding: 40px 20px; /* espacio interno adaptable */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  box-sizing: border-box;
+  padding: 40px 20px;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: var(--text-color);
 }
 
-/* Títulos */
+/* TITULOS */
 .admin-section h2,
 .admin-section h3 {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
+  font-weight: 600;
 }
 
-/* Formulario: ancho completo hasta un máximo */
+/* ========================= */
+/* FORMULARIO 🔥 */
+/* ========================= */
 .curso-form {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto 40px auto;
   padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  border-radius: 18px;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  box-sizing: border-box;
+
+  background: linear-gradient(135deg, var(--card-bg), rgba(255,255,255,0.05));
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
+/* inputs */
 .form-group {
-  flex: 1 1 300px;
+  flex: 1 1 280px;
   display: flex;
   flex-direction: column;
 }
 
 .form-group label {
-  margin-bottom: 8px;
-  font-weight: 600;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  opacity: 0.8;
 }
 
-.form-group input[type="text"],
-.form-group input[type="file"] {
+.form-group input {
   width: 100%;
-  padding: 12px 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  transition: all 0.3s ease;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-color);
+  transition: all 0.25s ease;
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="file"]:focus {
-  border-color: #2575fc;
+.form-group input:focus {
+  border-color: var(--link-color);
   outline: none;
-  box-shadow: 0 0 10px rgba(37,117,252,0.3);
+  box-shadow: 0 0 12px rgba(0,0,0,0.2);
 }
 
-/* Botones personalizados */
+/* ========================= */
+/* BOTONES 🔥 */
+/* ========================= */
 .custom-btn {
-  padding: 12px 25px;
-  font-size: 16px;
+  padding: 10px 16px;
+  font-size: 13px;
   font-weight: 600;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   color: #fff;
-  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
 .custom-btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-/* Botones por tipo */
+/* tipos */
 .btn-crear {
   background: linear-gradient(135deg, #6a11cb, #2575fc);
 }
@@ -84,80 +99,132 @@
   color: #000;
 }
 
-.btn-eliminar {
+.btn-eliminarc {
   background: linear-gradient(135deg, #ff416c, #ff4b2b);
 }
 
-/* Tabla */
+/* ========================= */
+/* TABLA 🔥 */
+/* ========================= */
 .admin-table {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   border-collapse: collapse;
   margin-top: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  table-layout: auto;
+
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--card-bg);
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
 }
 
-.admin-table th,
-.admin-table td {
-  padding: 12px;
-  border: 1px solid #ddd;
-  text-align: center;
+/* header */
+.admin-table th {
+  background: var(--link-color);
+  color: #fff;
+  padding: 14px;
   font-size: 14px;
 }
 
-.admin-table th {
-  background-color: #f0f0f0;
+/* filas */
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--card-border);
+  text-align: center;
+  font-size: 13px;
+  vertical-align: middle; /* 🔥 IMPORTANTE */
 }
 
-/* Imágenes y videos */
+/* hover fila */
+.admin-table tr:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* ========================= */
+/* FIX BOTONES (🔥 CLAVE) */
+/* ========================= */
+.admin-table td:last-child {
+  white-space: nowrap; /* evita que se rompan */
+}
+
+/* contenedor interno invisible */
+.admin-table td:last-child > * {
+  display: inline-block;
+  margin: 2px;
+}
+
+/* ========================= */
+/* MEDIA */
+/* ========================= */
 .curso-img {
-  width: 80px;
-  margin-right: 5px;
-  border-radius: 6px;
+  width: 70px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.curso-img:hover {
+  transform: scale(1.1);
 }
 
 .curso-video {
-  width: 150px;
-  margin-right: 5px;
-  border-radius: 6px;
+  width: 140px;
+  border-radius: 8px;
 }
 
-/* Progress bar */
+/* ========================= */
+/* PROGRESS 🔥 */
+/* ========================= */
 .progress-bar-container {
   width: 100%;
   max-width: 1400px;
   margin: 20px auto;
-  background: #e0e0e0;
-  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 14px;
   overflow: hidden;
 }
 
 .progress-bar {
   height: 22px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  background: linear-gradient(135deg, var(--link-color), #00c6ff);
   text-align: center;
   line-height: 22px;
   color: #fff;
   font-weight: bold;
-  border-radius: 12px 0 0 12px;
   transition: width 0.3s ease;
 }
 
-/* Adaptable a pantallas pequeñas */
+/* ========================= */
+/* PANEL EDIT 🔥 */
+/* ========================= */
+.edit-panel {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-panel input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-color);
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
 @media (max-width: 1024px) {
   .curso-form {
     flex-direction: column;
-  }
-  .form-group {
-    flex: 1 1 100%;
-  }
-  .curso-video {
-    width: 100%;
-  }
-  .curso-img {
-    width: 60px;
   }
 }
 
@@ -165,8 +232,74 @@
   .admin-section {
     padding: 20px 10px;
   }
+
   .custom-btn {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
+
+  .curso-video {
+    width: 100%;
+  }
+}
+/* contenedor de acciones */
+.acciones-btns {
+  display: flex;
+  justify-content: center; /* centrado horizontal */
+  align-items: center;
+  gap: 8px; /* espacio entre botones */
+  flex-wrap: wrap; /* por si en móvil se bajan */
+}
+
+/* ========================= */
+/* MODAL 🔥 */
+/* ========================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.edit-panel {
+  width: 100%;
+  max-width: 500px;
+  padding: 25px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: modalFade 0.3s ease;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.edit-panel input[type="file"] {
+  padding: 6px;
+  background: transparent;
 }

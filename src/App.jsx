@@ -28,7 +28,6 @@ import CursoDetalle from './vistas/admin/CursoDetalle';
 import ProfesorPanel from './vistas/profesor/ProfesorPanel';
 import ProfesorCursos from './vistas/profesor/CursosProfesor';
 import EditarCursoProfesor from './vistas/profesor/EditarCursoProfesor';
-import Examenes from './vistas/profesor/Examenes';
 import VerExamenes from './vistas/profesor/VerExamenes';
 import Inscripciones from './vistas/profesor/Insripciones';
 import AlumnosCursoProfesor from './vistas/profesor/AlumnosCursoProfesor';
@@ -128,7 +127,6 @@ function App() {
           <Route path="cursos/:id/niveles/crear" element={<CrearNivelProfesor />} />
 
           {/* EXAMENES */}
-          <Route path="examenes" element={<Examenes />} />
           <Route path="cursos/:cursoId/examenes" element={<VerExamenes />} />
 
           {/* INSCRIPCIONES */}

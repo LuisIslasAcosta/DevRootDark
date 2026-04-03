@@ -1,88 +1,79 @@
-.examenes-panel {
+/* ========================= */
+/* BOTON FLOTANTE */
+/* ========================= */
+.fab-btn {
+  position: fixed;
+  top: 250px;      /* 🔥 ahora arriba */
+  right: 980px;
+  padding: 14px 20px;
+  border-radius: 50px;
+  border: none;
+  font-weight: 600;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+.fab-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ========================= */
+/* MODAL FORM */
+/* ========================= */
+.modal-form {
   width: 100%;
-  max-width: 100%;
-  padding: 28px;
-  color: var(--text-color);
-}
-
-/* Header */
-.examenes-header {
-  margin-bottom: 22px;
-}
-
-.examenes-header h2 {
-  font-weight: 700;
-  letter-spacing: 0.4px;
-}
-
-.examenes-header p {
-  opacity: 0.7;
-  font-size: 14px;
-}
-
-/* Table Card */
-.examenes-table-card {
+  max-width: 600px;
+  padding: 25px;
+  border-radius: 16px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  border-radius: 18px;
-  padding: 18px;
-  box-shadow: var(--shadow);
-}
-
-/* Table */
-.examenes-table {
-  color: var(--text-color);
-  margin-top: 4px;
-}
-
-.examenes-table thead {
-  background: rgba(0,0,0,0.05);
-}
-
-.examenes-table th {
-  font-size: 14px;
-  font-weight: 600;
-  opacity: 0.85;
-}
-
-/* Text emphasis */
-.curso-name {
-  font-weight: 600;
-}
-
-.exam-title {
-  font-weight: 500;
-}
-
-/* Empty */
-.empty-row {
-  text-align: center;
-  opacity: 0.6;
-  font-style: italic;
-}
-
-/* Actions */
-.actions-col {
-  width: 120px;
-}
-
-.actions-cell {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* Button delete */
-.btn-delete {
-  background: #dc2626;
-  border: none;
-  padding: 6px 14px;
+/* inputs */
+.examen-form input,
+.examen-form select {
+  padding: 10px;
   border-radius: 10px;
-  color: white;
-  font-size: 13px;
-  transition: opacity 0.2s ease, transform 0.1s ease;
+  border: 1px solid var(--card-border);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-color);
 }
 
-.btn-delete:hover {
-  opacity: 0.85;
-  transform: translateY(-1px);
+/* ========================= */
+/* PREGUNTAS */
+/* ========================= */
+.pregunta-card {
+  padding: 15px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ========================= */
+/* BOTONES */
+/* ========================= */
+.btn-save {
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
 }
