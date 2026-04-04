@@ -234,12 +234,6 @@ function ProfesorPanel() {
                         <button onClick={() => navigate(`/profesor/cursos/${cursoId}/examenes`)}>
                           Ver exámenes
                         </button>
-                        <button onClick={() => navigate(`/profesor/cursos/${cursoId}/niveles`)}>
-                          Ver niveles
-                        </button>
-                        <button onClick={() => navigate(`/profesor/cursos/${cursoId}/lecciones`)}>
-                          Ver lecciones
-                        </button>
                       </div>
                     </div>
                   );

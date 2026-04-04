@@ -77,3 +77,9 @@
   border-radius: 10px;
   cursor: pointer;
 }
+.top-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: flex-start;
+}

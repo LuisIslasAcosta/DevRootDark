@@ -31,11 +31,7 @@ import EditarCursoProfesor from './vistas/profesor/EditarCursoProfesor';
 import VerExamenes from './vistas/profesor/VerExamenes';
 import Inscripciones from './vistas/profesor/Insripciones';
 import AlumnosCursoProfesor from './vistas/profesor/AlumnosCursoProfesor';
-import CrearLeccionProfesor from './vistas/profesor/CrearLeccionProfesor';
-import VerLeccionesProfesor from './vistas/profesor/VerLeccionesProfesor';
 import ReportesProfesor from './vistas/profesor/ReportesProfesor';
-import VerNivelesProfesor from './vistas/profesor/VerNivelesProfesor';
-import CrearNivelProfesor from './vistas/profesor/CrearNivelProfesor';
 import Ventas from './vistas/profesor/Ventas';
 
 // ================= RUTAS PROTEGIDAS =================
@@ -117,14 +113,6 @@ function App() {
 
           {/* VER ALUMNOS INSCRITOS */}
           <Route path="cursos/:id/alumnos" element={<AlumnosCursoProfesor />} />
-
-          {/* LECCIONES */}
-          <Route path="cursos/:id/lecciones" element={<VerLeccionesProfesor />} />
-          <Route path="cursos/:id/lecciones/crear" element={<CrearLeccionProfesor />} />
-
-          {/* NIVELES */}
-          <Route path="cursos/:id/niveles" element={<VerNivelesProfesor />} />
-          <Route path="cursos/:id/niveles/crear" element={<CrearNivelProfesor />} />
 
           {/* EXAMENES */}
           <Route path="cursos/:cursoId/examenes" element={<VerExamenes />} />
