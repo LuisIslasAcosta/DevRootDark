@@ -164,3 +164,175 @@
   object-fit: cover;
   border-radius: 6px;
 }
+
+/* EXÁMENES POR LECCIÓN */
+.leccion-examenes {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #e5e7eb;
+}
+
+.leccion-examenes h6 {
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+.curso-form-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
+}
+
+.curso-form-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.curso-form-card h5 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.curso-form-card p {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.btn-modern {
+  display: inline-block;
+  padding: 10px 20px;
+  background: var(--link-color, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-modern:hover {
+  background: var(--link-color, #3b82f6);
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-modern:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* EXÁMENES POR NIVEL */
+.nivel-examenes {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #e5e7eb;
+}
+
+.nivel-examenes h6 {
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #374151;
+}
+
+/* BARRA DE PROGRESO */
+.progreso-container {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.progreso-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progreso-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.progreso-porcentaje {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #3b82f6;
+}
+
+.progreso-bar {
+  width: 100%;
+  height: 24px;
+  background: #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progreso-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  transition: width 0.5s ease;
+  border-radius: 12px;
+}
+
+.progreso-detalles {
+  display: flex;
+  gap: 20px;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.progreso-detalles span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* BOTÓN MARCAR COMO VISTA */
+.btn-marcar-vista {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.btn-marcar-vista:hover {
+  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.leccion-vista-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #d1fae5;
+  color: #065f46;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 10px;
+}

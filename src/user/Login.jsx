@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUsuario } from "../service/api";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // ✅ íconos de ojo
+import { FaEye, FaEyeSlash } from "react-icons/fa"; //  íconos de ojo
 import "./styles/login.css";
 
 const Login = () => {

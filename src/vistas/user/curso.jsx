@@ -13,6 +13,21 @@ function Cursos() {
   const [niveles, setNiveles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [nivelAbierto, setNivelAbierto] = useState(null);
+  const [progreso, setProgreso] = useState(null);
+  const [leccionesVistas, setLeccionesVistas] = useState({});
+  const [user, setUser] = useState(null);
+
+  // ================= LOAD USER =================
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem("usuario");
+    if (usuarioGuardado) {
+      try {
+        setUser(JSON.parse(usuarioGuardado));
+      } catch {
+        setUser(null);
+      }
+    }
+  }, []);
 
   // ================= CARGAR CURSO =================
   useEffect(() => {
@@ -27,6 +42,29 @@ function Cursos() {
     cargarCurso();
   }, [id]);
 
+  // ================= CARGAR PROGRESO DEL ESTUDIANTE =================
+  useEffect(() => {
+    const cargarProgreso = async () => {
+      if (!user?.id || !id) return;
+      
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          `http://127.0.0.1:5000/api/analisis/progreso/estudiante/${user.id}/${id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
+        if (res.data && res.data.resumen) {
+          setProgreso(res.data.resumen);
+        }
+      } catch (err) {
+        console.error("Error al cargar progreso:", err);
+      }
+    };
+    
+    cargarProgreso();
+  }, [user, id]);
+
   // ================= CARGAR NIVELES CON LECCIONES =================
   useEffect(() => {
     const cargarNiveles = async () => {
@@ -36,20 +74,31 @@ function Cursos() {
         );
         const nivelesConExamenes = await Promise.all(
           res.data.map(async (nivel) => {
-            const leccionesConExamenes = await Promise.all(
-              nivel.lecciones.map(async (leccion) => {
-                // Traer los exámenes por lección
-                try {
-                  const examRes = await axios.get(
-                    `http://127.0.0.1:5000/api/examenes/leccion/${leccion.id}`
-                  );
-                  return { ...leccion, examenes: examRes.data || [] };
-                } catch {
-                  return { ...leccion, examenes: [] };
-                }
-              })
-            );
-            return { ...nivel, lecciones: leccionesConExamenes };
+              const leccionesConExamenes = await Promise.all(
+                nivel.lecciones.map(async (leccion) => {
+                  // Traer los exámenes por lección
+                  try {
+                    const examRes = await axios.get(
+                      `http://127.0.0.1:5000/api/examenes/leccion/${leccion.id}`
+                    );
+                    return { ...leccion, examenes: examRes.data || [] };
+                  } catch {
+                    return { ...leccion, examenes: [] };
+                  }
+                })
+              );
+              
+              // Traer los exámenes del nivel
+              let examenesNivel = [];
+              try {
+                const examNivelRes = await axios.get(
+                  `http://127.0.0.1:5000/api/examenes/nivel/${nivel.id}`
+                );
+                examenesNivel = examNivelRes.data || [];
+              } catch (err) {
+                console.error(`Error al cargar exámenes del nivel ${nivel.id}:`, err);
+              }
+            return { ...nivel, lecciones: leccionesConExamenes, examenesNivel };
           })
         );
         setNiveles(nivelesConExamenes);
@@ -64,6 +113,39 @@ function Cursos() {
 
   const toggleNivel = (nivelId) => {
     setNivelAbierto(nivelAbierto === nivelId ? null : nivelId);
+  };
+
+  // ================= MARCAR LECCIÓN COMO VISTA =================
+  const marcarLeccionVista = async (leccionId) => {
+    if (!user?.id) return;
+    
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        "http://127.0.0.1:5000/api/analisis/progreso/leccion/vista",
+        {
+          alumno_id: user.id,
+          leccion_id: leccionId,
+          curso_id: id
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      // Actualizar estado local
+      setLeccionesVistas(prev => ({ ...prev, [leccionId]: true }));
+      
+      // Recargar progreso
+      const res = await axios.get(
+        `http://127.0.0.1:5000/api/analisis/progreso/estudiante/${user.id}/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      if (res.data && res.data.resumen) {
+        setProgreso(res.data.resumen);
+      }
+    } catch (err) {
+      console.error("Error al marcar lección como vista:", err);
+    }
   };
 
   // ================= UTILS =================
@@ -85,6 +167,26 @@ function Cursos() {
         <h2>{curso.nombre}</h2>
         <p className="curso-desc">{curso.descripcion}</p>
       </div>
+
+      {/* BARRA DE PROGRESO */}
+      {progreso && (
+        <div className="progreso-container">
+          <div className="progreso-header">
+            <h4>Tu Progreso</h4>
+            <span className="progreso-porcentaje">{progreso.progreso_global}%</span>
+          </div>
+          <div className="progreso-bar">
+            <div 
+              className="progreso-fill" 
+              style={{ width: `${progreso.progreso_global}%` }}
+            ></div>
+          </div>
+          <div className="progreso-detalles">
+            <span>📚 Lecciones: {progreso.lecciones_completadas}</span>
+            <span> Exámenes: {progreso.examenes_realizados}</span>
+          </div>
+        </div>
+      )}
 
       {/* INFO */}
       <div className="curso-meta">
@@ -178,6 +280,19 @@ function Cursos() {
                           </div>
                         )}
 
+                        {/* BOTÓN MARCAR COMO VISTA */}
+                        {!leccionesVistas[leccion.id] && (
+                          <button 
+                            className="btn-marcar-vista"
+                            onClick={() => marcarLeccionVista(leccion.id)}
+                          >
+                            ✓ Marcar como vista
+                          </button>
+                        )}
+                        {leccionesVistas[leccion.id] && (
+                          <span className="leccion-vista-badge">✓ Vista</span>
+                        )}
+
                         {/* EXÁMENES POR LECCIÓN */}
                         {leccion.examenes?.length > 0 && (
                           <div className="leccion-examenes">
@@ -197,6 +312,22 @@ function Cursos() {
                       </div>
                     ))
                   )}
+                </div>
+              )}
+              
+              {/* EXÁMENES DEL NIVEL */}
+              {nivel.examenesNivel?.length > 0 && (
+                <div className="nivel-examenes">
+                  <h6> Exámenes de este nivel</h6>
+                  {nivel.examenesNivel.map(examen => (
+                    <div key={examen.id} className="curso-form-card">
+                      <h5>{examen.titulo}</h5>
+                      {examen.descripcion && <p>{examen.descripcion}</p>}
+                      <Link to={`/principal/examen/${examen.id}`} className="btn-modern">
+                        Responder Examen
+                      </Link>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

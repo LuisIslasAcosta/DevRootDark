@@ -57,7 +57,7 @@ const Recuperar = () => {
       const res = await axios.put("http://127.0.0.1:5000/api/recuperar/reset", {
         usuario_id: usuarioId,
         nueva_password: nuevaPassword,
-        respuesta // ✅ enviar la respuesta de seguridad al reset
+        respuesta //  enviar la respuesta de seguridad al reset
       });
       if (res.status === 200) {
         setMensaje("Contraseña actualizada correctamente. Redirigiendo al login...");

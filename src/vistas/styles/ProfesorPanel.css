@@ -400,6 +400,101 @@ html, body {
 }
 
 /* ========================= */
+/* MÉTODO DEL CODO */
+/* ========================= */
+.codo-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 12px;
+}
+
+.codo-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.codo-chart {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.codo-result {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.codo-info-card {
+  background: linear-gradient(135deg, var(--card-bg, #fff), rgba(255,255,255,0.05));
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.codo-info-card h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.k-optimo-value {
+  font-size: 48px;
+  font-weight: bold;
+  color: var(--link-color, #007bff);
+  text-align: center;
+  margin: 15px 0;
+}
+
+.codo-description {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-color, #333);
+  margin: 10px 0;
+}
+
+.codo-details {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.codo-details h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.codo-details p {
+  margin: 10px 0;
+  font-size: 14px;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.codo-details p svg {
+  color: var(--link-color, #007bff);
+  font-size: 14px;
+}
+
+/* ========================= */
 /* RESPONSIVE */
 /* ========================= */
 @media (max-width: 900px) {
@@ -427,6 +522,10 @@ html, body {
 
 @media (max-width: 768px) {
   .kmeans-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .codo-container {
     grid-template-columns: 1fr;
   }
 }
@@ -469,4 +568,687 @@ html, body {
 .dashboard-card {
   position: relative;
   z-index: 1;
+}
+
+
+
+/* ================= ESTILOS GENERALES ================= */
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-sidebar {
+  width: 250px;
+  background: var(--card-bg, #fff);
+  border-right: 1px solid var(--card-border, #ddd);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+
+/* ================= SEGMENTACIÓN ALUMNOS ================= */
+.segmentacion-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.metric-card {
+  background: var(--card-bg, #e10c0ce2);
+  border: 1px solid var(--card-border, #81fc16);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.metric-card h4 {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--link-color, #007bff);
+  margin: 0;
+}
+
+.clusters-interpretation {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.clusters-interpretation h4 {
+  margin-bottom: 15px;
+}
+
+.clusters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.cluster-card {
+  background: var(--card-bg, #fff);
+  border: 2px solid var(--card-border, #ddd);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.cluster-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.cluster-card.cluster-0 {
+  border-left: 5px solid #8884d8;
+}
+
+.cluster-card.cluster-1 {
+  border-left: 5px solid #82ca9d;
+}
+
+.cluster-card.cluster-2 {
+  border-left: 5px solid #ffc658;
+}
+
+.cluster-card h5 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: var(--text-color, #333);
+}
+
+.cluster-card p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cluster-card p svg {
+  color: var(--link-color, #007bff);
+  font-size: 14px;
+}
+
+.recomendacion {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--card-border, #ddd);
+  color: #666;
+  font-style: italic;
+}
+
+.recomendacion svg {
+  color: #ffc107;
+}
+
+/* ================= CUADROS INDIVIDUALES DE ALUMNOS ================= */
+.alumnos-cluster-grid {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--card-border, #ddd);
+}
+
+.alumnos-cluster-grid h6 {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--text-color, #333);
+  font-weight: 600;
+}
+
+.alumno-individual-card {
+  background: #fff3cd !important;
+  border: 3px solid #ff5722 !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  margin-bottom: 15px !important;
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3) !important;
+  font-weight: bold !important;
+}
+
+.alumno-individual-card:last-child {
+  margin-bottom: 0;
+}
+
+.alumno-individual-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--card-border, #ddd);
+}
+
+.alumno-nombre-individual {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-color, #333);
+  flex: 1;
+}
+
+.alumno-promedio-individual {
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--link-color, #007bff);
+}
+
+.alumno-individual-body {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.alumno-individual-body p {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.alumno-individual-body p svg {
+  font-size: 12px;
+  color: var(--link-color, #007bff);
+}
+
+.alumno-individual-tip {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dotted var(--card-border, #ddd);
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.alumno-individual-tip svg {
+  color: #ffc107;
+  font-size: 12px;
+}
+
+/* ================= FACTORES IMPORTANTES ================= */
+.feature-importance {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.feature-importance h4 {
+  margin-bottom: 15px;
+}
+
+.importance-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.importance-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.importance-item label {
+  min-width: 200px;
+  font-size: 14px;
+  color: var(--text-color, #333);
+}
+
+.importance-bar-bg {
+  flex: 1;
+  height: 20px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.importance-bar-fill {
+  height: 100%;
+  background: var(--link-color, #007bff);
+  transition: width 0.3s ease;
+}
+
+.importance-item span {
+  min-width: 40px;
+  text-align: right;
+  font-weight: bold;
+  color: var(--link-color, #007bff);
+}
+
+/* ================= PCA VISUALIZATION ================= */
+.pca-visualization {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.pca-visualization h4 {
+  margin-bottom: 10px;
+}
+
+.pca-description {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.pca-chart {
+  margin-bottom: 15px;
+}
+
+.pca-legend {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.legend-color.cluster-0 {
+  background: #8884d8;
+}
+
+.legend-color.cluster-1 {
+  background: #82ca9d;
+}
+
+.custom-tooltip {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.custom-tooltip p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: var(--text-color, #333);
+}
+
+.custom-tooltip p svg {
+  color: var(--link-color, #007bff);
+  margin-right: 5px;
+}
+
+.error-text {
+  color: #dc3545;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ================= ESTILOS PARA TARJETAS DE ALUMNOS ================= */
+.alumno-card-riesgo {
+  background: #fff3cd !important;
+  border: 3px solid #ff5722 !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  margin-bottom: 15px !important;
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.3) !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease !important;
+}
+
+.alumno-card-riesgo:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4) !important;
+}
+
+.alumno-card-destacado {
+  background: #d4edda !important;
+  border: 3px solid #28a745 !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  margin-bottom: 15px !important;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3) !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease !important;
+}
+
+.alumno-card-destacado:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4) !important;
+}
+
+/* ================= ALUMNOS POR GRUPO ================= */
+.alumnos-por-grupo {
+  margin-top: 30px;
+}
+
+.grupo-alumnos-section {
+  margin-bottom: 30px;
+}
+
+.grupo-alumnos-section h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.grupo-alumnos-section h4 svg {
+  font-size: 20px;
+}
+
+.alumnos-lista-individual {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.alumno-card-riesgo {
+  background: #fff3cd !important;
+  border: 3px solid #ff5722 !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.alumno-card-riesgo:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 20px rgba(255, 87, 34, 0.35) !important;
+}
+
+.alumno-card-destacado {
+  background: #d4edda !important;
+  border: 3px solid #28a745 !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.alumno-card-destacado:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.35) !important;
+}
+
+.alumno-individual-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--card-border, #ddd);
+}
+
+.alumno-nombre-individual {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-color, #333);
+  flex: 1;
+}
+
+.alumno-promedio-individual {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--link-color, #007bff);
+}
+
+.alumno-individual-body {
+  margin: 10px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.alumno-individual-body p {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alumno-individual-body p svg {
+  font-size: 13px;
+  color: var(--link-color, #007bff);
+}
+
+.alumno-individual-tip {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dotted var(--card-border, #ddd);
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alumno-individual-tip svg {
+  color: #ffc107;
+  font-size: 13px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .alumnos-lista-individual {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+.centroides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.centroide-card {
+  background: var(--card-bg, #fff);
+  border: 2px solid var(--card-border, #ddd);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.centroide-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.centroide-card.cluster-0 {
+  border-left: 5px solid #8884d8;
+}
+
+.centroide-card.cluster-1 {
+  border-left: 5px solid #82ca9d;
+}
+
+.centroide-card.cluster-2 {
+  border-left: 5px solid #ffc658;
+}
+
+.centroide-card h5 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: var(--text-color, #333);
+  font-weight: 700;
+}
+
+.centroide-values p {
+  margin: 10px 0;
+  font-size: 14px;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.centroide-values p svg {
+  color: var(--link-color, #007bff);
+  font-size: 14px;
+}
+
+.centroide-values p strong {
+  color: var(--text-color, #333);
+  font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+  .codo-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .k-optimo-value {
+    font-size: 36px;
+  }
+  
+  .centroides-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= WCSS Y DISTANCIA EUCLIDIANA ================= */
+.wcss-section {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.wcss-section h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  color: var(--text-color, #333);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wcss-section h4 svg {
+  color: var(--link-color, #007bff);
+}
+
+.wcss-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.wcss-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.wcss-card h5 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.wcss-card .metric-value {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: white;
+}
+
+.wcss-card .metric-description {
+  font-size: 12px;
+  opacity: 0.8;
+  margin: 8px 0 0 0;
+  line-height: 1.4;
+}
+
+.distancias-card {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+}
+
+.distancias-card h5 {
+  margin: 0 0 15px 0;
+  font-size: 14px;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.distancia-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.distancia-item:last-child {
+  margin-bottom: 0;
+}
+
+.distancia-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.distancias-card .metric-description {
+  font-size: 12px;
+  opacity: 0.8;
+  margin: 12px 0 0 0;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .wcss-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .wcss-card .metric-value {
+    font-size: 28px;
+  }
 }

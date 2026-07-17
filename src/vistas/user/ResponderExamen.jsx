@@ -86,7 +86,7 @@ function ResponderExamen() {
             <p><strong>{index + 1}. {p.enunciado}</strong></p>
 
             {opcionesValidas.length === 0 && (
-              <p style={{ color: "red" }}>⚠️ Esta pregunta no tiene opciones válidas</p>
+              <p style={{ color: "red" }}> Esta pregunta no tiene opciones válidas</p>
             )}
 
             {opcionesValidas.map((op, i) => (

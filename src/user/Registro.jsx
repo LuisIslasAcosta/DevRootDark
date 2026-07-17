@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { registrarUsuario } from "../service/api";
 import { Link } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // ✅ íconos de ojo
+import { FaEye, FaEyeSlash } from "react-icons/fa"; //  íconos de ojo
 import "./styles/login.css"; // usamos el mismo login.css para mantener consistencia
 
 const Registro = () => {

@@ -1,0 +1,437 @@
+/* ========================= */
+/* REGRESIÓN LOGÍSTICA */
+/* ========================= */
+.regresion-logistica {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.regresion-logistica h2 {
+  margin: 0 0 30px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3e50;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #3498db;
+}
+
+/* ========================= */
+/* MÉTRICAS PRINCIPALES */
+/* ========================= */
+.metricas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.metrica-card {
+  background: #fff;
+  padding: 24px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  text-align: center;
+  border-top: 4px solid #3498db;
+  transition: all 0.3s ease;
+}
+
+.metrica-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.metrica-card h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metrica-card .valor {
+  margin: 0 0 6px;
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.metrica-card .descripcion {
+  font-size: 13px;
+  color: #95a5a6;
+  line-height: 1.4;
+}
+
+/* ========================= */
+/* MATRIZ DE CONFUSIÓN */
+/* ========================= */
+.matriz-confusion {
+  margin: 40px 0;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.matriz-confusion h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.matriz-confusion table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.matriz-confusion thead {
+  background: #34495e;
+  color: #fff;
+}
+
+.matriz-confusion th {
+  padding: 14px 16px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.matriz-confusion td {
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  vertical-align: middle;
+}
+
+.matriz-confusion tbody tr td:first-child {
+  font-weight: 600;
+  background: #ecf0f1;
+  color: #2c3e50;
+}
+
+.matriz-confusion .tp,
+.matriz-confusion .tn {
+  background: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.matriz-confusion .tp strong,
+.matriz-confusion .tn strong {
+  color: #155724;
+}
+
+.matriz-confusion .fp,
+.matriz-confusion .fn {
+  background: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.matriz-confusion .fp strong,
+.matriz-confusion .fn strong {
+  color: #721c24;
+}
+
+.matriz-confusion small {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 4px;
+  display: block;
+}
+
+/* ========================= */
+/* FÓRMULAS */
+/* ========================= */
+.formulas {
+  margin: 40px 0;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.formulas h4 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.formula {
+  padding: 14px 18px;
+  background: #f8f9fa;
+  border-left: 4px solid #3498db;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.formula:last-child {
+  margin-bottom: 0;
+}
+
+.formula strong {
+  color: #2980b9;
+  font-weight: 600;
+}
+
+/* ========================= */
+/* COEFICIENTES */
+/* ========================= */
+.coeficientes {
+  margin: 40px 0;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.coeficientes h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.coeficientes p {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: #2c3e50;
+}
+
+.coeficientes p strong {
+  color: #8e44ad;
+}
+
+.coeficientes ul {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.coeficientes li {
+  margin: 10px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #2c3e50;
+}
+
+.coeficientes li strong {
+  color: #2980b9;
+}
+
+.coeficientes .explicacion {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: #e7f3ff;
+  border-left: 4px solid #3498db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #2c3e50;
+  line-height: 1.5;
+}
+
+/* ========================= */
+/* RESUMEN DE CURSOS */
+/* ========================= */
+.resumen-cursos {
+  margin: 40px 0;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.resumen-cursos h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.resumen-cursos table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.resumen-cursos thead {
+  background: #34495e;
+  color: #fff;
+}
+
+.resumen-cursos th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.resumen-cursos td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.resumen-cursos tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.resumen-cursos tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.resumen-cursos td:first-child {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.resumen-cursos td:nth-child(2),
+.resumen-cursos td:nth-child(3),
+.resumen-cursos td:nth-child(4) {
+  font-family: "Courier New", monospace;
+  font-weight: 600;
+  text-align: right;
+  color: #2c3e50;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.badge.estrella {
+  background: linear-gradient(135deg, #ffc107, #ff9800);
+  color: #000;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.badge.rotacion {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+}
+
+.badge.secundario {
+  background: rgba(108, 117, 125, 0.2);
+  color: #adb5bd;
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+/* ========================= */
+/* BOTÓN ACTUALIZAR */
+/* ========================= */
+.btn-actualizar {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 40px auto 0;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.btn-actualizar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(135deg, #2980b9, #3498db);
+}
+
+.btn-actualizar:active {
+  transform: translateY(0);
+}
+
+/* ========================= */
+/* LOADING Y ERROR */
+/* ========================= */
+.loading,
+.error,
+.info {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-size: 16px;
+  color: #7f8c8d;
+}
+
+.error {
+  color: #e74c3c;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.info {
+  color: #3498db;
+  background: #d1ecf1;
+  border: 1px solid #bee5eb;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+@media (max-width: 1024px) {
+  .metricas-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .regresion-logistica {
+    padding: 20px;
+  }
+
+  .regresion-logistica h2 {
+    font-size: 20px;
+  }
+
+  .metricas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrica-card .valor {
+    font-size: 28px;
+  }
+
+  .matriz-confusion,
+  .formulas,
+  .coeficientes,
+  .resumen-cursos {
+    padding: 16px;
+  }
+
+  .matriz-confusion table,
+  .resumen-cursos table {
+    font-size: 12px;
+  }
+
+  .matriz-confusion th,
+  .matriz-confusion td,
+  .resumen-cursos th,
+  .resumen-cursos td {
+    padding: 10px 8px;
+  }
+
+  .btn-actualizar {
+    max-width: 100%;
+  }
+}

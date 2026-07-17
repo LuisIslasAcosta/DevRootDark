@@ -37,7 +37,7 @@ function AnalisisRespuestasAlumno() {
         const apiData = res.data;
         setData(apiData);
 
-        // 📊 PREPARAR DATOS PARA GRÁFICA
+        //  PREPARAR DATOS PARA GRÁFICA
         const formatted = apiData.historial.map((item, index) => ({
           intento: index + 1,
           calificacion: item.calificacion
