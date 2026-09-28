@@ -1,316 +1,538 @@
-/* Reset general */
-body {
-  font-size: 19px;
-}
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
+/* ---------- Base: ocupar SIEMPRE toda la pantalla ---------- */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Layout principal */
-.admin-layout {
-  display: flex;
-  background-color: var(--bg-color);
-  min-height: 100vh;
-  width: 100vw;
-  font-family: 'Segoe UI', Roboto, sans-serif;
+/* Escala fluida: todo está en rem, así crece en pantallas 2K/4K y se ajusta en móvil */
+html {
+  font-size: clamp(16px, 0.55vw + 8px, 24px);
+  -webkit-text-size-adjust: 100%;
 }
 
-.dashboard-welcome {
-  text-align: center;
-  font-size: 1.2rem;
-  color: var(--text-color);
-  margin-bottom: 20px;
-}
-
-/* Barra lateral */
-.admin-sidebar {
-  width: 300px;
-  background-color: var(--card-bg);
-  border-right: 1px solid var(--card-border);
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 20px 0 8px rgba(0, 0, 0, 0.05);
-  position: relative;
-}
-
-/* Icono de temas */
-.tema-icon {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-}
-
-.tema-icon button {
-  background: none;
-  border: none;
-  color: var(--link-color);
-  cursor: pointer;
-  transition: color 0.2s ease;
-  font-size: 1.4rem;
-}
-
-.tema-icon button:hover {
-  color: var(--link-hover);
-}
-
-/* Menú de temas */
-.tema-menu {
-  position: absolute;
-  top: 40px;
-  right: 0;
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  padding: 20px;
-  width: 200px;
-  z-index: 999;
-}
-
-.tema-menu h4 {
-  margin-top: 0;
-  color: var(--text-color);
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
-
-.tema-menu button {
-  display: block;
+/* Anula estilos de plantilla (Vite/CRA) que encogen o centran #root */
+html,
+body,
+#root {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
-  background-color: var(--link-color);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+  max-width: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
 }
 
-.tema-menu button:hover {
-  background-color: var(--link-hover);
-}
-
-.tema-menu label {
+body {
   display: block;
-  margin-top: 10px;
-  color: var(--text-color);
-  font-size: 0.9rem;
+  font-size: 1rem;
+  text-align: left;
 }
 
-.tema-menu input[type="color"] {
-  margin-left: 10px;
-  vertical-align: middle;
-  cursor: pointer;
+/* Tokens derivados del tema (funcionan con temas.css y colores personalizados) */
+.admin-layout {
+  --accent: var(--link-color, #2563eb);
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --border: var(--card-border, rgba(128, 128, 128, 0.25));
+  --surface: var(--card-bg, #ffffff);
+  --ink: var(--text-color, #1f2937);
+  --ink-soft: color-mix(in srgb, var(--ink) 65%, transparent);
+  --radius: 1rem;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --c-usuarios: #6366f1;
+  --c-cursos: #f59e0b;
+  --sidebar-w: 17rem;
+
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--bg-color);
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans", "Segoe UI", Roboto, sans-serif;
 }
 
-/* Sección superior con perfil */
-.admin-top {
+/* ---------- Barra lateral ---------- */
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
+  gap: 1.5rem;
+  padding: 1.75rem 1.1rem;
+  background-color: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.admin-sidebar .brand {
+  padding: 0 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
 }
 
 .profile {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-bottom: 15px;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.9rem;
+  background-color: var(--accent-soft);
 }
 
 .profile-pic {
-  width: 200px;
-  height: 200px;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex-shrink: 0;
   border-radius: 50%;
-  margin-bottom: 12px;
-  border: 3px solid var(--link-color);
   object-fit: cover;
+  border: 2px solid var(--accent);
+}
+
+.profile-initial {
+  display: grid;
+  place-items: center;
+  background-color: var(--accent);
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .profile-name {
-  font-weight: 600;
-  color: var(--text-color);
-  font-size: 1.2rem;
-  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink);
 }
 
-/* Botones debajo del perfil */
+.profile-role {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* Navegación */
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-nav .admin-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.65rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-nav .admin-link:hover {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+
+.admin-nav .admin-link.active {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.admin-nav .admin-link:focus-visible,
+.profile-actions button:focus-visible,
+.tema-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Acciones del perfil (abajo) */
 .profile-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 100%;
+  gap: 0.25rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
 }
 
 .edit-btn,
 .logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.65rem 0.9rem;
   background: none;
   border: none;
-  color: var(--link-color);
-  font-size: 1rem;
+  border-radius: 0.65rem;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
-  padding: 8px;
-  border-radius: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.edit-btn svg,
-.logout-btn svg {
-  margin-right: 6px;
+.edit-btn:hover {
+  background-color: var(--accent-soft);
+  color: var(--accent);
 }
 
-.edit-btn:hover,
 .logout-btn:hover {
-  color: var(--link-hover);
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
 }
 
-/* Marca */
-.admin-sidebar .brand {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 30px;
-  text-align: center;
+/* ---------- Área principal ---------- */
+.admin-main {
+  min-width: 0;
+  padding: clamp(1rem, 2.4vw, 3rem);
+  padding-bottom: calc(clamp(1rem, 2.4vw, 3rem) + env(safe-area-inset-bottom, 0px));
 }
 
-/* Navegación lateral */
-.admin-nav {
+.dashboard-header {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
 }
 
-.admin-nav a {
-  color: var(--link-color);
-  text-decoration: none;
-  font-weight: 500;
-  padding: 12px 16px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+.dashboard-title {
+  font-size: clamp(1.4rem, 1.2rem + 1vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.dashboard-welcome {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Selector de tema ---------- */
+.tema-icon {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tema-toggle {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.tema-toggle:hover {
+  background-color: var(--accent-soft);
+}
+
+.tema-menu {
+  position: absolute;
+  top: 3.2rem;
+  right: 0;
+  z-index: 50;
+  width: min(15rem, 80vw);
+  padding: 1.1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+.tema-menu h4 {
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.tema-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.tema-options button {
+  padding: 0.5rem;
+  background-color: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.tema-options button:hover {
+  background-color: var(--accent-soft);
+}
+
+.tema-options button.sel {
+  border-color: var(--accent);
+  background-color: var(--accent-soft);
+  color: var(--accent);
+}
+
+.tema-menu label {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ink);
 }
 
-.admin-nav a:hover {
-  background-color: var(--link-hover);
-  color: #fff;
+.tema-menu input[type="color"] {
+  width: 2.1rem;
+  height: 1.5rem;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  cursor: pointer;
 }
 
-.admin-nav a svg {
-  margin-right: 10px;
-}
-
-/* Área principal */
-.admin-main {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-/* Título dashboard */
-.dashboard-title {
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-/* Tarjetas KPI */
+/* ---------- Tarjetas KPI (se estiran a todo el ancho) ---------- */
 .dashboard-cards {
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .kpi-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  padding: 20px 30px;
-  text-align: center;
-  width: 260px;
-  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.4rem 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
-.kpi-card:hover {
-  transform: translateY(-6px);
+.kpi-icon {
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  flex-shrink: 0;
+  border-radius: 0.9rem;
+  font-size: 1.4rem;
+}
+
+.kpi-icon.usuarios {
+  background-color: color-mix(in srgb, var(--c-usuarios) 15%, transparent);
+  color: var(--c-usuarios);
+}
+
+.kpi-icon.cursos {
+  background-color: color-mix(in srgb, var(--c-cursos) 18%, transparent);
+  color: var(--c-cursos);
+}
+
+.kpi-value {
+  font-size: clamp(1.8rem, 1.4rem + 1.2vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
 }
 
 .kpi-card h4 {
-  font-size: 1.2rem;
-  color: var(--text-color);
-  margin-bottom: 10px;
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ink-soft);
 }
 
-.kpi-card p {
-  font-size: 2.4rem;
-  font-weight: bold;
-  color: var(--link-color);
+/* ---------- Paneles ---------- */
+.panel {
+  min-width: 0;
+  padding: 1.4rem 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
-/* Gráficas */
+.panel h4 {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ---------- Gráficas ---------- */
 .dashboard-charts {
-  display: flex;
-  gap: 40px;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
-.chart-box {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  padding: 20px;
-  width: 440px;
+/* Altura fluida: ambas gráficas quedan del mismo tamaño y rellenan su tarjeta */
+.chart-canvas {
+  position: relative;
+  width: 100%;
+  height: clamp(15rem, 34vh, 30rem);
 }
 
-.chart-box h4 {
-  text-align: center;
-  margin-bottom: 15px;
-  color: var(--text-color);
-  font-size: 1.2rem;
-}
-
+/* ---------- Actividad reciente ---------- */
 .dashboard-recent {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  padding: 20px;
-  margin: 40px auto;
-  width: 90%;
-  max-width: 800px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-recent h4 {
-  font-size: 1.3rem;
-  color: var(--text-color);
-  margin-bottom: 15px;
-  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
 }
 
 .dashboard-recent ul {
+  display: flex;
+  flex-direction: column;
   list-style: none;
-  padding-left: 0;
-  color: var(--text-color);
 }
 
 .dashboard-recent li {
-  margin-bottom: 10px;
-  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.25rem;
+  font-size: 0.95rem;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.dashboard-recent li + li {
+  border-top: 1px solid var(--border);
+}
+
+.dot {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.dot.usuarios {
+  background-color: color-mix(in srgb, var(--c-usuarios) 15%, transparent);
+  color: var(--c-usuarios);
+}
+
+.dot.cursos {
+  background-color: color-mix(in srgb, var(--c-cursos) 18%, transparent);
+  color: var(--c-cursos);
+}
+
+.empty {
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1000px) {
+  .dashboard-charts,
+  .dashboard-recent {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Móvil / app ---------- */
+@media (max-width: 800px) {
+  html {
+    font-size: 16px;
+  }
+
+  .admin-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-sidebar {
+    position: static;
+    height: auto;
+    gap: 0.9rem;
+    padding: calc(1rem + env(safe-area-inset-top, 0px)) 1rem 1rem;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .admin-sidebar .brand {
+    padding: 0;
+  }
+
+  /* Menú en una fila desplazable, como pestañas */
+  .admin-nav {
+    flex-direction: row;
+    gap: 0.4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .admin-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-nav .admin-link {
+    flex-shrink: 0;
+    padding: 0.6rem 0.9rem;
+  }
+
+  .profile-actions {
+    flex-direction: row;
+    margin-top: 0;
+    padding-top: 0.75rem;
+  }
+
+  .edit-btn,
+  .logout-btn {
+    justify-content: center;
+    padding: 0.6rem;
+  }
+
+  .dashboard-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .chart-canvas {
+    height: 15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }
