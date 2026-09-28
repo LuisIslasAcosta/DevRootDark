@@ -95,7 +95,7 @@ function Cursos() {
       {/* IMÁGENES */}
       {curso.imagenes?.length > 0 && (
         <section className="curso-media-section">
-          <h4>🖼 Imágenes</h4>
+          <h4> Imágenes</h4>
           <div className="curso-media-grid">
             {curso.imagenes.map((img, i) => (
               <img
@@ -113,7 +113,7 @@ function Cursos() {
       {/* VIDEOS */}
       {curso.videos?.length > 0 && (
         <section className="curso-media-section">
-          <h4>🎥 Videos</h4>
+          <h4> Videos</h4>
           <div className="curso-media-grid">
             {curso.videos.map((vid, i) => (
               <video

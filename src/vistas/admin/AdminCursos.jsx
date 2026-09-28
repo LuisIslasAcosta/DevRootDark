@@ -5,12 +5,12 @@ import '../styles/AdminVistas.css';
 import { Link } from "react-router-dom";
 
 function AdminCursos() {
-  const usuario = JSON.parse(localStorage.getItem("usuario")); // 👈 usuario autenticado
+  const usuario = JSON.parse(localStorage.getItem("usuario")); //  usuario autenticado
   const [cursos, setCursos] = useState([]);
   const [nuevoCurso, setNuevoCurso] = useState({
     nombre: "",
     descripcion: "",
-    profesor_id: usuario ? usuario.id : "", // 👈 se autocompleta
+    profesor_id: usuario ? usuario.id : "", //  se autocompleta
     imagenes: [],
     videos: []
   });
@@ -36,7 +36,7 @@ function AdminCursos() {
     const formData = new FormData();
     formData.append("nombre", nuevoCurso.nombre);
     formData.append("descripcion", nuevoCurso.descripcion);
-    formData.append("profesor", nuevoCurso.profesor_id); // 👈 se envía automáticamente
+    formData.append("profesor", nuevoCurso.profesor_id); //  se envía automáticamente
 
     nuevoCurso.imagenes.forEach(img => {
       formData.append("imagenes", img);
@@ -48,7 +48,7 @@ function AdminCursos() {
 
     axios.post("http://127.0.0.1:5000/api/cursos", formData, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}` // 👈 JWT
+        Authorization: `Bearer ${localStorage.getItem("token")}` //  JWT
       },
       onUploadProgress: (progressEvent) => {
         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -66,7 +66,7 @@ function AdminCursos() {
   const eliminarCurso = (id) => {
     const confirmar = window.confirm("¿Estás seguro de que quieres eliminar este curso?");
     if (!confirmar) {
-      return; // 👈 si el usuario cancela, no se elimina
+      return; //  si el usuario cancela, no se elimina
     }
 
     fetch(`http://127.0.0.1:5000/api/cursos/${id}`, { method: "DELETE" })
@@ -98,7 +98,7 @@ function AdminCursos() {
             onChange={e => setNuevoCurso({ ...nuevoCurso, descripcion: e.target.value })}
           />
         </Form.Group>
-        {/* 👇 Eliminamos el campo de Profesor ID */}
+        {/*  Eliminamos el campo de Profesor ID */}
         <Form.Group className="mb-2">
           <Form.Label>Imágenes</Form.Label>
           <Form.Control
@@ -131,7 +131,7 @@ function AdminCursos() {
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Profesor</th> {/* 👈 CAMBIO: antes decía "Profesor ID" */}
+            <th>Profesor</th> {/*  CAMBIO: antes decía "Profesor ID" */}
             <th>Imágenes</th>
             <th>Videos</th>
             <th>Acciones</th>
@@ -141,7 +141,7 @@ function AdminCursos() {
           {cursos.map((curso, index) => (
             <tr key={curso.id || index}>
               <td>{curso.nombre}</td>
-              <td>{curso.profesor}</td> {/* 👈 ya es el nombre */}
+              <td>{curso.profesor}</td> {/*  ya es el nombre */}
               <td>
                 {curso.imagenes && curso.imagenes.map((img, i) => (
                   <img

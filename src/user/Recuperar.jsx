@@ -14,7 +14,7 @@ const Recuperar = () => {
 
   const navigate = useNavigate();
 
-  // 1️⃣ Enviar email y obtener pregunta
+  //  Enviar email y obtener pregunta
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     setMensaje("");
@@ -29,7 +29,7 @@ const Recuperar = () => {
     }
   };
 
-  // 2️⃣ Verificar respuesta de seguridad
+  //  Verificar respuesta de seguridad
   const handleRespuestaSubmit = async (e) => {
     e.preventDefault();
     setMensaje("");
@@ -49,7 +49,7 @@ const Recuperar = () => {
     }
   };
 
-  // 3️⃣ Actualizar contraseña (ahora requiere respuesta también)
+  //  Actualizar contraseña (ahora requiere respuesta también)
   const handleNuevaPasswordSubmit = async (e) => {
     e.preventDefault();
     setMensaje("");
@@ -57,7 +57,7 @@ const Recuperar = () => {
       const res = await axios.put("http://127.0.0.1:5000/api/recuperar/reset", {
         usuario_id: usuarioId,
         nueva_password: nuevaPassword,
-        respuesta // ✅ enviar la respuesta de seguridad al reset
+        respuesta // enviar la respuesta de seguridad al reset
       });
       if (res.status === 200) {
         setMensaje("Contraseña actualizada correctamente. Redirigiendo al login...");
