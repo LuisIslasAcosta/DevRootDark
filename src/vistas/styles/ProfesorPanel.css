@@ -1,384 +1,648 @@
-/* RESET BASE */
+/* =========================================================
+   Panel del profesor
+   Usa las variables del tema: --bg-color, --text-color,
+   --card-bg, --card-border, --link-color, --link-hover
+   (Las clases del panel empiezan con "pf-" para no chocar
+   con el panel de administración ni con temas.css)
+========================================================= */
+
 * {
   box-sizing: border-box;
 }
-html, body {
+
+/* Escala fluida: todo en rem, crece en pantallas grandes y se ajusta en móvil */
+html {
+  font-size: clamp(16px, 0.55vw + 8px, 24px);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Anula estilos de plantilla que encogen o centran #root */
+html,
+body,
+#root {
   width: 100%;
-  margin: 0;
-  overflow-x: hidden;
-}
-
-
-
-/* ========================= */
-/* LAYOUT GENERAL */
-/* ========================= */
-.dashboard-layout {
-  display: flex;
-  width: 100vw;
+  max-width: none;
   min-height: 100vh;
-  background: var(--bg-color);
-  color: var(--text-color);
-  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
 }
 
-/* ========================= */
-/* SIDEBAR MODERNO */
-/* ========================= */
-.dashboard-sidebar {
-  width: 280px;
-  min-width: 280px;
-  background: var(--card-bg);
-  border-right: 1px solid var(--card-border);
-  padding: 22px;
+body {
+  display: block;
+  text-align: left;
+}
+
+/* ---------- Layout ---------- */
+.pf-layout {
+  --pf-accent: var(--link-color, #2563eb);
+  --pf-accent-soft: color-mix(in srgb, var(--pf-accent) 12%, transparent);
+  --pf-surface: var(--card-bg, #ffffff);
+  --pf-ink: var(--text-color, #1f2937);
+  --pf-soft: color-mix(in srgb, var(--pf-ink) 65%, transparent);
+  --pf-line: var(--card-border, rgba(128, 128, 128, 0.25));
+  --pf-radius: 1rem;
+  --pf-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --pf-danger: #dc2626;
+
+  display: grid;
+  grid-template-columns: 17rem minmax(0, 1fr);
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--bg-color);
+  color: var(--pf-ink);
+  font-family: "Plus Jakarta Sans", "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---------- Barra lateral ---------- */
+.pf-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  box-shadow: 4px 0 18px rgba(0,0,0,0.04);
+  gap: 1.5rem;
+  padding: 1.75rem 1.1rem;
+  background-color: var(--pf-surface);
+  border-right: 1px solid var(--pf-line);
 }
 
-/* Marca */
-.sidebar-brand {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-align: center;
-  margin-bottom: 8px;
+.pf-brand {
+  padding: 0 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--pf-ink);
 }
 
-/* ========================= */
-/* PERFIL */
-/* ========================= */
-.sidebar-profile {
-  text-align: center;
+.pf-perfil {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.9rem;
+  background-color: var(--pf-accent-soft);
 }
 
-.profile-pic {
-  width: 90px;
-  height: 90px;
+.pf-avatar {
+  width: 3.25rem;
+  height: 3.25rem;
+  flex-shrink: 0;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--card-border);
-  transition: 0.3s ease;
+  border: 2px solid var(--pf-accent);
 }
 
-.profile-pic:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+.pf-avatar--inicial {
+  display: grid;
+  place-items: center;
+  background-color: var(--pf-accent);
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
-.sidebar-profile h5 {
-  margin-top: 10px;
-  font-weight: 600;
-}
-
-/* ========================= */
-/* NAVEGACION */
-/* ========================= */
-.sidebar-nav {
+.pf-perfil-info {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  min-width: 0;
 }
 
-.sidebar-nav button {
+.pf-perfil-nombre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--pf-ink);
+}
+
+.pf-perfil-rol {
+  font-size: 0.8rem;
+  color: var(--pf-soft);
+}
+
+/* Navegación */
+.pf-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pf-nav .pf-link {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text-color);
-  font-weight: 500;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.65rem;
+  color: var(--pf-soft);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.pf-nav .pf-link:hover {
+  background-color: var(--pf-accent-soft);
+  color: var(--pf-accent);
+  text-decoration: none;
+}
+
+.pf-nav .pf-link.active {
+  background-color: var(--pf-accent);
+  color: #fff;
+}
+
+.pf-nav .pf-link:focus-visible,
+.pf-btn-lado:focus-visible,
+.pf-tema-toggle:focus-visible,
+.pf-accion:focus-visible {
+  outline: 2px solid var(--pf-accent);
+  outline-offset: 2px;
+}
+
+/* Acciones abajo */
+.pf-acciones-lado {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--pf-line);
+}
+
+.pf-btn-lado {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: none;
+  border: none;
+  border-radius: 0.65rem;
+  color: var(--pf-soft);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
-  transition: 0.25s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.sidebar-nav button:hover {
-  background: var(--link-hover);
-  color: var(--card-bg);
-  transform: translateX(6px);
+.pf-btn-lado:hover {
+  background-color: var(--pf-accent-soft);
+  color: var(--pf-accent);
 }
 
-/* ========================= */
-/* BOTON TEMAS */
-/* ========================= */
+.pf-btn-lado--salir:hover {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: var(--pf-danger);
+}
 
-.theme-dropdown {
+/* ---------- Área principal ---------- */
+.pf-main {
+  min-width: 0;
+  padding: clamp(1rem, 2.4vw, 3rem);
+  padding-bottom: calc(clamp(1rem, 2.4vw, 3rem) + env(safe-area-inset-bottom, 0px));
+}
+
+.pf-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.pf-topbar h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 1.2rem + 1vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--pf-ink);
+}
+
+.pf-topbar p {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  color: var(--pf-soft);
+}
+
+/* ---------- Selector de tema ---------- */
+.pf-tema {
   position: relative;
+  flex-shrink: 0;
 }
 
-/* Solo el botón pequeño */
-.theme-dropdown .theme-btn {
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.pf-tema-toggle {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  background-color: var(--pf-surface);
+  border: 1px solid var(--pf-line);
+  border-radius: 0.75rem;
+  color: var(--pf-accent);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-/* Menu flotante hacia arriba */
-.upward-menu {
+.pf-tema-toggle:hover {
+  background-color: var(--pf-accent-soft);
+}
+
+.pf-tema-menu {
   position: absolute;
-  bottom: 115%;
-  left: 0;
-  width: 260px;
-  z-index: 9999;
-  transform-origin: bottom;
-  animation: fadeUp 0.18s ease;
+  top: 3.2rem;
+  right: 0;
+  z-index: 50;
+  width: min(15rem, 80vw);
+  padding: 1.1rem;
+  background-color: var(--pf-surface);
+  border: 1px solid var(--pf-line);
+  border-radius: 0.9rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
 }
 
-/* Animación suave */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(80px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.pf-tema-menu h4 {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--pf-ink);
 }
 
-.theme-btn {
-  width: 100%;
-  background: transparent;
-  border: 1px solid var(--card-border);
-  padding: 12px;
-  border-radius: 14px;
-  color: var(--text-color);
+.pf-tema-opciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.pf-tema-opciones button {
+  padding: 0.5rem;
+  background-color: transparent;
+  color: var(--pf-ink);
+  border: 1px solid var(--pf-line);
+  border-radius: 0.5rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.25s ease;
 }
 
-.theme-btn:hover {
-  background: var(--link-hover);
-  color: var(--card-bg);
+.pf-tema-opciones button:hover {
+  background-color: var(--pf-accent-soft);
 }
 
-/* ========================= */
-/* MENU TEMAS */
-/* ========================= */
-.tema-menu {
-  margin-top: 12px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  padding: 14px;
-  border-radius: 16px;
+.pf-tema-opciones button.sel {
+  border-color: var(--pf-accent);
+  background-color: var(--pf-accent-soft);
+  color: var(--pf-accent);
+}
+
+.pf-tema-menu label {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: var(--shadow);
-}
-
-.tema-menu button {
-  padding: 9px;
-  border-radius: 12px;
-  border: 1px solid var(--card-border);
-  background: transparent;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.tema-menu button:hover {
-  background: var(--link-hover);
-  color: var(--card-bg);
-}
-
-.tema-menu label {
-  font-size: 13px;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-}
-
-/* ========================= */
-/* LOGOUT */
-/* ========================= */
-.logout-btn {
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid #ff4d4d;
-  background: transparent;
-  color: #ff4d4d;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
-
-.logout-btn:hover {
-  background: #ff4d4d;
-  color: white;
-}
-
-/* ========================= */
-/* MAIN */
-/* ========================= */
-.dashboard-main {
-  flex: 1;
-  padding: 26px 32px;
-  width: 100%;
-}
-
-/* ========================= */
-/* TOPBAR */
-/* ========================= */
-.dashboard-topbar {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  padding: 18px 22px;
-  border-radius: 18px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--shadow);
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--pf-ink);
 }
 
-.dashboard-topbar button {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--card-border);
-  background: transparent;
+.pf-tema-menu input[type="color"] {
+  width: 2.1rem;
+  height: 1.5rem;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--pf-line);
+  border-radius: 0.4rem;
   cursor: pointer;
-  transition: 0.25s ease;
 }
 
-.dashboard-topbar button:hover {
-  background: var(--link-hover);
-  color: var(--card-bg);
-}
-
-/* ========================= */
-/* TITULO */
-/* ========================= */
+/* ---------- Títulos y textos ---------- */
 .section-title {
-  margin: 14px 0 18px;
-  font-size: 20px;
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--pf-ink);
+}
+
+.pf-layout .section-title:not(:first-of-type) {
+  margin-top: 2rem;
+}
+
+.empty-text {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  color: var(--pf-soft);
+}
+
+.pf-error {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.7rem;
+  background-color: color-mix(in srgb, var(--pf-danger) 14%, transparent);
+  color: var(--pf-danger);
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
-/* ========================= */
-/* GRID TARJETAS */
-/* ========================= */
+/* ---------- Tarjetas de cursos ---------- */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr));
+  gap: 1.25rem;
 }
 
-/* ========================= */
-/* CARD */
-/* ========================= */
 .dashboard-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: var(--shadow);
-  transition: 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1.4rem 1.5rem;
+  background-color: var(--pf-surface);
+  border: 1px solid var(--pf-line);
+  border-radius: var(--pf-radius);
+  box-shadow: var(--pf-shadow);
 }
 
-.dashboard-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 18px 36px rgba(0,0,0,0.18);
+.pf-curso-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.pf-curso-icono {
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  flex-shrink: 0;
+  border-radius: 0.8rem;
+  background-color: var(--pf-accent-soft);
+  color: var(--pf-accent);
+  font-size: 1.15rem;
 }
 
 .dashboard-card h4 {
-  margin-bottom: 6px;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--pf-ink);
+  overflow-wrap: anywhere;
 }
 
 .curso-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
 }
 
-
-.dashboard-card button {
-  margin-top: 12px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--card-border);
-  background: var(--card-bg);
-  color: var(--text-color);
-  font-weight: 500;
+.pf-accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  background-color: transparent;
+  border: 1px solid var(--pf-line);
+  border-radius: 0.65rem;
+  color: var(--pf-soft);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.25s ease;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
-/* Hover moderno */
-.dashboard-card button:hover {
-  background: var(--link-hover);
-  color: var(--card-bg);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+.pf-accion:hover {
+  background-color: var(--pf-accent-soft);
+  border-color: var(--pf-accent);
+  color: var(--pf-accent);
 }
 
+.pf-accion--principal {
+  grid-column: 1 / -1;
+  background-color: var(--pf-accent);
+  border-color: var(--pf-accent);
+  color: #fff;
+}
 
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
-@media (max-width: 900px) {
-  .dashboard-layout {
-    flex-direction: column;
+.pf-accion--principal:hover {
+  background-color: var(--link-hover, var(--pf-accent));
+  border-color: var(--link-hover, var(--pf-accent));
+  color: #fff;
+}
+
+/* Esqueleto de carga */
+.pf-esqueleto {
+  min-height: 11rem;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--pf-ink) 8%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: pf-brillo 1.4s ease-in-out infinite;
+}
+
+@keyframes pf-brillo {
+  from {
+    background-position: 200% 0;
   }
-
-  .dashboard-sidebar {
-    width: 100%;
-    min-width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .sidebar-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .dashboard-main {
-    padding: 20px;
+  to {
+    background-position: -200% 0;
   }
 }
 
+/* ---------- KMeans ---------- */
+.pf-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
 
-/* ===== KMeans Chart ===== */
-.kmeans-chart {
-  margin-top: 20px;
+.pf-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.3rem;
+  background-color: var(--pf-surface);
+  border: 1px solid var(--pf-line);
+  border-radius: var(--pf-radius);
+  box-shadow: var(--pf-shadow);
+}
+
+.pf-stat-valor {
+  font-size: clamp(1.6rem, 1.3rem + 1vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--pf-ink);
+}
+
+.pf-stat-etiqueta {
+  font-size: 0.9rem;
+  color: var(--pf-soft);
+}
+
+.pf-kmeans {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1.25rem;
+}
+
+.pf-panel {
+  min-width: 0;
+  padding: 1.4rem 1.5rem;
+  background-color: var(--pf-surface);
+  border: 1px solid var(--pf-line);
+  border-radius: var(--pf-radius);
+  box-shadow: var(--pf-shadow);
+}
+
+.pf-panel h4 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--pf-ink);
+}
+
+/* Las etiquetas de los ejes usan el color del texto del tema */
+.pf-chart {
   width: 100%;
+  height: clamp(15rem, 32vh, 26rem);
+  color: var(--pf-soft);
 }
 
-/* ===== KMeans Table ===== */
-.kmeans-table {
-  margin-top: 20px;
-  width: 100%;
+.pf-nota {
+  margin: 1rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--pf-soft);
+}
+
+.pf-tabla-wrap {
   overflow-x: auto;
+  border: 1px solid var(--pf-line);
+  border-radius: 0.8rem;
 }
 
-.kmeans-table table {
+.pf-tabla {
   width: 100%;
   border-collapse: collapse;
 }
 
-.kmeans-table th, .kmeans-table td {
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  text-align: center;
+.pf-tabla th {
+  padding: 0.75rem 1rem;
+  background-color: color-mix(in srgb, var(--pf-ink) 5%, transparent);
+  color: var(--pf-soft);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--pf-line);
 }
 
-.kmeans-table th {
-  background-color: var(--card-bg, #f0f0f0);
-  color: var(--text-color, #333);
+.pf-tabla td {
+  padding: 0.75rem 1rem;
+  color: var(--pf-ink);
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--pf-line);
 }
 
-.kmeans-table tr:nth-child(even) {
-  background-color: rgba(0,0,0,0.03);
+.pf-tabla tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.kmeans-table h4 {
-  margin: 10px 0;
+.pf-tabla tbody tr:hover {
+  background-color: var(--pf-accent-soft);
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1000px) {
+  .pf-kmeans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Móvil / app ---------- */
+@media (max-width: 800px) {
+  html {
+    font-size: 16px;
+  }
+
+  .pf-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pf-sidebar {
+    position: static;
+    height: auto;
+    gap: 0.9rem;
+    padding: calc(1rem + env(safe-area-inset-top, 0px)) 1rem 1rem;
+    border-right: none;
+    border-bottom: 1px solid var(--pf-line);
+  }
+
+  .pf-brand {
+    padding: 0;
+  }
+
+  /* Menú en una fila desplazable, como pestañas */
+  .pf-nav {
+    flex-direction: row;
+    gap: 0.4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .pf-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pf-nav .pf-link {
+    flex-shrink: 0;
+    padding: 0.6rem 0.9rem;
+  }
+
+  .pf-acciones-lado {
+    flex-direction: row;
+    margin-top: 0;
+    padding-top: 0.75rem;
+  }
+
+  .pf-btn-lado {
+    justify-content: center;
+    padding: 0.6rem;
+  }
+
+  .pf-topbar {
+    margin-bottom: 1.25rem;
+  }
+
+  .pf-chart {
+    height: 15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-esqueleto {
+    animation: none;
+  }
+
+  .pf-nav .pf-link,
+  .pf-btn-lado,
+  .pf-accion,
+  .pf-tema-toggle {
+    transition: none;
+  }
 }

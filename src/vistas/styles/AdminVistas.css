@@ -1,86 +1,693 @@
-/* =========================
-   Sección de administración
-========================= */
-.admin-section {
-  background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  margin-bottom: 40px;
+/* =========================================================
+   Vistas de administración (usuarios, cursos, etc.)
+   Usa las variables del tema: --card-bg, --card-border,
+   --text-color, --bg-color, --link-color, --link-hover
+========================================================= */
+
+/* Tokens compartidos. El modal se renderiza fuera del panel, por eso se declaran también en .av-modal */
+.admin-section,
+.av-modal {
+  --av-accent: var(--link-color, #2563eb);
+  --av-accent-soft: color-mix(in srgb, var(--av-accent) 12%, transparent);
+  --av-surface: var(--card-bg, #ffffff);
+  --av-ink: var(--text-color, #1f2937);
+  --av-soft: color-mix(in srgb, var(--av-ink) 65%, transparent);
+  --av-line: var(--card-border, rgba(128, 128, 128, 0.25));
+  --av-danger: #dc2626;
+  --av-ok: #16a34a;
 }
 
-/* Títulos */
+/* ---------- Contenedor ---------- */
+.admin-section {
+  width: 100%;
+  margin-bottom: 2rem;
+  padding: clamp(1rem, 2vw, 1.75rem);
+  background-color: var(--av-surface);
+  border: 1px solid var(--av-line);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  color: var(--av-ink);
+}
+
 .admin-section h2,
 .admin-section h3 {
-  color: var(--text-color);
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
+  color: var(--av-ink);
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-/* Formularios */
+.admin-section h2 {
+  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.9rem);
+}
+
+/* ---------- Encabezado con buscador y filtro ---------- */
+.av-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.av-header h2 {
+  margin-bottom: 0.15rem;
+}
+
+.av-sub {
+  font-size: 0.9rem;
+  color: var(--av-soft);
+}
+
+.av-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  width: min(100%, 32rem);
+}
+
+.av-buscar {
+  position: relative;
+  flex: 1 1 14rem;
+  display: block;
+}
+
+.av-buscar svg {
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  transform: translateY(-50%);
+  color: var(--av-soft);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.av-buscar input,
+.av-filtro {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  background-color: var(--av-surface);
+  color: var(--av-ink);
+  border: 1px solid var(--av-line);
+  border-radius: 0.65rem;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.av-buscar input {
+  padding-left: 2.4rem;
+}
+
+.av-filtro {
+  flex: 0 1 12rem;
+  width: auto;
+  cursor: pointer;
+}
+
+.av-buscar input::placeholder {
+  color: var(--av-soft);
+}
+
+.av-buscar input:focus,
+.av-filtro:focus,
+.admin-section form input:focus,
+.admin-section form select:focus {
+  border-color: var(--av-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--av-accent-soft);
+}
+
+/* Formularios genéricos de otras vistas */
 .admin-section form label {
-  color: var(--text-color);
+  color: var(--av-ink);
 }
 
 .admin-section form input,
 .admin-section form select {
-  background-color: var(--card-bg);
-  color: var(--text-color);
-  border: 1px solid var(--card-border);
-  border-radius: 6px;
-  padding: 10px;
+  background-color: var(--av-surface);
+  color: var(--av-ink);
+  border: 1px solid var(--av-line);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
   font-size: 1rem;
 }
 
-.admin-section form input:focus,
-.admin-section form select:focus {
-  border-color: var(--link-color);
-  outline: none;
-  box-shadow: 0 0 4px var(--link-color);
+/* ---------- Avisos ---------- */
+.av-aviso {
+  margin-bottom: 1rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-/* Tablas */
+.av-aviso.ok {
+  background-color: color-mix(in srgb, var(--av-ok) 14%, transparent);
+  color: var(--av-ok);
+}
+
+.av-aviso.error {
+  background-color: color-mix(in srgb, var(--av-danger) 14%, transparent);
+  color: var(--av-danger);
+}
+
+/* ---------- Estado vacío ---------- */
+.av-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--av-soft);
+}
+
+.av-vacio svg {
+  font-size: 2rem;
+  opacity: 0.6;
+}
+
+/* ---------- Tabla ---------- */
+.av-tabla-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--av-line);
+  border-radius: 0.8rem;
+}
+
 .admin-table {
-  background-color: var(--card-bg) !important;
-  color: var(--text-color) !important;
-  border: 1px solid var(--card-border) !important;
-  border-radius: 6px;
-  overflow: hidden;
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  color: var(--av-ink) !important;
+  background-color: transparent !important;
+  border-color: var(--av-line) !important;
 }
 
 .admin-table th {
-  background-color: var(--bg-color) !important;
-  color: var(--text-color) !important;
-  font-weight: 600;
-  text-align: center;
+  padding: 0.85rem 1rem;
+  background-color: color-mix(in srgb, var(--av-ink) 5%, transparent) !important;
+  color: var(--av-soft) !important;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--av-line) !important;
 }
 
 .admin-table td {
-  background-color: var(--card-bg) !important;
-  color: var(--text-color) !important;
+  padding: 0.85rem 1rem;
+  background-color: transparent !important;
+  color: var(--av-ink) !important;
+  font-size: 0.95rem;
   vertical-align: middle;
-  padding: 12px;
+  border-bottom: 1px solid var(--av-line) !important;
+  box-shadow: none !important;
 }
 
-/* Botones */
-.admin-section button {
-  font-weight: 500;
-  border-radius: 6px;
-  transition: background-color 0.2s ease;
+.admin-table tbody tr:last-child td {
+  border-bottom: none !important;
 }
 
-.admin-section button:hover {
-  filter: brightness(0.95);
+.admin-table tbody tr {
+  transition: background-color 0.15s ease;
 }
-.admin-link {
-  color: var(--link-color);
+
+.admin-table tbody tr:hover {
+  background-color: var(--av-accent-soft);
+}
+
+.admin-table .col-acciones {
+  text-align: right;
+}
+
+.av-email {
+  overflow-wrap: anywhere;
+}
+
+/* Persona: avatar + nombre */
+.av-persona {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.av-nombre {
+  font-weight: 700;
+  color: var(--av-ink);
+}
+
+.av-avatar {
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--av-accent-soft);
+  color: var(--av-accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.av-avatar--lg {
+  width: 3rem;
+  height: 3rem;
+  font-size: 1rem;
+}
+
+/* Etiquetas de rol */
+.av-rol {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--av-ink) 10%, transparent);
+  color: var(--av-soft);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.av-rol.administrador {
+  background-color: color-mix(in srgb, #6366f1 16%, transparent);
+  color: #6366f1;
+}
+
+.av-rol.profesor {
+  background-color: color-mix(in srgb, #f59e0b 20%, transparent);
+  color: #d97706;
+}
+
+.av-rol.usuario {
+  background-color: color-mix(in srgb, #10b981 16%, transparent);
+  color: #059669;
+}
+
+/* ---------- Botones ---------- */
+.av-acciones {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.av-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid transparent;
+  border-radius: 0.6rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.av-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.av-btn:focus-visible {
+  outline: 2px solid var(--av-accent);
+  outline-offset: 2px;
+}
+
+.av-btn--editar {
+  background-color: var(--av-accent-soft);
+  color: var(--av-accent);
+}
+
+.av-btn--editar:hover:not(:disabled) {
+  background-color: var(--av-accent);
+  color: #fff;
+}
+
+.av-btn--eliminar {
+  background-color: color-mix(in srgb, var(--av-danger) 12%, transparent);
+  color: var(--av-danger);
+}
+
+.av-btn--eliminar:hover:not(:disabled),
+.av-btn--peligro {
+  background-color: var(--av-danger);
+  color: #fff;
+}
+
+.av-btn--peligro:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.av-btn--primario {
+  background-color: var(--av-accent);
+  color: #fff;
+}
+
+.av-btn--primario:hover:not(:disabled) {
+  background-color: var(--link-hover, var(--av-accent));
+}
+
+.av-btn--ghost {
+  background-color: transparent;
+  border-color: var(--av-line);
+  color: var(--av-soft);
+}
+
+.av-btn--ghost:hover:not(:disabled) {
+  background-color: var(--av-accent-soft);
+  color: var(--av-accent);
+}
+
+/* ---------- Modales (react-bootstrap) ---------- */
+.av-modal .modal-content {
+  background-color: var(--av-surface);
+  color: var(--av-ink);
+  border: 1px solid var(--av-line);
+  border-radius: 1rem;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+}
+
+.av-modal .modal-header,
+.av-modal .modal-footer {
+  border-color: var(--av-line);
+}
+
+.av-modal .modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+[data-theme="dark"] .av-modal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.av-modal .form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--av-ink);
+}
+
+.av-modal .form-control,
+.av-modal .form-select {
+  background-color: var(--av-surface);
+  color: var(--av-ink);
+  border: 1px solid var(--av-line);
+  border-radius: 0.6rem;
+}
+
+.av-modal .form-control::placeholder {
+  color: var(--av-soft);
+}
+
+.av-modal .form-control:focus,
+.av-modal .form-select:focus {
+  background-color: var(--av-surface);
+  color: var(--av-ink);
+  border-color: var(--av-accent);
+  box-shadow: 0 0 0 3px var(--av-accent-soft);
+}
+
+.av-persona--modal {
+  margin-bottom: 1.25rem;
+  padding: 0.85rem;
+  border-radius: 0.8rem;
+  background-color: var(--av-accent-soft);
+}
+
+.av-persona--modal p {
+  margin: 0;
+}
+
+.av-modal-sub {
+  font-size: 0.85rem;
+  color: var(--av-soft);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Móvil: cada fila se convierte en tarjeta ---------- */
+@media (max-width: 800px) {
+  .av-tabla-wrap {
+    overflow: visible;
+    border: none;
+  }
+
+  .admin-table--stack thead {
+    display: none;
+  }
+
+  .admin-table--stack,
+  .admin-table--stack tbody {
+    display: block;
+  }
+
+  .admin-table--stack tbody tr {
+    display: block;
+    margin-bottom: 0.9rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--av-line);
+    border-radius: 0.9rem;
+  }
+
+  .admin-table--stack td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    text-align: right;
+  }
+
+  .admin-table--stack td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    color: var(--av-soft);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  .admin-table--stack tbody tr:last-child td {
+    border-bottom: 1px solid var(--av-line) !important;
+  }
+
+  .admin-table--stack td:last-child {
+    border-bottom: none !important;
+  }
+
+  .admin-table--stack .col-acciones {
+    display: block;
+  }
+
+  .admin-table--stack .col-acciones::before {
+    display: none;
+  }
+
+  .admin-table--stack .av-acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  .av-tools {
+    width: 100%;
+  }
+
+  .av-filtro {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-table tbody tr,
+  .av-btn {
+    transition: none;
+  }
+}
+
+/* =========================================================
+   Vista de cursos: formulario, miniaturas, chips
+========================================================= */
+
+/* Los enlaces con estilo de botón no se subrayan */
+a.av-btn,
+a.av-btn:hover {
   text-decoration: none;
-  font-weight: 500;
-  margin-right: 20px;
-  transition: color 0.2s ease;
 }
 
-.admin-link:hover {
-  color: var(--link-hover);
-  text-decoration: underline;
+.av-btn--nuevo {
+  flex: 0 0 auto;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* ---------- Formulario de nuevo curso ---------- */
+.av-form {
+  margin-bottom: 1.5rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background-color: color-mix(in srgb, var(--av-ink) 4%, transparent);
+  border: 1px solid var(--av-line);
+  border-radius: 0.9rem;
+}
+
+.av-form h3 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.av-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.av-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.av-campo--full {
+  grid-column: 1 / -1;
+}
+
+.av-campo > span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--av-ink);
+}
+
+.av-campo input[type="text"],
+.av-campo textarea,
+.av-campo input[type="file"] {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background-color: var(--av-surface);
+  color: var(--av-ink);
+  border: 1px solid var(--av-line);
+  border-radius: 0.6rem;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.av-campo textarea {
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.av-campo input::placeholder,
+.av-campo textarea::placeholder {
+  color: var(--av-soft);
+}
+
+.av-campo input:focus,
+.av-campo textarea:focus {
+  border-color: var(--av-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--av-accent-soft);
+}
+
+.av-campo input[type="file"]::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 0.35rem 0.8rem;
+  background-color: var(--av-accent-soft);
+  color: var(--av-accent);
+  border: none;
+  border-radius: 0.45rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.av-archivos {
+  font-size: 0.8rem;
+  color: var(--av-soft);
+  overflow-wrap: anywhere;
+}
+
+.av-form-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+/* Barra de progreso de subida */
+.av-progreso {
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.25rem;
+  padding: 0.55rem 0.9rem;
+  background-color: var(--av-accent-soft);
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--av-ink);
+}
+
+.av-progreso-barra {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background-color: color-mix(in srgb, var(--av-accent) 35%, transparent);
+  transition: width 0.2s ease;
+}
+
+.av-progreso span {
+  position: relative;
+}
+
+/* ---------- Miniatura del curso ---------- */
+.av-miniatura {
+  width: 3.4rem;
+  height: 2.6rem;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  border: 1px solid var(--av-line);
+}
+
+.av-miniatura--vacia {
+  display: grid;
+  place-items: center;
+  background-color: var(--av-accent-soft);
+  color: var(--av-accent);
+  font-size: 1rem;
+}
+
+/* Chips de contenido */
+.av-chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.av-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--av-ink) 8%, transparent);
+  color: var(--av-soft);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+@media (max-width: 800px) {
+  .av-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .av-btn--nuevo {
+    flex: 1 1 100%;
+  }
+
+  .av-form-acciones .av-btn {
+    flex: 1;
+  }
 }

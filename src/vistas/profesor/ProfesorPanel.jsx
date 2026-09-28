@@ -1,21 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Outlet, useNavigate, useLocation, NavLink } from "react-router-dom";
 import axios from "axios";
-
 import {
   FaSignOutAlt,
   FaPalette,
   FaHome,
   FaBookOpen,
-  FaCog,
   FaClipboardList,
-  FaChartBar
+  FaChartBar,
+  FaUserEdit,
+  FaPen,
+  FaUsers,
+  FaLayerGroup,
+  FaListUl
 } from "react-icons/fa";
-
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 import "../styles/ProfesorPanel.css";
 import "../../temas/temas.css";
+
+const API = "http://127.0.0.1:5000/api";
+const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
+
+const etiquetaCluster = (v) => (typeof v === "number" ? `Cluster ${v}` : v);
 
 function ProfesorPanel() {
   const navigate = useNavigate();
@@ -26,6 +33,7 @@ function ProfesorPanel() {
     const saved = localStorage.getItem("usuario");
     return saved ? JSON.parse(saved) : null;
   });
+  const [fotoError, setFotoError] = useState(false);
 
   // ================= THEME =================
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
@@ -33,6 +41,8 @@ function ProfesorPanel() {
 
   // ================= DATA =================
   const [cursos, setCursos] = useState([]);
+  const [cargandoCursos, setCargandoCursos] = useState(true);
+  const [errorCursos, setErrorCursos] = useState(false);
 
   // ================= KMEANS =================
   const [kmeansData, setKmeansData] = useState(null);
@@ -43,7 +53,10 @@ function ProfesorPanel() {
   useEffect(() => {
     const syncUser = () => {
       const updated = localStorage.getItem("usuario");
-      if (updated) setUser(JSON.parse(updated));
+      if (updated) {
+        setUser(JSON.parse(updated));
+        setFotoError(false);
+      }
     };
     window.addEventListener("storage", syncUser);
     return () => window.removeEventListener("storage", syncUser);
@@ -54,19 +67,17 @@ function ProfesorPanel() {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
+  useEffect(() => {
+    CUSTOM_VARS.forEach((v) => {
+      const saved = localStorage.getItem(v);
+      if (saved) document.documentElement.style.setProperty(v, saved);
+    });
+  }, []);
+
   const changeTheme = (newTheme) => {
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-
-    const vars = [
-      "--bg-color",
-      "--text-color",
-      "--card-bg",
-      "--link-color",
-      "--card-border",
-      "--link-hover"
-    ];
-    vars.forEach(v => {
+    CUSTOM_VARS.forEach((v) => {
       document.documentElement.style.removeProperty(v);
       localStorage.removeItem(v);
     });
@@ -78,34 +89,26 @@ function ProfesorPanel() {
     localStorage.setItem(name, value);
   };
 
-  useEffect(() => {
-    const vars = [
-      "--bg-color",
-      "--text-color",
-      "--card-bg",
-      "--link-color",
-      "--card-border",
-      "--link-hover"
-    ];
-    vars.forEach(v => {
-      const saved = localStorage.getItem(v);
-      if (saved) document.documentElement.style.setProperty(v, saved);
-    });
-  }, []);
-
   // ================= LOAD COURSES =================
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return navigate("/login");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
-    axios.get("http://127.0.0.1:5000/api/mis_cursos", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => setCursos(res.data || []))
-      .catch(err => {
+    axios
+      .get(`${API}/mis_cursos`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setCursos(res.data || []))
+      .catch((err) => {
         console.error("Error cursos:", err);
-        if (err.response?.status === 401) navigate("/login");
-      });
+        if (err.response?.status === 401) {
+          navigate("/login");
+          return;
+        }
+        setErrorCursos(true);
+      })
+      .finally(() => setCargandoCursos(false));
   }, [navigate]);
 
   // ================= LOAD KMEANS =================
@@ -114,13 +117,12 @@ function ProfesorPanel() {
     if (!token) return;
 
     setLoadingKmeans(true);
-    axios.get("http://localhost:5000/api/kmeans", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => setKmeansData(res.data))
-      .catch(err => {
+    axios
+      .get(`${API}/kmeans`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => setKmeansData(res.data))
+      .catch((err) => {
         console.error("Error KMeans:", err);
-        setErrorKmeans("No se pudo cargar KMeans");
+        setErrorKmeans("No se pudo cargar el análisis KMeans. Revisa que el servidor esté activo.");
       })
       .finally(() => setLoadingKmeans(false));
   }, []);
@@ -131,69 +133,100 @@ function ProfesorPanel() {
     navigate("/login");
   };
 
+  // ================= DERIVED =================
+  const enInicio = location.pathname.replace(/\/$/, "") === "/profesor";
+
+  const foto = user?.foto_perfil
+    ? user.foto_perfil.startsWith("data:image")
+      ? user.foto_perfil
+      : `data:image/png;base64,${user.foto_perfil}`
+    : null;
+  const nombre = user?.nombre || "Profesor";
+  const inicial = nombre.trim().charAt(0).toUpperCase();
+
+  const distribucion = kmeansData?.distribucion || [];
+  const totalRegistros = useMemo(
+    () => distribucion.reduce((suma, d) => suma + (Number(d.count) || 0), 0),
+    [distribucion]
+  );
+  const silhouette =
+    typeof kmeansData?.silhouette === "number" ? kmeansData.silhouette.toFixed(3) : kmeansData?.silhouette;
+
+  const navClass = ({ isActive }) => `pf-link${isActive ? " active" : ""}`;
+
   return (
-    <div className="dashboard-layout">
+    <div className="pf-layout">
       {/* ================= SIDEBAR ================= */}
-      <aside className="dashboard-sidebar">
-        <div className="sidebar-profile">
-          <img
-            src={
-              user?.foto_perfil
-                ? (user.foto_perfil.startsWith("data:image")
-                  ? user.foto_perfil
-                  : `data:image/png;base64,${user.foto_perfil}`)
-                : "/default-avatar.png"
-            }
-            alt="Perfil"
-            className="profile-pic"
-          />
-          <h5>{user?.nombre || "Profesor"}</h5>
-          <button 
-            onClick={() => navigate("/profesor/editar-perfil")}
-            className="theme-btn icon-btn"
-            title="Editar perfil"
-          >
-            <FaCog />
-          </button>
+      <aside className="pf-sidebar">
+        <div className="pf-brand">Panel del Profesor</div>
+
+        <div className="pf-perfil">
+          {foto && !fotoError ? (
+            <img src={foto} alt="Foto de perfil" className="pf-avatar" onError={() => setFotoError(true)} />
+          ) : (
+            <div className="pf-avatar pf-avatar--inicial" aria-hidden="true">
+              {inicial}
+            </div>
+          )}
+          <div className="pf-perfil-info">
+            <span className="pf-perfil-nombre">{nombre}</span>
+            <span className="pf-perfil-rol">Profesor</span>
+          </div>
         </div>
 
-        <h4 className="sidebar-brand">Panel del Profesor</h4>
-
-        <nav className="sidebar-nav">
-          <button onClick={() => navigate("/profesor")}><FaHome /> Inicio</button>
-          <button onClick={() => navigate("/profesor/cursos")}><FaBookOpen /> Cursos</button>
-          <button onClick={() => navigate("/profesor/examenes")}><FaClipboardList /> Exámenes</button>
-          <button onClick={() => navigate("/profesor/reportes")}><FaChartBar /> Reportes</button>
+        <nav className="pf-nav">
+          <NavLink to="/profesor" end className={navClass}>
+            <FaHome /> Inicio
+          </NavLink>
+          <NavLink to="/profesor/cursos" className={navClass}>
+            <FaBookOpen /> Cursos
+          </NavLink>
+          <NavLink to="/profesor/examenes" className={navClass}>
+            <FaClipboardList /> Exámenes
+          </NavLink>
+          <NavLink to="/profesor/reportes" className={navClass}>
+            <FaChartBar /> Reportes
+          </NavLink>
         </nav>
 
-        <div className="sidebar-profile">
-          <button onClick={handleLogout} className="logout-btn">
-            <FaSignOutAlt /> Salir
+        <div className="pf-acciones-lado">
+          <button type="button" className="pf-btn-lado" onClick={() => navigate("/profesor/editar-perfil")}>
+            <FaUserEdit /> Editar perfil
+          </button>
+          <button type="button" className="pf-btn-lado pf-btn-lado--salir" onClick={handleLogout}>
+            <FaSignOutAlt /> Cerrar sesión
           </button>
         </div>
       </aside>
 
       {/* ================= MAIN ================= */}
-      <main className="dashboard-main">
+      <main className="pf-main">
         {/* ================= TOPBAR ================= */}
-        <div className="dashboard-topbar">
+        <header className="pf-topbar">
           <div>
-            <h2>Bienvenido, {user?.nombre || "Profesor"}</h2>
-            <p>Administra tus cursos, alumnos, exámenes y lecciones</p>
+            <h2>Hola, {nombre}</h2>
+            <p>Administra tus cursos, alumnos, exámenes y lecciones.</p>
           </div>
 
-          <div className="tema-dropdown">
-            <button onClick={() => setShowCustomizer(!showCustomizer)}>
-              <FaPalette />
+          <div className="pf-tema">
+            <button
+              type="button"
+              className="pf-tema-toggle"
+              onClick={() => setShowCustomizer(!showCustomizer)}
+              aria-label="Personalizar tema"
+              aria-expanded={showCustomizer}
+            >
+              <FaPalette size={18} />
             </button>
             {showCustomizer && (
-              <div className="tema-menu">
-                <h4>Seleccionar tema</h4>
-                <button onClick={() => changeTheme("light")}>Claro</button>
-                <button onClick={() => changeTheme("dark")}>Oscuro</button>
-                <button onClick={() => changeTheme("blue")}>Azul</button>
-                <button onClick={() => changeTheme("green")}>Verde</button>
-
+              <div className="pf-tema-menu">
+                <h4>Tema</h4>
+                <div className="pf-tema-opciones">
+                  <button type="button" className={theme === "light" ? "sel" : ""} onClick={() => changeTheme("light")}>Claro</button>
+                  <button type="button" className={theme === "dark" ? "sel" : ""} onClick={() => changeTheme("dark")}>Oscuro</button>
+                  <button type="button" className={theme === "blue" ? "sel" : ""} onClick={() => changeTheme("blue")}>Azul</button>
+                  <button type="button" className={theme === "green" ? "sel" : ""} onClick={() => changeTheme("green")}>Verde</button>
+                </div>
                 <h4>Personalizar</h4>
                 <label>Fondo <input type="color" name="--bg-color" onChange={handleCustomTheme} /></label>
                 <label>Texto <input type="color" name="--text-color" onChange={handleCustomTheme} /></label>
@@ -204,82 +237,139 @@ function ProfesorPanel() {
               </div>
             )}
           </div>
-        </div>
+        </header>
 
         {/* ================= DASHBOARD HOME ================= */}
-        {location.pathname === "/profesor" && (
+        {enInicio && (
           <>
             <h3 className="section-title">Mis cursos</h3>
-            <div className="dashboard-grid">
-              {cursos.length === 0 ? (
-                <p className="empty-text">No hay cursos disponibles</p>
-              ) : (
-                cursos.map(curso => {
+
+            {errorCursos ? (
+              <p className="empty-text">No se pudieron cargar tus cursos. Recarga la página e inténtalo de nuevo.</p>
+            ) : cargandoCursos ? (
+              <div className="dashboard-grid" aria-busy="true">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="dashboard-card pf-esqueleto" aria-hidden="true" />
+                ))}
+              </div>
+            ) : cursos.length === 0 ? (
+              <p className="empty-text">Aún no tienes cursos asignados.</p>
+            ) : (
+              <div className="dashboard-grid">
+                {cursos.map((curso) => {
                   const cursoId = curso.id || curso._id;
                   return (
-                    <div key={cursoId} className="dashboard-card">
-                      <h4>{curso.nombre}</h4>
+                    <article key={cursoId} className="dashboard-card">
+                      <div className="pf-curso-cabecera">
+                        <span className="pf-curso-icono" aria-hidden="true">
+                          <FaBookOpen />
+                        </span>
+                        <h4>{curso.nombre}</h4>
+                      </div>
                       <div className="curso-actions">
-                        <button onClick={() => navigate(`/profesor/cursos/${cursoId}/editar`)}>
-                          Editar curso
+                        <button
+                          type="button"
+                          className="pf-accion pf-accion--principal"
+                          onClick={() => navigate(`/profesor/cursos/${cursoId}/editar`)}
+                        >
+                          <FaPen /> Editar curso
                         </button>
-                        <button onClick={() => navigate(`/profesor/cursos/${cursoId}/alumnos`)}>
-                          Ver alumnos
+                        <button type="button" className="pf-accion" onClick={() => navigate(`/profesor/cursos/${cursoId}/alumnos`)}>
+                          <FaUsers /> Alumnos
                         </button>
-                        <button onClick={() => navigate(`/profesor/cursos/${cursoId}/examenes`)}>
-                          Ver exámenes
+                        <button type="button" className="pf-accion" onClick={() => navigate(`/profesor/cursos/${cursoId}/examenes`)}>
+                          <FaClipboardList /> Exámenes
                         </button>
-                        <button onClick={() => navigate(`/profesor/cursos/${cursoId}/niveles`)}>
-                          Ver niveles
+                        <button type="button" className="pf-accion" onClick={() => navigate(`/profesor/cursos/${cursoId}/niveles`)}>
+                          <FaLayerGroup /> Niveles
                         </button>
-                        <button onClick={() => navigate(`/profesor/cursos/${cursoId}/lecciones`)}>
-                          Ver lecciones
+                        <button type="button" className="pf-accion" onClick={() => navigate(`/profesor/cursos/${cursoId}/lecciones`)}>
+                          <FaListUl /> Lecciones
                         </button>
                       </div>
-                    </div>
+                    </article>
                   );
-                })
-              )}
-            </div>
+                })}
+              </div>
+            )}
 
-            {/* ================= KMEANS CHART ================= */}
-            <h3 className="section-title">Análisis KMeans</h3>
-            {loadingKmeans && <p>Cargando análisis...</p>}
-            {errorKmeans && <p>{errorKmeans}</p>}
+            {/* ================= KMEANS ================= */}
+            <h3 className="section-title">Análisis de alumnos (KMeans)</h3>
+
+            {loadingKmeans && <p className="empty-text">Cargando análisis...</p>}
+            {errorKmeans && <p className="pf-error">{errorKmeans}</p>}
+
             {kmeansData && (
               <>
-                <div className="kmeans-chart">
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={kmeansData.distribucion}>
-                      <XAxis dataKey="cluster" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="count" fill="#8884d8" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                  <h4>Silhouette Score: {kmeansData.silhouette}</h4>
+                <div className="pf-stats">
+                  <div className="pf-stat">
+                    <span className="pf-stat-valor">{totalRegistros}</span>
+                    <span className="pf-stat-etiqueta">Registros analizados</span>
+                  </div>
+                  <div className="pf-stat">
+                    <span className="pf-stat-valor">{distribucion.length}</span>
+                    <span className="pf-stat-etiqueta">Clusters</span>
+                  </div>
+                  <div className="pf-stat">
+                    <span className="pf-stat-valor">{silhouette}</span>
+                    <span className="pf-stat-etiqueta">Silhouette score</span>
+                  </div>
                 </div>
 
-                {/* ================= KMEANS TABLE ================= */}
-                <div className="kmeans-table">
-                  <h4>Distribución de Clusters (Tabla)</h4>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Cluster</th>
-                        <th>Registros</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {kmeansData.distribucion.map((item, index) => (
-                        <tr key={index}>
-                          <td>{item.cluster}</td>
-                          <td>{item.count}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <h4>Silhouette Score: {kmeansData.silhouette}</h4>
+                <div className="pf-kmeans">
+                  <div className="pf-panel">
+                    <h4>Distribución por cluster</h4>
+                    <div className="pf-chart">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={distribucion} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
+                          <CartesianGrid vertical={false} stroke="var(--card-border)" />
+                          <XAxis dataKey="cluster" tickFormatter={etiquetaCluster} tickLine={false} axisLine={false} tick={{ fill: "currentColor", fontSize: 12 }} />
+                          <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: "currentColor", fontSize: 12 }} />
+                          <Tooltip
+                            labelFormatter={etiquetaCluster}
+                            formatter={(valor) => [valor, "Registros"]}
+                            cursor={{ fill: "rgba(128,128,128,0.12)" }}
+                            contentStyle={{
+                              background: "var(--card-bg)",
+                              border: "1px solid var(--card-border)",
+                              borderRadius: 12,
+                              color: "var(--text-color)"
+                            }}
+                            labelStyle={{ color: "var(--text-color)", fontWeight: 700 }}
+                            itemStyle={{ color: "var(--text-color)" }}
+                          />
+                          <Bar dataKey="count" fill="#6366f1" radius={[8, 8, 0, 0]} maxBarSize={64} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <p className="pf-nota">
+                      El silhouette score va de -1 a 1; mientras más cercano a 1, mejor definidos están los grupos.
+                    </p>
+                  </div>
+
+                  <div className="pf-panel">
+                    <h4>Detalle por cluster</h4>
+                    <div className="pf-tabla-wrap">
+                      <table className="pf-tabla">
+                        <thead>
+                          <tr>
+                            <th>Cluster</th>
+                            <th>Registros</th>
+                            <th>Porcentaje</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {distribucion.map((item, index) => (
+                            <tr key={index}>
+                              <td>{etiquetaCluster(item.cluster)}</td>
+                              <td>{item.count}</td>
+                              <td>{totalRegistros > 0 ? `${((item.count / totalRegistros) * 100).toFixed(1)}%` : "-"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </>
             )}

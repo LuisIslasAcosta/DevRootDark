@@ -1,144 +1,492 @@
-/* Estilos generales */
+/* =========================================================
+   Respaldo de base de datos
+   Usa las variables del tema: --card-bg, --card-border,
+   --text-color, --bg-color, --link-color, --link-hover
+========================================================= */
+
 .respaldo-section {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
+  --rs-accent: var(--link-color, #2563eb);
+  --rs-accent-soft: color-mix(in srgb, var(--rs-accent) 12%, transparent);
+  --rs-surface: var(--card-bg, #ffffff);
+  --rs-ink: var(--text-color, #1f2937);
+  --rs-soft: color-mix(in srgb, var(--rs-ink) 65%, transparent);
+  --rs-line: var(--card-border, rgba(128, 128, 128, 0.25));
+  --rs-danger: #dc2626;
+  --rs-ok: #16a34a;
+  --rs-warn: #d97706;
 
-/* Títulos */
-.respaldo-section h2 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.respaldo-section h3 {
-  margin-top: 25px;
-  color: #444;
-  border-left: 4px solid #0078d7;
-  padding-left: 8px;
-}
-
-/* Labels e inputs */
-.respaldo-section label {
-  display: block;
-  margin: 15px 0;
-  font-weight: 500;
-  color: #333;
-}
-
-.respaldo-section input[type="text"],
-.respaldo-section input[type="number"],
-.respaldo-section select,
-.respaldo-section input[type="file"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 6px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.3s ease;
-}
-
-.respaldo-section input:focus,
-.respaldo-section select:focus {
-  border-color: #0078d7;
-  outline: none;
-}
-
-/* Botones */
-.respaldo-section button {
-  display: inline-block;
-  margin-top: 15px;
-  margin-right: 10px;
-  padding: 10px 18px;
-  background: #0078d7;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-
-.respaldo-section button:hover {
-  background: #005a9e;
-}
-
-/* Mensajes */
-.mensaje-overlay {
-  position: fixed; /* ocupa toda la pantalla */
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7); /* fondo semi-transparente */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  color: var(--rs-ink);
+  font-family: "Plus Jakarta Sans", "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---------- Encabezado ---------- */
+.rs-header h2 {
+  font-size: clamp(1.4rem, 1.2rem + 1vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--rs-ink);
+}
+
+.rs-sub {
+  margin-top: 0.25rem;
+  max-width: 60ch;
+  font-size: 1rem;
+  color: var(--rs-soft);
+}
+
+/* ---------- Avisos ---------- */
+.rs-aviso {
+  padding: 0.75rem 1rem;
+  border-radius: 0.7rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.rs-aviso.ok {
+  background-color: color-mix(in srgb, var(--rs-ok) 14%, transparent);
+  color: var(--rs-ok);
+}
+
+.rs-aviso.error {
+  background-color: color-mix(in srgb, var(--rs-danger) 14%, transparent);
+  color: var(--rs-danger);
+}
+
+/* ---------- Paneles ---------- */
+.rs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 1.25rem;
+}
+
+.rs-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1.4rem 1.5rem;
+  background-color: var(--rs-surface);
+  border: 1px solid var(--rs-line);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.rs-panel h3 {
+  display: flex;
   align-items: center;
-  z-index: 999; /* encima de todo */
+  gap: 0.6rem;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--rs-ink);
 }
 
-.mensaje-contenido {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  text-align: center;
-  max-width: 500px;
+.rs-panel h3 svg {
+  color: var(--rs-accent);
 }
 
-.mensaje-contenido h2 {
-  margin-bottom: 20px;
-  color: green;
+.rs-conteo {
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background-color: var(--rs-accent-soft);
+  color: var(--rs-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* ---------- Campos ---------- */
+.rs-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.rs-campo > span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--rs-ink);
+}
+
+.rs-campo small {
+  font-size: 0.8rem;
+  color: var(--rs-soft);
+  overflow-wrap: anywhere;
+}
+
+.rs-campo select,
+.rs-campo input[type="number"],
+.rs-campo input[type="file"] {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background-color: var(--rs-surface);
+  color: var(--rs-ink);
+  border: 1px solid var(--rs-line);
+  border-radius: 0.6rem;
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.rs-campo select:focus,
+.rs-campo input:focus {
+  border-color: var(--rs-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--rs-accent-soft);
+}
+
+.rs-campo input[type="file"]::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 0.35rem 0.8rem;
+  background-color: var(--rs-accent-soft);
+  color: var(--rs-accent);
+  border: none;
+  border-radius: 0.45rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rs-resumen {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.65rem;
+  background-color: var(--rs-accent-soft);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--rs-ink);
+}
+
+.rs-advertencia {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.65rem;
+  background-color: color-mix(in srgb, var(--rs-warn) 15%, transparent);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--rs-ink);
+}
+
+.rs-advertencia svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: var(--rs-warn);
+}
+
+/* Los botones de acción principal quedan al fondo de la tarjeta */
+.rs-panel > .rs-btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* ---------- Botones ---------- */
+.rs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.rs-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rs-btn:focus-visible {
+  outline: 2px solid var(--rs-accent);
+  outline-offset: 2px;
+}
+
+.rs-btn--primario {
+  background-color: var(--rs-accent);
+  color: #fff;
+}
+
+.rs-btn--primario:hover:not(:disabled) {
+  background-color: var(--link-hover, var(--rs-accent));
+}
+
+.rs-btn--peligro {
+  background-color: var(--rs-danger);
+  color: #fff;
+}
+
+.rs-btn--peligro:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.rs-btn--suave {
+  padding: 0.5rem 0.85rem;
+  background-color: var(--rs-accent-soft);
+  color: var(--rs-accent);
+  font-size: 0.85rem;
+}
+
+.rs-btn--suave:hover:not(:disabled) {
+  background-color: var(--rs-accent);
+  color: #fff;
+}
+
+.rs-btn--eliminar {
+  padding: 0.5rem 0.85rem;
+  background-color: color-mix(in srgb, var(--rs-danger) 12%, transparent);
+  color: var(--rs-danger);
+  font-size: 0.85rem;
+}
+
+.rs-btn--eliminar:hover:not(:disabled) {
+  background-color: var(--rs-danger);
+  color: #fff;
+}
+
+.rs-btn--ghost {
+  background-color: transparent;
+  border-color: var(--rs-line);
+  color: var(--rs-soft);
+}
+
+.rs-btn--ghost:hover:not(:disabled) {
+  background-color: var(--rs-accent-soft);
+  color: var(--rs-accent);
+}
+
+/* ---------- Tabla ---------- */
+.rs-tabla-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--rs-line);
+  border-radius: 0.8rem;
 }
 
 .tabla-respaldos {
   width: 100%;
-  border-collapse: collapse; /* Hace que las líneas sean continuas */
-  margin-top: 10px;
-}
-
-.tabla-respaldos th, .tabla-respaldos td {
-  border: 1px solid #ccc; /* Línea divisoria */
-  padding: 8px;
-  text-align: left;
+  margin: 0;
+  border-collapse: collapse;
 }
 
 .tabla-respaldos th {
-  background-color: #f0f0f0;
+  padding: 0.85rem 1rem;
+  background-color: color-mix(in srgb, var(--rs-ink) 5%, transparent);
+  color: var(--rs-soft);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--rs-line);
 }
 
-.tabla-respaldos tr:nth-child(even) {
-  background-color: #fafafa; /* Rayas suaves para mejor visibilidad */
+.tabla-respaldos td {
+  padding: 0.85rem 1rem;
+  color: var(--rs-ink);
+  font-size: 0.95rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--rs-line);
 }
 
-.tabla-respaldos button {
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
-  border-radius: 3px;
+.tabla-respaldos tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.mensaje-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
+.tabla-respaldos tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-respaldos tbody tr:hover {
+  background-color: var(--rs-accent-soft);
+}
+
+.tabla-respaldos .col-acciones {
+  text-align: right;
+}
+
+.rs-nombre {
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+.rs-acciones {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Etiquetas de tipo */
+.rs-tipo {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--rs-ink) 10%, transparent);
+  color: var(--rs-soft);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.rs-tipo.completo {
+  background-color: color-mix(in srgb, #6366f1 16%, transparent);
+  color: #6366f1;
+}
+
+.rs-tipo.incremental {
+  background-color: color-mix(in srgb, #10b981 16%, transparent);
+  color: #059669;
+}
+
+.rs-tipo.diferencial {
+  background-color: color-mix(in srgb, #f59e0b 20%, transparent);
+  color: #d97706;
+}
+
+/* Estado vacío */
+.rs-vacio {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--rs-soft);
 }
 
-.mensaje-contenido {
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
+.rs-vacio svg {
+  font-size: 2rem;
+  opacity: 0.6;
+}
+
+/* ---------- Diálogo de confirmación ---------- */
+.rs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.rs-dialogo {
+  width: min(28rem, 100%);
+  padding: 1.5rem;
+  background-color: var(--rs-surface);
+  color: var(--rs-ink);
+  border: 1px solid var(--rs-line);
+  border-radius: 1rem;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+}
+
+.rs-dialogo h4 {
+  margin: 0 0 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--rs-ink);
+}
+
+.rs-dialogo p {
+  margin: 0;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  color: var(--rs-ink);
+}
+
+.rs-dialogo-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+/* ---------- Móvil: cada fila se convierte en tarjeta ---------- */
+@media (max-width: 800px) {
+  .rs-panel {
+    padding: 1.1rem;
+  }
+
+  .rs-panel > .rs-btn {
+    align-self: stretch;
+  }
+
+  .rs-tabla-wrap {
+    overflow: visible;
+    border: none;
+  }
+
+  .tabla-respaldos,
+  .tabla-respaldos tbody {
+    display: block;
+  }
+
+  .tabla-respaldos thead {
+    display: none;
+  }
+
+  .tabla-respaldos tbody tr {
+    display: block;
+    margin-bottom: 0.9rem;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--rs-line);
+    border-radius: 0.9rem;
+  }
+
+  .tabla-respaldos td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    text-align: right;
+  }
+
+  .tabla-respaldos td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    color: var(--rs-soft);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  .tabla-respaldos tbody tr:last-child td {
+    border-bottom: 1px solid var(--rs-line);
+  }
+
+  .tabla-respaldos td:last-child {
+    display: block;
+    border-bottom: none;
+  }
+
+  .tabla-respaldos td:last-child::before {
+    display: none;
+  }
+
+  .rs-acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  .rs-dialogo-acciones .rs-btn {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rs-btn,
+  .tabla-respaldos tbody tr {
+    transition: none;
+  }
 }

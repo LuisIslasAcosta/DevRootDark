@@ -1,99 +1,306 @@
+/* =========================================================
+   Editar perfil
+   Usa las variables del tema: --card-bg, --card-border,
+   --text-color, --link-color, --link-hover
+========================================================= */
+
 .editar-perfil {
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 30px;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --ep-accent: var(--link-color, #2563eb);
+  --ep-accent-soft: color-mix(in srgb, var(--ep-accent) 12%, transparent);
+  --ep-surface: var(--card-bg, #ffffff);
+  --ep-ink: var(--text-color, #1f2937);
+  --ep-soft: color-mix(in srgb, var(--ep-ink) 65%, transparent);
+  --ep-line: var(--card-border, rgba(128, 128, 128, 0.25));
+  --ep-danger: #dc2626;
+  --ep-ok: #16a34a;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+  color: var(--ep-ink);
+  font-family: "Plus Jakarta Sans", "Segoe UI", Roboto, sans-serif;
 }
 
-.editar-perfil h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+/* ---------- Volver ---------- */
+.ep-volver {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem;
+  background-color: var(--ep-surface);
+  border: 1px solid var(--ep-line);
+  border-radius: 0.65rem;
+  color: var(--ep-soft);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.ep-volver:hover {
+  background-color: var(--ep-accent-soft);
+  color: var(--ep-accent);
+}
+
+/* ---------- Tarjeta ---------- */
+.ep-tarjeta {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background-color: var(--ep-surface);
+  border: 1px solid var(--ep-line);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.ep-header {
+  margin-bottom: 1.5rem;
+}
+
+.ep-header h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 1.2rem + 1vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ep-ink);
+}
+
+.ep-header p {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+  color: var(--ep-soft);
 }
 
 .editar-perfil form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1.1rem;
 }
 
-.editar-perfil label {
+/* ---------- Avisos ---------- */
+.ep-aviso {
+  margin-bottom: 1.1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.7rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.ep-aviso.ok {
+  background-color: color-mix(in srgb, var(--ep-ok) 14%, transparent);
+  color: var(--ep-ok);
+}
+
+.ep-aviso.error {
+  background-color: color-mix(in srgb, var(--ep-danger) 14%, transparent);
+  color: var(--ep-danger);
+}
+
+/* ---------- Foto ---------- */
+.ep-foto {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1rem;
+  border-radius: 0.9rem;
+  background-color: var(--ep-accent-soft);
+}
+
+.ep-avatar {
+  width: 5.5rem;
+  height: 5.5rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--ep-accent);
+}
+
+.ep-avatar--inicial {
+  display: grid;
+  place-items: center;
+  background-color: var(--ep-accent);
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.ep-foto-texto {
   display: flex;
   flex-direction: column;
-  font-weight: 500;
-  color: #444;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
 }
 
-.editar-perfil input[type="text"],
-.editar-perfil input[type="email"],
-.editar-perfil input[type="file"] {
-  margin-top: 6px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  transition: border-color 0.3s;
+.ep-foto-texto small {
+  font-size: 0.8rem;
+  color: var(--ep-soft);
 }
 
-.editar-perfil input:focus {
-  border-color: #0078d7;
-  outline: none;
-}
-
-.editar-perfil button {
-  padding: 12px;
-  background: #0078d7;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.editar-perfil button:hover {
-  background: #005fa3;
-}
-
-.editar-perfil img {
-  display: block;
-  margin: 0 auto;
-  border: 3px solid #0078d7;
-  padding: 4px;
-}
-
-.editar-perfil p {
-  margin-top: 15px;
-  text-align: center;
-  font-weight: 500;
-  color: green;
-}
-
-
-.mensaje-overlay {
-  position: fixed; /* ocupa toda la pantalla */
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7); /* fondo semi-transparente */
+/* ---------- Campos ---------- */
+.ep-campo {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.ep-campo > span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ep-ink);
+}
+
+.ep-campo input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background-color: var(--ep-surface);
+  color: var(--ep-ink);
+  border: 1px solid var(--ep-line);
+  border-radius: 0.65rem;
+  font: inherit;
+  font-size: 1rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ep-campo input:focus {
+  border-color: var(--ep-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ep-accent-soft);
+}
+
+/* ---------- Botones ---------- */
+.ep-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.ep-btn {
+  display: inline-flex;
   align-items: center;
-  z-index: 999; /* encima de todo */
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.2rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
 }
 
-.mensaje-contenido {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
+.ep-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ep-btn--primario {
+  background-color: var(--ep-accent);
+  color: #fff;
+}
+
+.ep-btn--primario:hover:not(:disabled) {
+  background-color: var(--link-hover, var(--ep-accent));
+  color: #fff;
+}
+
+.ep-btn--suave {
+  padding: 0.5rem 0.9rem;
+  background-color: var(--ep-surface);
+  border-color: var(--ep-line);
+  color: var(--ep-accent);
+  font-size: 0.85rem;
+}
+
+.ep-btn--suave:hover:not(:disabled) {
+  background-color: var(--ep-accent);
+  border-color: var(--ep-accent);
+  color: #fff;
+}
+
+.ep-btn--ghost {
+  background-color: transparent;
+  border-color: var(--ep-line);
+  color: var(--ep-soft);
+}
+
+.ep-btn--ghost:hover:not(:disabled) {
+  background-color: var(--ep-accent-soft);
+  color: var(--ep-accent);
+}
+
+.ep-volver:focus-visible,
+.ep-btn:focus-visible {
+  outline: 2px solid var(--ep-accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Cargando / sin sesión ---------- */
+.ep-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 1rem;
   text-align: center;
-  max-width: 500px;
+  color: var(--ep-soft);
 }
 
-.mensaje-contenido h2 {
-  margin-bottom: 20px;
-  color: green;
+.editar-perfil > .ep-estado {
+  background-color: var(--ep-surface);
+  border: 1px solid var(--ep-line);
+  border-radius: 1rem;
+}
+
+.ep-spinner {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 3px solid var(--ep-line);
+  border-top-color: var(--ep-accent);
+  border-radius: 50%;
+  animation: ep-giro 0.8s linear infinite;
+}
+
+@keyframes ep-giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Móvil ---------- */
+@media (max-width: 800px) {
+  .ep-foto {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ep-foto-texto {
+    align-items: center;
+  }
+
+  .ep-acciones {
+    flex-direction: column-reverse;
+  }
+
+  .ep-acciones .ep-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ep-spinner {
+    animation-duration: 2s;
+  }
+
+  .ep-btn,
+  .ep-campo input {
+    transition: none;
+  }
 }
