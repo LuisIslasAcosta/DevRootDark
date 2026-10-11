@@ -15,6 +15,7 @@ import MisCursosAlumno from './vistas/user/MisCursosAlumno';
 import ResponderExamen from './vistas/user/ResponderExamen';
 import ResultadosAlumno from './vistas/user/ResultadosAlumno';
 import EditarPerfil from './vistas/editar';
+import AnalisisRespuestasAlumno from './vistas/user/AnalisisRespuestasAlumno';
 
 // ================= ADMIN =================
 import PrincipalAdmin from './vistas/admin/principal_admin';
@@ -63,6 +64,8 @@ function App() {
             </ProtectedRoute>
           }
         >
+          <Route path="analisis-respuestas" element={<AnalisisRespuestasAlumno />} />
+
           <Route path="cursos/:id" element={<Cursos />} />
           <Route path="mis-cursos" element={<MisCursosAlumno />} />
 

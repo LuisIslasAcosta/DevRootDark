@@ -9,10 +9,13 @@ import '../publico/styles/publicidad.css';
 import '../publico/styles/sections.css';
 import '../temas/temas.css';
 
+const POR_PAGINA = 10;
+
 function Inicio() {
   const [cursos, setCursos] = useState([]);
   const [cursosRecientes, setCursosRecientes] = useState([]);
   const [cursoIndex, setCursoIndex] = useState(0);
+  const [pagina, setPagina] = useState(1);
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
   const [showCustomizer, setShowCustomizer] = useState(false);
   const [menuAbierto, setMenuAbierto] = useState(false);
@@ -65,6 +68,12 @@ function Inicio() {
 
   const imagenFija = "/src/publico/styles/student.jpg";
 
+  // Paginación de cursos
+  const totalPaginas = Math.max(1, Math.ceil(cursos.length / POR_PAGINA));
+  const paginaActual = Math.min(pagina, totalPaginas);
+  const inicio = (paginaActual - 1) * POR_PAGINA;
+  const cursosVisibles = cursos.slice(inicio, inicio + POR_PAGINA);
+
   return (
     <div className='Cuerpo-completo'>
       {/* NAV estilo glassy */}
@@ -90,8 +99,6 @@ function Inicio() {
                   <button className="tema-btn-dark" onClick={() => changeTheme("dark")}>Oscuro</button>
                   <button className="tema-btn-blue" onClick={() => changeTheme("blue")}>Azul</button>
                   <button className="tema-btn-green" onClick={() => changeTheme("green")}>Verde</button>
-
-
 
                   <h4>Personalizar</h4>
                   <label>Fondo: <input type="color" name="--bg-color" onChange={handleCustomTheme} /></label>
@@ -121,8 +128,8 @@ function Inicio() {
         {cursosRecientes.length > 0 ? (
           <div className="carrusel-hero">
             <div className="carrusel-hero-item">
-              <button 
-                className="carrusel-btn-hero" 
+              <button
+                className="carrusel-btn-hero"
                 onClick={() => setCursoIndex(prev => prev > 0 ? prev - 1 : cursosRecientes.length - 1)}
               >
                 ◀
@@ -136,8 +143,8 @@ function Inicio() {
 
               <div className="hero-img-container">
                 <img src={imagenFija} alt="Imagen fija del curso" />
-                <button 
-                  className="carrusel-btn-hero" 
+                <button
+                  className="carrusel-btn-hero"
                   onClick={() => setCursoIndex(prev => prev < cursosRecientes.length - 1 ? prev + 1 : 0)}
                 >
                   ▶
@@ -155,7 +162,7 @@ function Inicio() {
         <h2>Cursos Disponibles</h2>
         <ul className="cursos-completos">
           {cursos.length > 0 ? (
-            cursos.map((curso) => (
+            cursosVisibles.map((curso) => (
               <li key={curso.id} className="curso-item">
                 <div className="curso-img-container">
                   {curso.imagenes && curso.imagenes.map((img, i) => (
@@ -179,6 +186,35 @@ function Inicio() {
             <li>Cargando cursos...</li>
           )}
         </ul>
+
+        {/* Paginación */}
+        {cursos.length > POR_PAGINA && (
+          <div className="cursos-paginacion">
+            <button
+              type="button"
+              className="cursos-paginacion-btn"
+              onClick={() => setPagina(paginaActual - 1)}
+              disabled={paginaActual === 1}
+              aria-label="Página anterior"
+            >
+              ◀
+            </button>
+
+            <span>
+              {inicio + 1}–{Math.min(inicio + POR_PAGINA, cursos.length)} de {cursos.length}
+            </span>
+
+            <button
+              type="button"
+              className="cursos-paginacion-btn"
+              onClick={() => setPagina(paginaActual + 1)}
+              disabled={paginaActual === totalPaginas}
+              aria-label="Página siguiente"
+            >
+              ▶
+            </button>
+          </div>
+        )}
       </Container>
 
       <footer className="footer">

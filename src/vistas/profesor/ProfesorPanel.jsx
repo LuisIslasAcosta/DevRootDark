@@ -17,6 +17,7 @@ import {
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 import "../styles/ProfesorPanel.css";
+import "../styles/SeccionesProfesor.css";
 import "../../temas/temas.css";
 
 const API = "http://127.0.0.1:5000/api";

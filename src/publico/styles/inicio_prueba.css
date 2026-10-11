@@ -190,6 +190,39 @@
   color: var(--link-color);
 }
 
+/* === Paginación de cursos === */
+.cursos-paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.cursos-paginacion-btn {
+  min-width: 2.6rem;
+  padding: 8px 14px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.cursos-paginacion-btn:hover:not(:disabled) {
+  background-color: var(--link-color);
+  color: #fff;
+}
+
+.cursos-paginacion-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* === Footer === */
 .footer {
   text-align: center;

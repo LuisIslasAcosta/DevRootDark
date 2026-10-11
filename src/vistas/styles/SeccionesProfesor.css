@@ -1,0 +1,755 @@
+/* =====================================================================
+   SeccionesProfesor.css
+   Estilos de las pantallas del profesor: Cursos, Editar curso, Niveles,
+   Lecciones, Exámenes, Alumnos, Inscripciones y Reportes.
+   Requisito: las pantallas se renderizan dentro de .pf-main (ProfesorPanel).
+   ===================================================================== */
+
+/* ---------- Tokens (por si la pantalla no está dentro de .pf-layout) ---------- */
+:root {
+  --accent: var(--link-color, #2563eb);
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --border: var(--card-border, rgba(128, 128, 128, 0.25));
+  --surface: var(--card-bg, #ffffff);
+  --ink: var(--text-color, #1f2937);
+  --ink-soft: color-mix(in srgb, var(--ink) 65%, transparent);
+  --radius: 1rem;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --danger: #dc2626;
+  --ok: #16a34a;
+  --warn: #d97706;
+}
+
+/* ---------- Contenedores de página ---------- */
+.admin-section,
+.editar-section,
+.examen-section {
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  font-family: inherit;
+}
+
+.pf-main .container {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.pf-main .container.mt-4 {
+  margin-top: 0 !important;
+}
+
+/* ---------- Títulos ---------- */
+.pf-main > div > h2 {
+  margin-bottom: 1.25rem;
+  font-size: clamp(1.4rem, 1.2rem + 1vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-align: left;
+  color: var(--ink);
+}
+
+.pf-main > div > h3,
+.pf-main .container h3 {
+  margin: 1.75rem 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: left;
+  color: var(--ink);
+}
+
+.pf-main > div > p:not([class]),
+.pf-main > p:not([class]) {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Paneles de formulario ---------- */
+.curso-form,
+.examen-form,
+.editar-form,
+.card-form,
+.edit-panel,
+.crear-nivel-form {
+  box-sizing: border-box;
+  padding: 1.4rem 1.5rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.curso-form,
+.examen-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.curso-form > button,
+.examen-form > button[type="submit"] {
+  justify-self: start;
+  align-self: end;
+}
+
+.editar-form {
+  display: grid;
+  gap: 1.1rem;
+  max-width: 48rem;
+}
+
+.editar-form > button {
+  justify-self: start;
+}
+
+.card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 44rem;
+  margin: 0;
+}
+
+.pf-main .card-form h3 {
+  margin: 0 0 0.5rem;
+}
+
+.card-form label:not(:first-of-type) {
+  margin-top: 0.6rem;
+}
+
+.card-form button {
+  align-self: flex-start;
+  margin-top: 1rem;
+}
+
+.crear-nivel-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-width: 40rem;
+}
+
+.crear-nivel-form input {
+  flex: 1 1 16rem;
+}
+
+.edit-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.pf-main .edit-panel h3,
+.edit-panel button {
+  grid-column: 1 / -1;
+}
+
+.pf-main .edit-panel h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.edit-panel button {
+  justify-self: start;
+}
+
+/* ---------- Campos ---------- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.form-group label,
+.preguntas-section > label,
+.card-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.pf-main :is(
+  input:not([type]),
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="date"],
+  input[type="search"],
+  select,
+  textarea
+) {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pf-main :is(input:not([type]), input[type="text"], input[type="email"],
+  input[type="password"], input[type="number"], input[type="date"],
+  input[type="search"], select, textarea):focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.pf-main select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.pf-main textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.pf-main input[type="file"] {
+  width: 100%;
+  padding: 0.5rem;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 0.65rem;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.pf-main input[type="file"]::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 0.45rem 0.9rem;
+  background-color: var(--accent-soft);
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Pantallas sin clases (EditarExamen, ImportarExcelPreguntas…) */
+.pf-main > div > :is(input, select, textarea) {
+  display: block;
+  max-width: 36rem;
+  margin-bottom: 0.75rem;
+}
+
+/* ---------- Preguntas del examen ---------- */
+.preguntas-section {
+  display: grid;
+  gap: 0.9rem;
+  grid-column: 1 / -1;
+}
+
+.pregunta-item {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background-color: color-mix(in srgb, var(--ink) 3%, transparent);
+}
+
+.pregunta-item input:first-of-type,
+.pregunta-item input:last-of-type,
+.pregunta-item button {
+  grid-column: 1 / -1;
+}
+
+.pregunta-item button {
+  justify-self: end;
+}
+
+.preguntas-section > button {
+  justify-self: start;
+}
+
+/* ---------- Botones: base ---------- */
+.custom-btn,
+.btn-eliminar,
+.card-form button,
+.edit-panel button,
+.pf-main button:not([class]),
+.pf-main .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  box-shadow: none;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.custom-btn:focus-visible,
+.btn-eliminar:focus-visible,
+.card-form button:focus-visible,
+.pf-main button:focus-visible,
+.pf-main .btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.custom-btn:disabled,
+.card-form button:disabled,
+.pf-main .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Secundario (Editar) */
+.custom-btn {
+  background-color: transparent;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.custom-btn:hover:not(:disabled) {
+  background-color: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Suave (Ver) */
+.btn-ver {
+  background-color: var(--accent-soft);
+  border-color: transparent;
+  color: var(--accent);
+}
+
+.btn-ver:hover:not(:disabled) {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Primario */
+.btn-crear,
+.btn-guardar,
+.card-form button,
+.edit-panel .btn-ver,
+.pf-main button:not([class]),
+.pf-main .btn-primary {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-crear:hover:not(:disabled),
+.btn-guardar:hover:not(:disabled),
+.card-form button:hover:not(:disabled),
+.edit-panel .btn-ver:hover:not(:disabled),
+.pf-main button:not([class]):hover,
+.pf-main .btn-primary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--accent) 85%, #000);
+  border-color: color-mix(in srgb, var(--accent) 85%, #000);
+  color: #fff;
+}
+
+/* Éxito, info, aviso (Bootstrap) */
+.pf-main .btn-success {
+  background-color: var(--ok);
+  border-color: var(--ok);
+  color: #fff;
+}
+
+.pf-main .btn-success:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--ok) 85%, #000);
+  border-color: color-mix(in srgb, var(--ok) 85%, #000);
+  color: #fff;
+}
+
+.pf-main .btn-info {
+  background-color: var(--accent-soft);
+  border-color: transparent;
+  color: var(--accent);
+}
+
+.pf-main .btn-info:hover:not(:disabled) {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.pf-main .btn-warning {
+  background-color: rgba(217, 119, 6, 0.14);
+  border-color: transparent;
+  color: var(--warn);
+}
+
+.pf-main .btn-warning:hover:not(:disabled) {
+  background-color: var(--warn);
+  border-color: var(--warn);
+  color: #fff;
+}
+
+/* Peligro */
+.btn-eliminar,
+.pf-main .btn-danger,
+.examen-form .pregunta-item button:not([class]) {
+  background-color: rgba(220, 38, 38, 0.1);
+  border-color: transparent;
+  color: var(--danger);
+}
+
+.btn-eliminar:hover:not(:disabled),
+.pf-main .btn-danger:hover:not(:disabled),
+.examen-form .pregunta-item button:not([class]):hover {
+  background-color: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+}
+
+/* Secundario para "Agregar pregunta" */
+.examen-form .preguntas-section > button:not([class]) {
+  background-color: transparent;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+.examen-form .preguntas-section > button:not([class]):hover {
+  background-color: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Botones dentro de tablas y tarjetas: más compactos */
+.admin-table td .custom-btn,
+.admin-table td .btn-eliminar,
+.pf-main .table td .btn,
+.pf-main .card .btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+/* Quitar imagen/video existente (Editar curso) */
+.preview-item .btn-eliminar {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  padding: 0.3rem 0.65rem;
+  background-color: var(--danger);
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+.preview-item .btn-eliminar:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--danger) 85%, #000);
+}
+
+/* ---------- Vista previa de medios ---------- */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.9rem;
+}
+
+.preview-item {
+  position: relative;
+  padding: 0.5rem;
+  background-color: color-mix(in srgb, var(--ink) 5%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+}
+
+.preview-item img,
+.preview-item video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 0.6rem;
+}
+
+/* ---------- Tablas ---------- */
+.admin-table,
+.pf-main > div > .table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.admin-table th,
+.admin-table td,
+.pf-main .table th,
+.pf-main .table td {
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  vertical-align: middle;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.admin-table thead th,
+.pf-main .table thead th {
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink-soft);
+}
+
+.admin-table thead th {
+  background-color: color-mix(in srgb, var(--ink) 4%, transparent);
+}
+
+.admin-table tbody tr:last-child td,
+.pf-main .table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.admin-table tbody tr:hover td {
+  background-color: var(--accent-soft);
+}
+
+.admin-table td:last-child {
+  white-space: nowrap;
+}
+
+/* Bootstrap: neutraliza table-dark / striped y usa los tokens */
+.pf-main .table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--ink);
+  --bs-table-striped-bg: color-mix(in srgb, var(--ink) 4%, transparent);
+  --bs-table-striped-color: var(--ink);
+  --bs-table-hover-bg: var(--accent-soft);
+  --bs-table-hover-color: var(--ink);
+  --bs-table-border-color: var(--border);
+  margin-bottom: 0;
+}
+
+.pf-main .table-responsive {
+  overflow-x: auto;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.pf-main .table-responsive .table {
+  box-shadow: none !important;
+}
+
+.curso-img {
+  width: 4.5rem;
+  height: 3.25rem;
+  margin: 0 0.3rem 0.3rem 0;
+  object-fit: cover;
+  vertical-align: middle;
+  border-radius: 0.5rem;
+}
+
+.curso-video {
+  width: 11rem;
+  margin: 0 0.3rem 0.3rem 0;
+  vertical-align: middle;
+  border-radius: 0.5rem;
+}
+
+/* ---------- Progreso de subida ---------- */
+.progress-bar-container {
+  height: 1.5rem;
+  margin: 0 0 1.5rem;
+  overflow: hidden;
+  background-color: var(--accent-soft);
+  border-radius: 999px;
+}
+
+.progress-bar-container .progress-bar {
+  height: 100%;
+  min-width: 2.5rem;
+  padding: 0 0.7rem;
+  background-color: var(--accent);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  text-align: right;
+  transition: width 0.3s ease;
+}
+
+/* ---------- Tarjetas (Niveles y Lecciones, Bootstrap) ---------- */
+.pf-main .card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+}
+
+.pf-main .card h5 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pf-main .card p {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.pf-main .card a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pf-main .card a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Lista de alumnos ---------- */
+.pf-main > div > ul {
+  max-width: 40rem;
+  padding: 0.25rem 1.25rem;
+  list-style: none;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+}
+
+.pf-main > div > ul > li {
+  padding: 0.75rem 0;
+  font-size: 0.95rem;
+}
+
+.pf-main > div > ul > li + li {
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Reportes: gráfica (Recharts) ---------- */
+.pf-main .container > div:has(> .recharts-responsive-container) {
+  padding: 1.4rem 1.5rem !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.pf-main .container .recharts-cartesian-grid line {
+  stroke: var(--border);
+}
+
+.pf-main .container .recharts-cartesian-axis-line,
+.pf-main .container .recharts-cartesian-axis-tick-line {
+  stroke: var(--border);
+}
+
+.pf-main .container .recharts-cartesian-axis-tick-value {
+  fill: var(--ink-soft);
+  stroke: none;
+  font-size: 0.8rem;
+}
+
+.pf-main .container .recharts-bar-rectangle path {
+  fill: var(--accent);
+}
+
+.pf-main .container .recharts-label-list text {
+  fill: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pf-main .container .recharts-legend-icon {
+  fill: var(--accent);
+}
+
+.pf-main .container .recharts-legend-item-text {
+  color: var(--ink) !important;
+  font-size: 0.85rem;
+}
+
+.pf-main .container .recharts-default-tooltip {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 0.65rem !important;
+  box-shadow: var(--shadow);
+}
+
+.pf-main .container .recharts-tooltip-label {
+  color: var(--ink) !important;
+  font-weight: 600;
+}
+
+/* ---------- Móvil ---------- */
+@media (max-width: 800px) {
+  .pregunta-item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .curso-form > button,
+  .examen-form > button[type="submit"],
+  .editar-form > button,
+  .card-form button,
+  .edit-panel button {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .admin-table,
+  .pf-main > div > .table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .admin-table th,
+  .admin-table td,
+  .pf-main .table th,
+  .pf-main .table td {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .curso-video {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+.reportes-paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.reportes-paginacion .custom-btn {
+  min-width: 2.4rem;
+  padding: 0.4rem 0.7rem;
+  font-size: 1rem;
+}

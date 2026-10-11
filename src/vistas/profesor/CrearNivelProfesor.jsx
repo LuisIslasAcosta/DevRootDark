@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../styles/ProfesorPanel.css";
+import "../styles/SeccionesProfesor.css";
 
 function CrearNivelesCurso() {
   const { id: cursoId } = useParams(); // Traemos el ID del curso desde la URL

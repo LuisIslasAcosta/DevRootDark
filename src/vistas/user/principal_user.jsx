@@ -6,10 +6,11 @@ import {
   FaPalette,
   FaHome,
   FaBookOpen,
-  FaUser
+  FaUser,
+  FaClipboardList
 } from "react-icons/fa";
 
-import "../styles/principaluser.css";
+import "../styles/EstilosAlumno.css";
 import "../../temas/temas.css";
 
 function PrincipalAlumno() {
@@ -165,6 +166,10 @@ function PrincipalAlumno() {
             <FaBookOpen /> Mis Cursos
           </button>
         </nav>
+
+        <button onClick={() => navigate("/principal/analisis-respuestas")}>
+          <FaClipboardList /> Mis Respuestas
+        </button>
 
         <div className="sidebar-profile">
           <button onClick={handleLogout} className="logout-btn">

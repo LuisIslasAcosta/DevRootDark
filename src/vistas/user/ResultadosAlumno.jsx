@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import "../styles/EstilosAlumno.css";
 function ResultadosAlumno() {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const [resultados, setResultados] = useState([]);

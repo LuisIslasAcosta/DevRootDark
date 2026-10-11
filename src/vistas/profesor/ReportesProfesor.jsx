@@ -11,6 +11,10 @@ import {
   LabelList,
   Legend
 } from "recharts";
+import "../styles/ProfesorPanel.css";
+import "../styles/SeccionesProfesor.css";
+
+const POR_PAGINA = 10;
 
 function ReportesProfesor() {
 
@@ -18,6 +22,10 @@ function ReportesProfesor() {
   const [promedios, setPromedios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [paginas, setPaginas] = useState({}); // { "Nombre del curso": numeroDePagina }
+
+  const cambiarPagina = (curso, nueva) =>
+    setPaginas(prev => ({ ...prev, [curso]: nueva }));
 
   useEffect(() => {
 
@@ -106,53 +114,96 @@ function ReportesProfesor() {
 
       {/* TABLAS */}
 
-      {Object.keys(reportesPorCurso).map((curso) => (
+      {Object.keys(reportesPorCurso).map((curso) => {
 
-        <div key={curso} className="mb-5">
+        const filas = reportesPorCurso[curso];
+        const totalPaginas = Math.max(1, Math.ceil(filas.length / POR_PAGINA));
+        const paginaActual = Math.min(paginas[curso] || 1, totalPaginas);
+        const inicio = (paginaActual - 1) * POR_PAGINA;
+        const filasVisibles = filas.slice(inicio, inicio + POR_PAGINA);
 
-          <h3 className="mt-4">{curso}</h3>
+        return (
 
-          <div className="table-responsive">
+          <div key={curso} className="mb-5">
 
-            <table className="table table-dark table-striped shadow">
+            <h3 className="mt-4">{curso}</h3>
 
-              <thead>
-                <tr>
-                  <th>Alumno</th>
-                  <th>Email</th>
-                  <th>Examen</th>
-                  <th>Correctas</th>
-                  <th>Total</th>
-                  <th>Calificación</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
+            <div className="table-responsive">
 
-              <tbody>
+              <table className="table table-dark table-striped shadow">
 
-                {reportesPorCurso[curso].map((r, i) => (
-
-                  <tr key={i}>
-                    <td>{r.alumno}</td>
-                    <td>{r.email}</td>
-                    <td>{r.examen}</td>
-                    <td>{r.correctas}</td>
-                    <td>{r.total}</td>
-                    <td><strong>{r.calificacion}%</strong></td>
-                    <td>{r.fecha}</td>
+                <thead>
+                  <tr>
+                    <th>Alumno</th>
+                    <th>Email</th>
+                    <th>Examen</th>
+                    <th>Correctas</th>
+                    <th>Total</th>
+                    <th>Calificación</th>
+                    <th>Fecha</th>
                   </tr>
+                </thead>
 
-                ))}
+                <tbody>
 
-              </tbody>
+                  {filasVisibles.map((r, i) => (
 
-            </table>
+                    <tr key={inicio + i}>
+                      <td>{r.alumno}</td>
+                      <td>{r.email}</td>
+                      <td>{r.examen}</td>
+                      <td>{r.correctas}</td>
+                      <td>{r.total}</td>
+                      <td><strong>{r.calificacion}%</strong></td>
+                      <td>{r.fecha}</td>
+                    </tr>
+
+                  ))}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+            {/* PAGINACIÓN */}
+
+            {filas.length > POR_PAGINA && (
+
+              <div className="reportes-paginacion">
+
+                <button
+                  type="button"
+                  className="custom-btn"
+                  onClick={() => cambiarPagina(curso, paginaActual - 1)}
+                  disabled={paginaActual === 1}
+                  aria-label="Página anterior"
+                >
+                  ←
+                </button>
+
+                <span>
+                  {inicio + 1}–{Math.min(inicio + POR_PAGINA, filas.length)} de {filas.length}
+                </span>
+
+                <button
+                  type="button"
+                  className="custom-btn"
+                  onClick={() => cambiarPagina(curso, paginaActual + 1)}
+                  disabled={paginaActual === totalPaginas}
+                  aria-label="Página siguiente"
+                >
+                  →
+                </button>
+
+              </div>
+
+            )}
 
           </div>
 
-        </div>
-
-      ))}
+        );
+      })}
 
       <h2 className="mt-5 mb-4">Promedios por Examen</h2>
 

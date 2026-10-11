@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import "../styles/ProfesorPanel.css";
+import "../styles/SeccionesProfesor.css";
 function ImportarExcelPreguntas({ examenId }) {
   const [archivo, setArchivo] = useState(null);
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import "../styles/ProfesorPanel.css";
+import "../styles/SeccionesProfesor.css";
 function VerLeccionesProfesor() {
   const { id } = useParams(); // curso_id
   const navigate = useNavigate();

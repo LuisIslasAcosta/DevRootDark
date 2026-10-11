@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "../styles/Examenes.css";
+import "../styles/ProfesorPanel.css";
+import "../styles/SeccionesProfesor.css";
 
 function VerExamenes() {
   const { cursoId } = useParams(); 

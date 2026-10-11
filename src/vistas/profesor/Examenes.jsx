@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../styles/Examenes.css";
+import "../styles/ProfesorPanel.css";
+import "../styles/SeccionesProfesor.css";
 
 function CrearExamen() {
   const [cursos, setCursos] = useState([]);
