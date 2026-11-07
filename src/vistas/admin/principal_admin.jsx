@@ -27,7 +27,7 @@ import "../../temas/temas.css";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, ArcElement, CategoryScale, LinearScale);
 
-const API = "http://127.0.0.1:5000/api";
+const API = "https://apidevrootdark.onrender.com/api";
 const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
 const COLOR_USUARIOS = "#6366f1";
 const COLOR_CURSOS = "#f59e0b";

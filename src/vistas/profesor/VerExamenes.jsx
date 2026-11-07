@@ -14,7 +14,7 @@ function VerExamenes() {
     const token = localStorage.getItem("token");
     if (!cursoId) return;
 
-    axios.get(`http://127.0.0.1:5000/api/cursos/${cursoId}`, {
+    axios.get(`https://apidevrootdark.onrender.com/api/cursos/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setCursoNombre(res.data.nombre || "Curso"))
@@ -26,7 +26,7 @@ function VerExamenes() {
     const token = localStorage.getItem("token");
     if (!cursoId) return;
 
-    axios.get(`http://127.0.0.1:5000/api/examenes/curso/${cursoId}`, {
+    axios.get(`https://apidevrootdark.onrender.com/api/examenes/curso/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setExamenes(res.data || []))
@@ -39,7 +39,7 @@ function VerExamenes() {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:5000/api/examenes/${id}`, {
+      await axios.delete(`https://apidevrootdark.onrender.com/api/examenes/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("Examen eliminado ");

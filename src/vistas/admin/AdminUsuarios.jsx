@@ -3,7 +3,7 @@ import { Modal, Form } from "react-bootstrap";
 import { FaSearch, FaPen, FaTrashAlt, FaUsers } from "react-icons/fa";
 import "../styles/AdminVistas.css";
 
-const API = "http://127.0.0.1:5000/api";
+const API = "https://apidevrootdark.onrender.com/api";
 
 const ROLES = [
   { value: "usuario", label: "Usuario" },

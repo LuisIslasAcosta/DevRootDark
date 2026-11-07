@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaCamera, FaArrowLeft } from "react-icons/fa";
 import "../vistas/styles/editar.css";
 
-const API = "http://127.0.0.1:5000/api";
+const API = "https://apidevrootdark.onrender.com/api";
 const MAX_FOTO_MB = 2;
 
 const vacio = { nombre: "", email: "", telefono: "", foto_perfil: "" };

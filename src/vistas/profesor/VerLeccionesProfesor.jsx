@@ -11,7 +11,7 @@ function VerLeccionesProfesor() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:5000/api/lecciones/curso/${id}`, {
+    axios.get(`https://apidevrootdark.onrender.com/api/lecciones/curso/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
       .then(res => {
@@ -28,7 +28,7 @@ function VerLeccionesProfesor() {
     if (!window.confirm("¿Eliminar esta lección?")) return;
 
     try {
-      await axios.delete(`http://127.0.0.1:5000/api/lecciones/${leccionId}`, {
+      await axios.delete(`https://apidevrootdark.onrender.com/api/lecciones/${leccionId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
@@ -66,7 +66,7 @@ function VerLeccionesProfesor() {
               <ul>
                 {leccion.archivos.map((a, i) => (
                   <li key={i}>
-                    <a href={`http://127.0.0.1:5000/uploads/${a}`} target="_blank">
+                    <a href={`https://apidevrootdark.onrender.com/uploads/${a}`} target="_blank">
                       {a}
                     </a>
                   </li>

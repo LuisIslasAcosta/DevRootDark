@@ -22,7 +22,7 @@ function EditarCursoProfesor() {
   const [videosEliminar, setVideosEliminar] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:5000/api/cursos/${id}`, {
+    axios.get(`https://apidevrootdark.onrender.com/api/cursos/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => {
@@ -80,7 +80,7 @@ function EditarCursoProfesor() {
     formData.append("videosEliminar", JSON.stringify(videosEliminar));
 
     try {
-      await axios.put(`http://127.0.0.1:5000/api/cursos/${id}`, formData, {
+      await axios.put(`https://apidevrootdark.onrender.com/api/cursos/${id}`, formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
@@ -130,7 +130,7 @@ function EditarCursoProfesor() {
               {curso.imagenes.map((img, index) => (
                 <div key={index} className="preview-item">
                   <img
-                    src={`http://127.0.0.1:5000/api/uploads/imagenes/${img}`}
+                    src={`https://apidevrootdark.onrender.com/api/uploads/imagenes/${img}`}
                     alt="Imagen curso"
                     className="preview-img"
                   />
@@ -157,7 +157,7 @@ function EditarCursoProfesor() {
               {curso.videos.map((vid, index) => (
                 <div key={index} className="preview-item">
                   <video
-                    src={`http://127.0.0.1:5000/api/uploads/videos/${vid}`}
+                    src={`https://apidevrootdark.onrender.com/api/uploads/videos/${vid}`}
                     controls
                     className="preview-video"
                   />

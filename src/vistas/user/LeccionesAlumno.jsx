@@ -14,7 +14,7 @@ function LeccionesAlumno({ cursoId }) {
     const token = localStorage.getItem("token");
 
     // Cargar niveles
-    axios.get(`http://127.0.0.1:5000/api/niveles/curso/${cursoId}`, {
+    axios.get(`https://apidevrootdark.onrender.com/api/niveles/curso/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -23,7 +23,7 @@ function LeccionesAlumno({ cursoId }) {
 
       // Cargar lecciones de cada nivel
       nivelesData.forEach(nivel => {
-        axios.get(`http://127.0.0.1:5000/api/lecciones/nivel/${nivel.id}`, {
+        axios.get(`https://apidevrootdark.onrender.com/api/lecciones/nivel/${nivel.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then(resL => {

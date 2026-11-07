@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:5000/api'; // Base de la API
+const API_URL = 'https://apidevrootdark.onrender.com/api'; // Base de la API
 
 // --- Registro de usuario ---
 export const registrarUsuario = (data) =>

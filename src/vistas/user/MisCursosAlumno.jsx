@@ -45,12 +45,12 @@ function MisCursosAlumno() {
       try {
         setLoading(true);
 
-        const cursosRes = await axios.get("http://127.0.0.1:5000/api/cursos", {
+        const cursosRes = await axios.get("https://apidevrootdark.onrender.com/api/cursos", {
           headers: { Authorization: `Bearer ${token}` }
         });
 
         const insRes = await axios.get(
-          `http://127.0.0.1:5000/api/inscripciones/alumno/${user.id}`
+          `https://apidevrootdark.onrender.com/api/inscripciones/alumno/${user.id}`
         );
 
         const idsInscritos = [...new Set(insRes.data.map(i => i.curso_id))];
@@ -95,7 +95,7 @@ function MisCursosAlumno() {
 
               {curso.imagenes?.length > 0 && (
                 <img
-                  src={`http://127.0.0.1:5000/api/uploads/imagenes/${curso.imagenes[0]}`}
+                  src={`https://apidevrootdark.onrender.com/api/uploads/imagenes/${curso.imagenes[0]}`}
                   alt={curso.nombre}
                   className="curso-thumb"
                 />

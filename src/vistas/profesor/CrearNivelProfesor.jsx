@@ -21,7 +21,7 @@ function CrearNivelesCurso() {
       setLoading(true);
 
       await axios.post(
-        "http://127.0.0.1:5000/api/niveles",
+        "https://apidevrootdark.onrender.com/api/niveles",
         {
           curso_id: cursoId, // ⚡ Aquí usamos directamente el cursoId
           titulo

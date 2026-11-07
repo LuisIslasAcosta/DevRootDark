@@ -6,7 +6,7 @@ function ResultadosAlumno() {
   const [resultados, setResultados] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:5000/api/respuestas/alumno/${usuario.id}`)
+    axios.get(`https://apidevrootdark.onrender.com/api/respuestas/alumno/${usuario.id}`)
       .then(res => setResultados(res.data));
   }, []);
 

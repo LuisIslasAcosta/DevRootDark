@@ -7,14 +7,14 @@ function Inscripciones() {
   const [inscripciones, setInscripciones] = useState([]);
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:5000/api/inscripciones")
+    axios.get("https://apidevrootdark.onrender.com/api/inscripciones")
       .then(res => setInscripciones(res.data))
       .catch(err => console.error("Error al cargar inscripciones:", err));
   }, []);
 
   const eliminarInscripcion = (id) => {
     if (!window.confirm("¿Seguro que quieres eliminar esta inscripción?")) return;
-    axios.delete(`http://127.0.0.1:5000/api/inscripciones/${id}`)
+    axios.delete(`https://apidevrootdark.onrender.com/api/inscripciones/${id}`)
       .then(() => setInscripciones(inscripciones.filter(i => i.id !== id)))
       .catch(err => console.error("Error al eliminar inscripción:", err));
   };

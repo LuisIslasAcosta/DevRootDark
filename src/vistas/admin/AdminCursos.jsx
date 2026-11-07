@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FaSearch, FaPlus, FaTimes, FaEye, FaTrashAlt, FaBookOpen, FaImage, FaVideo } from "react-icons/fa";
 import "../styles/AdminVistas.css";
 
-const API = "http://127.0.0.1:5000/api";
+const API = "https://apidevrootdark.onrender.com/api";
 
 const cursoVacio = (usuario) => ({
   nombre: "",

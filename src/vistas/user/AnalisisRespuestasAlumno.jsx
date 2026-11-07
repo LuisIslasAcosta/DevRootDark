@@ -36,7 +36,7 @@ function AnalisisRespuestasAlumno() {
 
     const token = localStorage.getItem("token");
 
-    axios.get(`http://127.0.0.1:5000/api/respuestas/analisis/${user.id}`, {
+    axios.get(`https://apidevrootdark.onrender.com/api/respuestas/analisis/${user.id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

@@ -24,12 +24,12 @@ function Inicio() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
 
-    fetch('http://127.0.0.1:5000/api/cursos')
+    fetch('https://apidevrootdark.onrender.com/api/cursos')
       .then(res => res.json())
       .then(data => setCursos(data))
       .catch(err => console.error("Error al cargar cursos:", err));
 
-    fetch("http://127.0.0.1:5000/api/cursos/recientes")
+    fetch("https://apidevrootdark.onrender.com/api/cursos/recientes")
       .then(res => res.json())
       .then(data => setCursosRecientes(data))
       .catch(error => console.error("Error al cargar cursos recientes:", error));
@@ -168,7 +168,7 @@ function Inicio() {
                   {curso.imagenes && curso.imagenes.map((img, i) => (
                     <img
                       key={i}
-                      src={`http://127.0.0.1:5000/api/uploads/imagenes/${img}`}
+                      src={`https://apidevrootdark.onrender.com/api/uploads/imagenes/${img}`}
                       alt={`Imagen ${i + 1} de ${curso.nombre}`}
                     />
                   ))}

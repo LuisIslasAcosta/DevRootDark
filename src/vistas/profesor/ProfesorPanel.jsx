@@ -20,7 +20,7 @@ import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
 import "../../temas/temas.css";
 
-const API = "http://127.0.0.1:5000/api";
+const API = "https://apidevrootdark.onrender.com/api";
 const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
 
 const etiquetaCluster = (v) => (typeof v === "number" ? `Cluster ${v}` : v);

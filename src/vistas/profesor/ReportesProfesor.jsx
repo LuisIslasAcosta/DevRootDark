@@ -40,7 +40,7 @@ function ReportesProfesor() {
 
     /* REPORTES */
 
-    axios.get("http://127.0.0.1:5000/api/reportes/profesor", {
+    axios.get("https://apidevrootdark.onrender.com/api/reportes/profesor", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -54,7 +54,7 @@ function ReportesProfesor() {
 
     /* PROMEDIOS */
 
-    axios.get("http://127.0.0.1:5000/api/promedio-examen-profesor", {
+    axios.get("https://apidevrootdark.onrender.com/api/promedio-examen-profesor", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

@@ -28,7 +28,7 @@ function ResponderExamen() {
     const fetchPreguntas = async () => {
       try {
         const res = await axios.get(
-          `http://127.0.0.1:5000/api/preguntas/examen/${examenId}`,
+          `https://apidevrootdark.onrender.com/api/preguntas/examen/${examenId}`,
           {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
           }
@@ -76,7 +76,7 @@ function ResponderExamen() {
       const usuario = JSON.parse(localStorage.getItem("usuario"));
 
       const res = await axios.post(
-        "http://127.0.0.1:5000/api/respuestas",
+        "https://apidevrootdark.onrender.com/api/respuestas",
         {
           alumno_id: usuario.id,
           examen_id: examenId,

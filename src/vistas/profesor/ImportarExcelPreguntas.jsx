@@ -10,7 +10,7 @@ function ImportarExcelPreguntas({ examenId }) {
     formData.append("archivo", archivo);
     formData.append("examen_id", examenId);
 
-    await axios.post("http://127.0.0.1:5000/api/preguntas/importar_excel", formData);
+    await axios.post("https://apidevrootdark.onrender.com/api/preguntas/importar_excel", formData);
     alert("Preguntas importadas ");
   };
 

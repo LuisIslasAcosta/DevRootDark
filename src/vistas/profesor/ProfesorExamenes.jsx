@@ -10,11 +10,11 @@ function ProfesorExamenes() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios.get(`http://127.0.0.1:5000/api/cursos/${cursoId}`, {
+    axios.get(`https://apidevrootdark.onrender.com/api/cursos/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setCursoNombre(res.data.nombre));
 
-    axios.get(`http://127.0.0.1:5000/api/examenes/curso/${cursoId}`, {
+    axios.get(`https://apidevrootdark.onrender.com/api/examenes/curso/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setExamenes(res.data || []))
@@ -25,7 +25,7 @@ function ProfesorExamenes() {
     if (!window.confirm("¿Eliminar este examen?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:5000/api/examenes/${exId}`, {
+      await axios.delete(`https://apidevrootdark.onrender.com/api/examenes/${exId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setExamenes(prev => prev.filter(ex => ex.id !== exId));
