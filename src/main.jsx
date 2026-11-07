@@ -8,3 +8,13 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+
+// Registro del Service Worker (solo en producción para no interferir con la recarga de Vite)
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then((reg) => console.log('Service Worker registrado:', reg.scope))
+      .catch((err) => console.error('Error al registrar el Service Worker:', err))
+  })
+}
