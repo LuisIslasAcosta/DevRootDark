@@ -11,7 +11,7 @@ const vacio = { nombre: "", email: "", telefono: "", foto_perfil: "" };
 
 // La foto puede venir con o sin el prefijo "data:image"
 const srcFoto = (foto) =>
-  foto ? (foto.startsWith("data:image") ? foto : `data:image/png;base64,${foto}`) : null;
+  foto ? (/^(data:image|https?:)/.test(foto) ? foto : `data:image/png;base64,${foto}`) : null;
 
 function EditarPerfil() {
   const navigate = useNavigate();

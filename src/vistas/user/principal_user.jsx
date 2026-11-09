@@ -130,7 +130,7 @@ function PrincipalAlumno() {
   // ================= PERFIL (barra lateral) =================
   const [fotoError, setFotoError] = useState(false);
   const fotoPerfil = user?.foto_perfil
-    ? (user.foto_perfil.startsWith("data:image") ? user.foto_perfil : `data:image/png;base64,${user.foto_perfil}`)
+    ? (/^(data:image|https?:)/.test(user.foto_perfil) ? user.foto_perfil : `data:image/png;base64,${user.foto_perfil}`)
     : null;
   const nombreAlumno = user?.nombre || user?.username || "Alumno";
   const inicialNombre = nombreAlumno.trim().charAt(0).toUpperCase();
@@ -154,7 +154,7 @@ function PrincipalAlumno() {
 
         <div className="pf-perfil">
           {fotoPerfil && !fotoError ? (
-            <img src={fotoPerfil} alt="Foto de perfil" className="pf-avatar" onError={() => setFotoError(true)} />
+            <img src={fotoPerfil} alt="Foto de perfil" className="pf-avatar" referrerPolicy="no-referrer" onError={() => setFotoError(true)} />
           ) : (
             <div className="pf-avatar pf-avatar--inicial" aria-hidden="true">{inicialNombre}</div>
           )}

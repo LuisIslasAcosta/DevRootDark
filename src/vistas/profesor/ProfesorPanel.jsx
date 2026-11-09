@@ -140,7 +140,7 @@ function ProfesorPanel() {
   const enInicio = location.pathname.replace(/\/$/, "") === "/profesor";
 
   const foto = user?.foto_perfil
-    ? user.foto_perfil.startsWith("data:image")
+    ? /^(data:image|https?:)/.test(user.foto_perfil)
       ? user.foto_perfil
       : `data:image/png;base64,${user.foto_perfil}`
     : null;
@@ -168,7 +168,7 @@ function ProfesorPanel() {
 
         <div className="pf-perfil">
           {foto && !fotoError ? (
-            <img src={foto} alt="Foto de perfil" className="pf-avatar" onError={() => setFotoError(true)} />
+            <img src={foto} alt="Foto de perfil" className="pf-avatar" referrerPolicy="no-referrer" onError={() => setFotoError(true)} />
           ) : (
             <div className="pf-avatar pf-avatar--inicial" aria-hidden="true">
               {inicial}

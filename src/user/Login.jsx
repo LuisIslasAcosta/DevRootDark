@@ -4,6 +4,7 @@ import { loginUsuario, reenviarVerificacion } from "../service/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // íconos de ojo
 import "./styles/login.css";
 import Logo from "../componentes/Logo";
+import BotonGoogle from "../componentes/BotonGoogle";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -98,6 +99,7 @@ const Login = () => {
           </div>
           <button type="submit">Login</button>
         </form>
+        <BotonGoogle texto="signin_with" />
         <br />
         <Link to="/"><button>Regresar a la página principal</button></Link>
         {mensaje && <p className="auth-aviso auth-aviso--error">{mensaje}</p>}

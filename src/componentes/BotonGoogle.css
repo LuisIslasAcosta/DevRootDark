@@ -1,0 +1,54 @@
+.boton-google {
+  margin: 0.9rem 0 0.4rem;
+}
+.boton-google__separador {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.boton-google__separador::before,
+.boton-google__separador::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.45);
+}
+.boton-google__contenedor {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+.boton-google__estado {
+  margin: 0.6rem 0 0;
+  color: #fff;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* En el registro el botón va arriba: el separador "o" se muestra debajo */
+.registro-o-manual {
+  display: none;
+}
+.boton-google + .registro-o-manual {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.4rem 0 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+}
+.boton-google + .registro-o-manual::before,
+.boton-google + .registro-o-manual::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.45);
+}
+.login-box h2 + .boton-google .boton-google__separador {
+  display: none;
+}

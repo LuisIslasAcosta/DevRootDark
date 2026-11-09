@@ -152,7 +152,7 @@ function PrincipalAdmin() {
   };
 
   const fotoPerfil = user?.foto_perfil
-    ? user.foto_perfil.startsWith("data:image")
+    ? /^(data:image|https?:)/.test(user.foto_perfil)
       ? user.foto_perfil
       : `data:image/png;base64,${user.foto_perfil}`
     : null;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { registrarUsuario, reenviarVerificacion } from "../service/api";
 import { Link } from "react-router-dom";
 import Logo from "../componentes/Logo";
+import BotonGoogle from "../componentes/BotonGoogle";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // íconos de ojo
 import "./styles/login.css"; // usamos el mismo login.css para mantener consistencia
 
@@ -103,6 +104,8 @@ const Registro = () => {
           <Logo variante="banner" />
         </Link>
         <h2>Registro de Usuario</h2>
+        <BotonGoogle texto="signup_with" />
+        <p className="registro-o-manual">o llena tus datos</p>
         <form onSubmit={handleSubmit}>
           <input type="text" name="nombre" placeholder="Nombre" onChange={handleChange} required />
           <input type="text" name="apellidop" placeholder="Apellido Paterno" onChange={handleChange} required />
