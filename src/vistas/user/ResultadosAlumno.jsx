@@ -6,7 +6,7 @@ function ResultadosAlumno() {
   const [resultados, setResultados] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://apidevrootdark.onrender.com/api/respuestas/alumno/${usuario.id}`)
+    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/respuestas/alumno/${usuario.id}`)
       .then(res => setResultados(res.data));
   }, []);
 

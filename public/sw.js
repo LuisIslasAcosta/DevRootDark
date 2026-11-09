@@ -4,7 +4,7 @@ const VERSION = 'v1';
 const SHELL_CACHE = `drd-shell-${VERSION}`;
 const ASSETS_CACHE = `drd-assets-${VERSION}`;
 const API_CACHE = `drd-api-${VERSION}`;
-const API_ORIGIN = 'https://apidevrootdark.onrender.com';
+const API_ORIGIN = 'https://defense-situation-bouquet-aqua.trycloudflare.com/';
 
 // Archivos base de la aplicación (app shell)
 const SHELL_FILES = [

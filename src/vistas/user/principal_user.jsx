@@ -72,7 +72,7 @@ function PrincipalAlumno() {
 
     const cargarCursos = async () => {
       try {
-        const cursosRes = await axios.get("https://apidevrootdark.onrender.com/api/cursos", {
+        const cursosRes = await axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos", {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -87,7 +87,7 @@ function PrincipalAlumno() {
 
       try {
         const insRes = await axios.get(
-          `https://apidevrootdark.onrender.com/api/inscripciones/alumno/${user.id}`
+          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/inscripciones/alumno/${user.id}`
         );
 
         const ids = Array.isArray(insRes.data)
@@ -110,7 +110,7 @@ function PrincipalAlumno() {
     if (!user?.id) return alert("Usuario no válido");
 
     try {
-      await axios.post("https://apidevrootdark.onrender.com/api/inscripciones", {
+      await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/inscripciones", {
         curso_id: cursoId,
         alumno_id: user.id
       });
@@ -221,7 +221,7 @@ function PrincipalAlumno() {
                   {curso.imagenes?.map((img, i) => (
                     <img
                       key={i}
-                      src={`https://apidevrootdark.onrender.com/api/uploads/imagenes/${img}`}
+                      src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${img}`}
                       className="curso-thumb"
                       alt="Curso"
                     />

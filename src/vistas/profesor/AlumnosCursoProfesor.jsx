@@ -9,11 +9,11 @@ function AlumnosCursoProfesor() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios.get(`https://apidevrootdark.onrender.com/api/cursos/${cursoId}`, {
+    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setCursoNombre(res.data.nombre));
 
-    axios.get(`https://apidevrootdark.onrender.com/api/cursos/${cursoId}/alumnos`, {
+    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${cursoId}/alumnos`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setAlumnos(res.data || []))

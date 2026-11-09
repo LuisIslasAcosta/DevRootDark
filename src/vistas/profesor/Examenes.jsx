@@ -23,7 +23,7 @@ function CrearExamen() {
 
   // ================= CARGAR CURSOS =================
   useEffect(() => {
-    axios.get("https://apidevrootdark.onrender.com/api/mis_cursos", {
+    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/mis_cursos", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setCursos(res.data || []))
@@ -34,7 +34,7 @@ function CrearExamen() {
   useEffect(() => {
     if (!examen.curso_id) return;
 
-    axios.get(`https://apidevrootdark.onrender.com/api/niveles/curso/${examen.curso_id}`, {
+    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/curso/${examen.curso_id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setNiveles(res.data || []))
@@ -45,7 +45,7 @@ function CrearExamen() {
   useEffect(() => {
     if (!examen.nivel_id) return;
 
-    axios.get(`https://apidevrootdark.onrender.com/api/lecciones/nivel/${examen.nivel_id}`, {
+    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/lecciones/nivel/${examen.nivel_id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setLecciones(res.data || []))
@@ -137,7 +137,7 @@ function CrearExamen() {
         formData.append("archivo", archivoExcel);
       }
 
-      await axios.post("https://apidevrootdark.onrender.com/api/examenes", formData, {
+      await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes", formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 

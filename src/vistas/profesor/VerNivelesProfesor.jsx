@@ -15,7 +15,7 @@ function VerNivelesProfesor() {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://apidevrootdark.onrender.com/api/niveles/curso/${cursoId}`,
+          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/curso/${cursoId}`,
           { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
         setNiveles(res.data || []);
@@ -35,7 +35,7 @@ function VerNivelesProfesor() {
     if (!window.confirm("¿Eliminar este nivel?")) return;
 
     try {
-      await axios.delete(`https://apidevrootdark.onrender.com/api/niveles/${id}`, {
+      await axios.delete(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 

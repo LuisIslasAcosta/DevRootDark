@@ -24,12 +24,12 @@ function Inicio() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
 
-    fetch('https://apidevrootdark.onrender.com/api/cursos')
+    fetch('https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos')
       .then(res => res.json())
       .then(data => setCursos(data))
       .catch(err => console.error("Error al cargar cursos:", err));
 
-    fetch("https://apidevrootdark.onrender.com/api/cursos/recientes")
+    fetch("https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/recientes")
       .then(res => res.json())
       .then(data => setCursosRecientes(data))
       .catch(error => console.error("Error al cargar cursos recientes:", error));
@@ -168,7 +168,7 @@ function Inicio() {
                   {curso.imagenes && curso.imagenes.map((img, i) => (
                     <img
                       key={i}
-                      src={`https://apidevrootdark.onrender.com/api/uploads/imagenes/${img}`}
+                      src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${img}`}
                       alt={`Imagen ${i + 1} de ${curso.nombre}`}
                     />
                   ))}

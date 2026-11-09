@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaCamera, FaArrowLeft } from "react-icons/fa";
 import "../vistas/styles/editar.css";
 
-const API = "https://apidevrootdark.onrender.com/api";
+const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
 const MAX_FOTO_MB = 2;
 
 const vacio = { nombre: "", email: "", telefono: "", foto_perfil: "" };

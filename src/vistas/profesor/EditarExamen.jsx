@@ -10,7 +10,7 @@ function EditarExamen() {
   const [examen, setExamen] = useState({ titulo: "", fecha: "", preguntas: [] });
 
   useEffect(() => {
-    axios.get(`https://apidevrootdark.onrender.com/api/examenes`)
+    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes`)
       .then(res => {
         const encontrado = res.data.find(e => e.id === id);
         if (encontrado) setExamen(encontrado);
@@ -24,7 +24,7 @@ function EditarExamen() {
   };
 
   const guardar = async () => {
-    await axios.put(`https://apidevrootdark.onrender.com/api/examenes/${id}`, examen);
+    await axios.put(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes/${id}`, examen);
     alert("Examen actualizado");
     navigate("/profesor/examenes");
   };

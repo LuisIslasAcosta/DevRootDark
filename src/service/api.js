@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://apidevrootdark.onrender.com/api'; // Base de la API
+const API_URL = 'https://defense-situation-bouquet-aqua.trycloudflare.com//api'; // Base de la API
 
 // --- Registro de usuario ---
 export const registrarUsuario = (data) =>

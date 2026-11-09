@@ -45,12 +45,12 @@ function MisCursosAlumno() {
       try {
         setLoading(true);
 
-        const cursosRes = await axios.get("https://apidevrootdark.onrender.com/api/cursos", {
+        const cursosRes = await axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos", {
           headers: { Authorization: `Bearer ${token}` }
         });
 
         const insRes = await axios.get(
-          `https://apidevrootdark.onrender.com/api/inscripciones/alumno/${user.id}`
+          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/inscripciones/alumno/${user.id}`
         );
 
         const idsInscritos = [...new Set(insRes.data.map(i => i.curso_id))];
@@ -95,7 +95,7 @@ function MisCursosAlumno() {
 
               {curso.imagenes?.length > 0 && (
                 <img
-                  src={`https://apidevrootdark.onrender.com/api/uploads/imagenes/${curso.imagenes[0]}`}
+                  src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${curso.imagenes[0]}`}
                   alt={curso.nombre}
                   className="curso-thumb"
                 />

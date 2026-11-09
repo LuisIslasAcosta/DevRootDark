@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { FaArrowLeft, FaChalkboardTeacher, FaImage, FaVideo, FaTimes } from "react-icons/fa";
 import "../styles/Curso_Detalle.css";
 
-const API = "https://apidevrootdark.onrender.com/api";
+const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
 
 function CursoDetalle() {
   const { id } = useParams();

@@ -19,7 +19,7 @@ const Recuperar = () => {
     e.preventDefault();
     setMensaje("");
     try {
-      const res = await axios.post("https://apidevrootdark.onrender.com/api/recuperar/pregunta", { email });
+      const res = await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/recuperar/pregunta", { email });
       setPregunta(res.data.pregunta_seguridad);
       setUsuarioId(res.data.usuario_id);
       setPaso(2);
@@ -34,7 +34,7 @@ const Recuperar = () => {
     e.preventDefault();
     setMensaje("");
     try {
-      const res = await axios.post("https://apidevrootdark.onrender.com/api/recuperar/verificar", {
+      const res = await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/recuperar/verificar", {
         usuario_id: usuarioId,
         respuesta
       });
@@ -54,7 +54,7 @@ const Recuperar = () => {
     e.preventDefault();
     setMensaje("");
     try {
-      const res = await axios.put("https://apidevrootdark.onrender.com/api/recuperar/reset", {
+      const res = await axios.put("https://defense-situation-bouquet-aqua.trycloudflare.com//api/recuperar/reset", {
         usuario_id: usuarioId,
         nueva_password: nuevaPassword,
         respuesta // enviar la respuesta de seguridad al reset

@@ -17,7 +17,7 @@ function CrearLeccionProfesor() {
   useEffect(() => {
     if (!cursoId) return;
     const token = localStorage.getItem("token");
-    axios.get(`https://apidevrootdark.onrender.com/api/niveles/curso/${cursoId}`, {
+    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/curso/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -43,7 +43,7 @@ function CrearLeccionProfesor() {
 
     try {
       setLoading(true);
-      await axios.post("https://apidevrootdark.onrender.com/api/lecciones", formData, {
+      await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/lecciones", formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       alert("Lección creada ");

@@ -21,7 +21,7 @@ function CrearNivelesCurso() {
       setLoading(true);
 
       await axios.post(
-        "https://apidevrootdark.onrender.com/api/niveles",
+        "https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles",
         {
           curso_id: cursoId, // ⚡ Aquí usamos directamente el cursoId
           titulo

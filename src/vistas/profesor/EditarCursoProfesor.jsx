@@ -22,7 +22,7 @@ function EditarCursoProfesor() {
   const [videosEliminar, setVideosEliminar] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://apidevrootdark.onrender.com/api/cursos/${id}`, {
+    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => {
@@ -80,7 +80,7 @@ function EditarCursoProfesor() {
     formData.append("videosEliminar", JSON.stringify(videosEliminar));
 
     try {
-      await axios.put(`https://apidevrootdark.onrender.com/api/cursos/${id}`, formData, {
+      await axios.put(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${id}`, formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
@@ -130,7 +130,7 @@ function EditarCursoProfesor() {
               {curso.imagenes.map((img, index) => (
                 <div key={index} className="preview-item">
                   <img
-                    src={`https://apidevrootdark.onrender.com/api/uploads/imagenes/${img}`}
+                    src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${img}`}
                     alt="Imagen curso"
                     className="preview-img"
                   />
@@ -157,7 +157,7 @@ function EditarCursoProfesor() {
               {curso.videos.map((vid, index) => (
                 <div key={index} className="preview-item">
                   <video
-                    src={`https://apidevrootdark.onrender.com/api/uploads/videos/${vid}`}
+                    src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/videos/${vid}`}
                     controls
                     className="preview-video"
                   />

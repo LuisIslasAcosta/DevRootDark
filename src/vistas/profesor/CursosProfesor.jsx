@@ -22,7 +22,7 @@ function ProfesorCursos() {
 
   const cargarCursos = () => {
 
-    axios.get("https://apidevrootdark.onrender.com/api/mis_cursos", {
+    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/mis_cursos", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setCursos(res.data))
@@ -56,7 +56,7 @@ function ProfesorCursos() {
       formData.append("videos", video);
     });
 
-    axios.post("https://apidevrootdark.onrender.com/api/cursos", formData, {
+    axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos", formData, {
 
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 
@@ -95,7 +95,7 @@ function ProfesorCursos() {
     const confirmar = window.confirm("¿Estás seguro de que quieres eliminar este curso?");
     if (!confirmar) return;
 
-    fetch(`https://apidevrootdark.onrender.com/api/cursos/${id}`, {
+    fetch(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
@@ -133,7 +133,7 @@ function ProfesorCursos() {
     formData.append("precio", cursoEditando.precio);
 
     axios.put(
-      `https://apidevrootdark.onrender.com/api/cursos/${cursoEditando.id}`,
+      `https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${cursoEditando.id}`,
       formData,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -243,7 +243,7 @@ function ProfesorCursos() {
 
                   <img
                     key={i}
-                    src={`https://apidevrootdark.onrender.com/api/uploads/imagenes/${img}`}
+                    src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${img}`}
                     alt="curso"
                     className="curso-img"
                   />
@@ -259,7 +259,7 @@ function ProfesorCursos() {
 
                   <video
                     key={i}
-                    src={`https://apidevrootdark.onrender.com/api/uploads/videos/${vid}`}
+                    src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/videos/${vid}`}
                     controls
                     className="curso-video"
                   />

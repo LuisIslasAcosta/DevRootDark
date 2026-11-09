@@ -27,7 +27,7 @@ import "../../temas/temas.css";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, ArcElement, CategoryScale, LinearScale);
 
-const API = "https://apidevrootdark.onrender.com/api";
+const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
 const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
 const COLOR_USUARIOS = "#6366f1";
 const COLOR_CURSOS = "#f59e0b";

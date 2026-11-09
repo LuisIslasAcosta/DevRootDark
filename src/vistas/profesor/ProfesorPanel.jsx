@@ -20,7 +20,7 @@ import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
 import "../../temas/temas.css";
 
-const API = "https://apidevrootdark.onrender.com/api";
+const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
 const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
 
 const etiquetaCluster = (v) => (typeof v === "number" ? `Cluster ${v}` : v);

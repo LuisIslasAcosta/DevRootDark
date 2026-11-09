@@ -40,7 +40,7 @@ function ReportesProfesor() {
 
     /* REPORTES */
 
-    axios.get("https://apidevrootdark.onrender.com/api/reportes/profesor", {
+    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/reportes/profesor", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -54,7 +54,7 @@ function ReportesProfesor() {
 
     /* PROMEDIOS */
 
-    axios.get("https://apidevrootdark.onrender.com/api/promedio-examen-profesor", {
+    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/promedio-examen-profesor", {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
