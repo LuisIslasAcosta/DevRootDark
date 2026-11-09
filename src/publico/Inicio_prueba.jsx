@@ -8,6 +8,9 @@ import '../publico/styles/layout.css';
 import '../publico/styles/publicidad.css';
 import '../publico/styles/sections.css';
 import '../temas/temas.css';
+import studentImg from './styles/student.jpg';
+import { API_URL } from "../config";
+import Logo from "../componentes/Logo";
 
 const POR_PAGINA = 10;
 
@@ -24,12 +27,12 @@ function Inicio() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
 
-    fetch('https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos')
+    fetch(`${API_URL}/cursos`)
       .then(res => res.json())
       .then(data => setCursos(data))
       .catch(err => console.error("Error al cargar cursos:", err));
 
-    fetch("https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/recientes")
+    fetch(`${API_URL}/cursos/recientes`)
       .then(res => res.json())
       .then(data => setCursosRecientes(data))
       .catch(error => console.error("Error al cargar cursos recientes:", error));
@@ -66,7 +69,7 @@ function Inicio() {
     });
   }, []);
 
-  const imagenFija = "/src/publico/styles/student.jpg";
+  const imagenFija = studentImg;
 
   // Paginación de cursos
   const totalPaginas = Math.max(1, Math.ceil(cursos.length / POR_PAGINA));
@@ -78,9 +81,9 @@ function Inicio() {
     <div className='Cuerpo-completo'>
       {/* NAV estilo glassy */}
       <nav className="nav glassy-nav">
-        <div className="logo-container">
-          <span className="logo-text">DevRootDark</span>
-        </div>
+        <Link to="/" className="logo-container" aria-label="DevRootDark - Inicio">
+          <Logo variante="nav" alto="46px" />
+        </Link>
 
         <div className={`menu ${menuAbierto ? 'open' : ''}`}>
           <button className="menu-toggle" onClick={() => setMenuAbierto(!menuAbierto)}>☰</button>
@@ -118,6 +121,7 @@ function Inicio() {
 
       {/* Hero Section */}
       <section className="hero-section" id="home">
+        <Logo variante="banner" className="hero-logo" />
         <h1>Bienvenido al Futuro del Aprendizaje</h1>
         <p>Explora cursos innovadores y desarrolla tus habilidades.</p>
         <Link to="/register" className="hero-button">Comenzar Ahora</Link>
@@ -168,7 +172,7 @@ function Inicio() {
                   {curso.imagenes && curso.imagenes.map((img, i) => (
                     <img
                       key={i}
-                      src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${img}`}
+                      src={`${API_URL}/uploads/imagenes/${img}`}
                       alt={`Imagen ${i + 1} de ${curso.nombre}`}
                     />
                   ))}
@@ -218,7 +222,8 @@ function Inicio() {
       </Container>
 
       <footer className="footer">
-        <p>© DevRootDark 2026</p>
+        <Logo variante="icono" alto="40px" className="footer-logo" />
+        <p>© DevRootDark 2026 · Aprende a programar desde la raíz</p>
       </footer>
     </div>
   );

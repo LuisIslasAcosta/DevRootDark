@@ -4,8 +4,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { FaSearch, FaPlus, FaTimes, FaEye, FaTrashAlt, FaBookOpen, FaImage, FaVideo } from "react-icons/fa";
 import "../styles/AdminVistas.css";
+import { API_URL } from "../../config";
 
-const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
+const API = API_URL;
 
 const cursoVacio = (usuario) => ({
   nombre: "",

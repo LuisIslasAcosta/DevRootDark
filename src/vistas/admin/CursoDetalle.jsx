@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaArrowLeft, FaChalkboardTeacher, FaImage, FaVideo, FaTimes } from "react-icons/fa";
 import "../styles/Curso_Detalle.css";
+import { API_URL } from "../../config";
 
-const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
+const API = API_URL;
 
 function CursoDetalle() {
   const { id } = useParams();

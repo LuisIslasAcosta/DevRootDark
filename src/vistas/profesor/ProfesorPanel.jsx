@@ -19,8 +19,10 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
 import "../../temas/temas.css";
+import { API_URL } from "../../config";
+import Logo from "../../componentes/Logo";
 
-const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
+const API = API_URL;
 const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
 
 const etiquetaCluster = (v) => (typeof v === "number" ? `Cluster ${v}` : v);
@@ -159,7 +161,10 @@ function ProfesorPanel() {
     <div className="pf-layout">
       {/* ================= SIDEBAR ================= */}
       <aside className="pf-sidebar">
-        <div className="pf-brand">Panel del Profesor</div>
+        <div className="pf-brand">
+          <Logo variante="nav" alto="40px" className="sidebar-logo" />
+          <span className="brand-texto">Panel del Profesor</span>
+        </div>
 
         <div className="pf-perfil">
           {foto && !fotoError ? (

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import "../styles/EstilosAlumno.css";
+import { API_URL } from "../../config";
 
 function ResponderExamen() {
   const { id: examenId } = useParams();
@@ -28,7 +29,7 @@ function ResponderExamen() {
     const fetchPreguntas = async () => {
       try {
         const res = await axios.get(
-          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/preguntas/examen/${examenId}`,
+          `${API_URL}/preguntas/examen/${examenId}`,
           {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
           }
@@ -76,7 +77,7 @@ function ResponderExamen() {
       const usuario = JSON.parse(localStorage.getItem("usuario"));
 
       const res = await axios.post(
-        "https://defense-situation-bouquet-aqua.trycloudflare.com//api/respuestas",
+        `${API_URL}/respuestas`,
         {
           alumno_id: usuario.id,
           examen_id: examenId,

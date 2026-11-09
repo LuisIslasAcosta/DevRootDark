@@ -1,0 +1,2 @@
+# Netlify: todas las rutas de React (/login, /principal, /profesor/...) cargan index.html
+/*    /index.html   200

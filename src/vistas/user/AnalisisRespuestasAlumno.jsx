@@ -17,6 +17,7 @@ import {
   LabelList
 } from "recharts";
 import "../styles/EstilosAlumno.css";
+import { API_URL } from "../../config";
 function AnalisisRespuestasAlumno() {
   const [user, setUser] = useState(null);
   const [data, setData] = useState(null);
@@ -36,7 +37,7 @@ function AnalisisRespuestasAlumno() {
 
     const token = localStorage.getItem("token");
 
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/respuestas/analisis/${user.id}`, {
+    axios.get(`${API_URL}/respuestas/analisis/${user.id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

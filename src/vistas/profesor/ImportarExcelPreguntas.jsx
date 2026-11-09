@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 function ImportarExcelPreguntas({ examenId }) {
   const [archivo, setArchivo] = useState(null);
 
@@ -10,7 +11,7 @@ function ImportarExcelPreguntas({ examenId }) {
     formData.append("archivo", archivo);
     formData.append("examen_id", examenId);
 
-    await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/preguntas/importar_excel", formData);
+    await axios.post(`${API_URL}/preguntas/importar_excel`, formData);
     alert("Preguntas importadas ");
   };
 

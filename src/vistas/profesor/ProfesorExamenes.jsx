@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 function ProfesorExamenes() {
   const { cursoId } = useParams();
   const [examenes, setExamenes] = useState([]);
@@ -10,11 +11,11 @@ function ProfesorExamenes() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${cursoId}`, {
+    axios.get(`${API_URL}/cursos/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setCursoNombre(res.data.nombre));
 
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes/curso/${cursoId}`, {
+    axios.get(`${API_URL}/examenes/curso/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setExamenes(res.data || []))
@@ -25,7 +26,7 @@ function ProfesorExamenes() {
     if (!window.confirm("¿Eliminar este examen?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes/${exId}`, {
+      await axios.delete(`${API_URL}/examenes/${exId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setExamenes(prev => prev.filter(ex => ex.id !== exId));

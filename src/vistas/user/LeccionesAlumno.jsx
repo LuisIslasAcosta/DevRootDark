@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/EstilosAlumno.css";
+import { API_URL } from "../../config";
 
 function LeccionesAlumno({ cursoId }) {
   const [niveles, setNiveles] = useState([]);
@@ -14,7 +15,7 @@ function LeccionesAlumno({ cursoId }) {
     const token = localStorage.getItem("token");
 
     // Cargar niveles
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/curso/${cursoId}`, {
+    axios.get(`${API_URL}/niveles/curso/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -23,7 +24,7 @@ function LeccionesAlumno({ cursoId }) {
 
       // Cargar lecciones de cada nivel
       nivelesData.forEach(nivel => {
-        axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/lecciones/nivel/${nivel.id}`, {
+        axios.get(`${API_URL}/lecciones/nivel/${nivel.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         .then(resL => {

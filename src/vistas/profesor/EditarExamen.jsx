@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 
 function EditarExamen() {
   const { id } = useParams();
@@ -10,7 +11,7 @@ function EditarExamen() {
   const [examen, setExamen] = useState({ titulo: "", fecha: "", preguntas: [] });
 
   useEffect(() => {
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes`)
+    axios.get(`${API_URL}/examenes`)
       .then(res => {
         const encontrado = res.data.find(e => e.id === id);
         if (encontrado) setExamen(encontrado);
@@ -24,7 +25,7 @@ function EditarExamen() {
   };
 
   const guardar = async () => {
-    await axios.put(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes/${id}`, examen);
+    await axios.put(`${API_URL}/examenes/${id}`, examen);
     alert("Examen actualizado");
     navigate("/profesor/examenes");
   };

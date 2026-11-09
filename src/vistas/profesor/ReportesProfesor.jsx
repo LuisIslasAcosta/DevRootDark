@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 
 const POR_PAGINA = 10;
 
@@ -40,7 +41,7 @@ function ReportesProfesor() {
 
     /* REPORTES */
 
-    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/reportes/profesor", {
+    axios.get(`${API_URL}/reportes/profesor`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -54,7 +55,7 @@ function ReportesProfesor() {
 
     /* PROMEDIOS */
 
-    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/promedio-examen-profesor", {
+    axios.get(`${API_URL}/promedio-examen-profesor`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

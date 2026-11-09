@@ -5,6 +5,7 @@ import axios from "axios";
 
 import "../styles/EstilosAlumno.css";
 import "../../temas/temas.css";
+import { API_URL, API_ORIGIN } from "../../config";
 
 function Cursos() {
   const { id } = useParams();
@@ -33,7 +34,7 @@ function Cursos() {
   useEffect(() => {
     const cargarCurso = async () => {
       try {
-        const res = await axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${id}`);
+        const res = await axios.get(`${API_URL}/cursos/${id}`);
         setCurso(res.data);
       } catch (err) {
         console.error("Error al cargar curso:", err);
@@ -50,7 +51,7 @@ function Cursos() {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/analisis/progreso/estudiante/${user.id}/${id}`,
+          `${API_URL}/analisis/progreso/estudiante/${user.id}/${id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         
@@ -70,7 +71,7 @@ function Cursos() {
     const cargarNiveles = async () => {
       try {
         const res = await axios.get(
-          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/curso/${id}/con_lecciones`
+          `${API_URL}/niveles/curso/${id}/con_lecciones`
         );
         const nivelesConExamenes = await Promise.all(
           res.data.map(async (nivel) => {
@@ -79,7 +80,7 @@ function Cursos() {
                   // Traer los exámenes por lección
                   try {
                     const examRes = await axios.get(
-                      `https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes/leccion/${leccion.id}`
+                      `${API_URL}/examenes/leccion/${leccion.id}`
                     );
                     return { ...leccion, examenes: examRes.data || [] };
                   } catch {
@@ -92,7 +93,7 @@ function Cursos() {
               let examenesNivel = [];
               try {
                 const examNivelRes = await axios.get(
-                  `https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes/nivel/${nivel.id}`
+                  `${API_URL}/examenes/nivel/${nivel.id}`
                 );
                 examenesNivel = examNivelRes.data || [];
               } catch (err) {
@@ -122,7 +123,7 @@ function Cursos() {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "https://defense-situation-bouquet-aqua.trycloudflare.com//api/analisis/progreso/leccion/vista",
+        `${API_URL}/analisis/progreso/leccion/vista`,
         {
           alumno_id: user.id,
           leccion_id: leccionId,
@@ -136,7 +137,7 @@ function Cursos() {
       
       // Recargar progreso
       const res = await axios.get(
-        `https://defense-situation-bouquet-aqua.trycloudflare.com//api/analisis/progreso/estudiante/${user.id}/${id}`,
+        `${API_URL}/analisis/progreso/estudiante/${user.id}/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
@@ -202,7 +203,7 @@ function Cursos() {
             {curso.imagenes.map((img, i) => (
               <img
                 key={i}
-                src={`https://defense-situation-bouquet-aqua.trycloudflare.com/${getArchivoURL(img)}`}
+                src={`${API_ORIGIN}${getArchivoURL(img)}`}
                 alt={`imagen-${i}`}
                 className="curso-media-img"
                 loading="lazy"
@@ -220,7 +221,7 @@ function Cursos() {
             {curso.videos.map((vid, i) => (
               <video
                 key={i}
-                src={`https://defense-situation-bouquet-aqua.trycloudflare.com/${getArchivoURL(vid)}`}
+                src={`${API_ORIGIN}${getArchivoURL(vid)}`}
                 controls
                 className="curso-video-player"
               />
@@ -256,7 +257,7 @@ function Cursos() {
                         {leccion.archivos?.length > 0 && (
                           <div className="leccion-archivos">
                             {leccion.archivos.map((archivo, i) => {
-                              const url = `https://defense-situation-bouquet-aqua.trycloudflare.com/${getArchivoURL(archivo)}`;
+                              const url = `${API_ORIGIN}${getArchivoURL(archivo)}`;
                               const ext = archivo.split(".").pop().toLowerCase();
 
                               if (["png","jpg","jpeg","gif"].includes(ext)) {

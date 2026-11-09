@@ -1,10 +1,9 @@
 // Service Worker de DevRootDark
 // Cambia la versión cada vez que publiques para forzar la actualización de la caché.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL_CACHE = `drd-shell-${VERSION}`;
 const ASSETS_CACHE = `drd-assets-${VERSION}`;
 const API_CACHE = `drd-api-${VERSION}`;
-const API_ORIGIN = 'https://defense-situation-bouquet-aqua.trycloudflare.com/';
 
 // Archivos base de la aplicación (app shell)
 const SHELL_FILES = [
@@ -54,7 +53,8 @@ self.addEventListener('fetch', (event) => {
   }
 
   // 2) API: red primero y respaldo en caché (solo GET) para consultar datos sin conexión
-  if (url.origin === API_ORIGIN) {
+  // Cualquier petición a /api/ de otro dominio (la URL de la API puede cambiar)
+  if (url.origin !== self.location.origin && url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(request)
         .then((res) => {

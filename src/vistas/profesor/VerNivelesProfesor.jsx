@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 function VerNivelesProfesor() {
   const { id: cursoId } = useParams(); // Traemos el id del curso desde la URL
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function VerNivelesProfesor() {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/curso/${cursoId}`,
+          `${API_URL}/niveles/curso/${cursoId}`,
           { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
         setNiveles(res.data || []);
@@ -35,7 +36,7 @@ function VerNivelesProfesor() {
     if (!window.confirm("¿Eliminar este nivel?")) return;
 
     try {
-      await axios.delete(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/${id}`, {
+      await axios.delete(`${API_URL}/niveles/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
@@ -69,12 +70,6 @@ function VerNivelesProfesor() {
 
           <div className="d-flex gap-2 mt-2">
             <button
-              className="btn btn-primary"
-              onClick={() => navigate(`/profesor/cursos/${cursoId}/niveles/${nivel.id}/editar`)}
-            >
-               Editar
-            </button>
-            <button
               className="btn btn-danger"
               onClick={() => eliminarNivel(nivel.id)}
             >
@@ -82,13 +77,13 @@ function VerNivelesProfesor() {
             </button>
             <button
               className="btn btn-info"
-              onClick={() => navigate(`/profesor/cursos/${cursoId}/niveles/${nivel.id}/lecciones`)}
+              onClick={() => navigate(`/profesor/cursos/${cursoId}/lecciones`)}
             >
                Ver Lecciones
             </button>
             <button
               className="btn btn-warning"
-              onClick={() => navigate(`/profesor/cursos/${cursoId}/niveles/${nivel.id}/examenes`)}
+              onClick={() => navigate(`/profesor/cursos/${cursoId}/examenes`)}
             >
                Ver Exámenes
             </button>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { registrarUsuario } from "../service/api";
 import { Link } from "react-router-dom";
+import Logo from "../componentes/Logo";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // íconos de ojo
 import "./styles/login.css"; // usamos el mismo login.css para mantener consistencia
 
@@ -53,6 +54,9 @@ const Registro = () => {
   return (
     <div className="login-container">
       <div className="login-box">
+        <Link to="/" className="auth-logo" aria-label="Volver al inicio">
+          <Logo variante="banner" />
+        </Link>
         <h2>Registro de Usuario</h2>
         <form onSubmit={handleSubmit}>
           <input type="text" name="nombre" placeholder="Nombre" onChange={handleChange} required />

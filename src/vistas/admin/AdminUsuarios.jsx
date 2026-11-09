@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal, Form } from "react-bootstrap";
 import { FaSearch, FaPen, FaTrashAlt, FaUsers } from "react-icons/fa";
 import "../styles/AdminVistas.css";
+import { API_URL } from "../../config";
 
-const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
+const API = API_URL;
 
 const ROLES = [
   { value: "usuario", label: "Usuario" },

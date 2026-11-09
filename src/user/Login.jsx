@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUsuario } from "../service/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // íconos de ojo
 import "./styles/login.css";
+import Logo from "../componentes/Logo";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -31,7 +32,7 @@ const Login = () => {
         localStorage.setItem("acceptedTerms", "true");
         localStorage.setItem("rol", response.data.usuario.rol);
         localStorage.setItem("usuario", JSON.stringify(response.data.usuario));
-        localStorage.setItem("user_id", response.data.usuario._id);
+        localStorage.setItem("user_id", response.data.usuario.id);
 
         setMensaje("Login exitoso ");
 
@@ -47,6 +48,9 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-box">
+        <Link to="/" className="auth-logo" aria-label="Volver al inicio">
+          <Logo variante="banner" />
+        </Link>
         <h2>Iniciar Sesión</h2>
         <form onSubmit={handleSubmit}>
           <input

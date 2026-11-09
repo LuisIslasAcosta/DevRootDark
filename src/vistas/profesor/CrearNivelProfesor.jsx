@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 
 function CrearNivelesCurso() {
   const { id: cursoId } = useParams(); // Traemos el ID del curso desde la URL
@@ -21,7 +22,7 @@ function CrearNivelesCurso() {
       setLoading(true);
 
       await axios.post(
-        "https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles",
+        `${API_URL}/niveles`,
         {
           curso_id: cursoId, // ⚡ Aquí usamos directamente el cursoId
           titulo

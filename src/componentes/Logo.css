@@ -1,0 +1,119 @@
+/* ===== Logo DevRootDark adaptable a los temas ===== */
+.drd-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  line-height: 0;
+  user-select: none;
+  /* Color de "DEV" y del lema (lo calcula Logo.jsx según el fondo) */
+  --logo-texto: currentColor;
+}
+
+.drd-logo__capas {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+}
+
+.drd-logo__color,
+.drd-logo__icono {
+  display: block;
+  height: 100%;
+  width: auto;
+  transition: filter 0.3s ease;
+}
+
+.drd-logo__mono {
+  position: absolute;
+  inset: 0;
+  background: var(--logo-texto);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transition: background 0.3s ease;
+}
+
+/* Fondo claro: contorno sutil para que el verde y el turquesa se lean bien */
+.drd-logo--claro .drd-logo__color,
+.drd-logo--claro .drd-logo__icono {
+  filter: drop-shadow(0 0 0.6px rgba(0, 0, 0, 0.55)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
+}
+
+/* Fondo oscuro: brillo neón como el logo original */
+.drd-logo--oscuro .drd-logo__color,
+.drd-logo--oscuro .drd-logo__icono {
+  filter: drop-shadow(0 0 8px rgba(46, 230, 199, 0.28));
+}
+
+/* Banner: se ajusta al ancho disponible */
+.drd-logo--banner {
+  width: min(560px, 90%);
+  height: auto;
+}
+.drd-logo--banner .drd-logo__capas,
+.drd-logo--banner .drd-logo__color {
+  width: 100%;
+  height: auto;
+}
+
+/* Tamaños por defecto (se pueden cambiar con la prop "alto") */
+.drd-logo--nav { height: 40px; }
+.drd-logo--nav .drd-logo__icono { height: 100%; }
+.drd-logo--nav .drd-logo__capas { height: 62%; }
+.drd-logo--icono { height: 48px; }
+
+@media (max-width: 576px) {
+  .drd-logo--nav { height: 32px; }
+}
+
+/* ===== Ubicaciones del logo ===== */
+.logo-container,
+.auth-logo {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.hero-logo {
+  display: flex;
+  margin: 0 auto 1.4rem;
+  width: min(620px, 92%);
+}
+
+.footer .footer-logo {
+  display: inline-flex;
+  margin-bottom: 0.5rem;
+}
+
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  text-decoration: none !important;
+}
+.auth-logo .drd-logo--banner {
+  width: min(320px, 100%);
+}
+
+.admin-sidebar .brand,
+.pf-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+.admin-sidebar .brand > .brand-texto,
+.pf-brand > .brand-texto {
+  font-size: 0.85rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.sidebar-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.sidebar-logo {
+  max-width: 100%;
+}

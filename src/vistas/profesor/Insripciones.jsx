@@ -3,18 +3,19 @@ import { Table, Button } from "react-bootstrap";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 function Inscripciones() {
   const [inscripciones, setInscripciones] = useState([]);
 
   useEffect(() => {
-    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/inscripciones")
+    axios.get(`${API_URL}/inscripciones`)
       .then(res => setInscripciones(res.data))
       .catch(err => console.error("Error al cargar inscripciones:", err));
   }, []);
 
   const eliminarInscripcion = (id) => {
     if (!window.confirm("¿Seguro que quieres eliminar esta inscripción?")) return;
-    axios.delete(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/inscripciones/${id}`)
+    axios.delete(`${API_URL}/inscripciones/${id}`)
       .then(() => setInscripciones(inscripciones.filter(i => i.id !== id)))
       .catch(err => console.error("Error al eliminar inscripción:", err));
   };

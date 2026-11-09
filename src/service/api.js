@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_URL } from "../config";
 
-const API_URL = 'https://defense-situation-bouquet-aqua.trycloudflare.com//api'; // Base de la API
+// La URL base de la API viene de src/config.js (variable VITE_API_URL)
 
 // --- Registro de usuario ---
 export const registrarUsuario = (data) =>

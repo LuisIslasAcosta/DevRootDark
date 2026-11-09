@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 
 function ProfesorCursos() {
 
@@ -22,7 +23,7 @@ function ProfesorCursos() {
 
   const cargarCursos = () => {
 
-    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/mis_cursos", {
+    axios.get(`${API_URL}/mis_cursos`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setCursos(res.data))
@@ -56,7 +57,7 @@ function ProfesorCursos() {
       formData.append("videos", video);
     });
 
-    axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos", formData, {
+    axios.post(`${API_URL}/cursos`, formData, {
 
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 
@@ -95,7 +96,7 @@ function ProfesorCursos() {
     const confirmar = window.confirm("¿Estás seguro de que quieres eliminar este curso?");
     if (!confirmar) return;
 
-    fetch(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${id}`, {
+    fetch(`${API_URL}/cursos/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
@@ -133,7 +134,7 @@ function ProfesorCursos() {
     formData.append("precio", cursoEditando.precio);
 
     axios.put(
-      `https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos/${cursoEditando.id}`,
+      `${API_URL}/cursos/${cursoEditando.id}`,
       formData,
       {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
@@ -243,7 +244,7 @@ function ProfesorCursos() {
 
                   <img
                     key={i}
-                    src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${img}`}
+                    src={`${API_URL}/uploads/imagenes/${img}`}
                     alt="curso"
                     className="curso-img"
                   />
@@ -259,7 +260,7 @@ function ProfesorCursos() {
 
                   <video
                     key={i}
-                    src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/videos/${vid}`}
+                    src={`${API_URL}/uploads/videos/${vid}`}
                     controls
                     className="curso-video"
                   />
@@ -271,7 +272,7 @@ function ProfesorCursos() {
 
               <td>
 
-                <Link to={`/profesor/curso/${curso.id}`}>
+                <Link to={`/profesor/cursos/${curso.id}/lecciones`}>
                   <button className="custom-btn btn-ver">Ver</button>
                 </Link>
 

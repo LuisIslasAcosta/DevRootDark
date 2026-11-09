@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL, urlArchivo } from "../../config";
 function VerLeccionesProfesor() {
   const { id } = useParams(); // curso_id
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ function VerLeccionesProfesor() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/lecciones/curso/${id}`, {
+    axios.get(`${API_URL}/lecciones/curso/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
       .then(res => {
@@ -28,7 +29,7 @@ function VerLeccionesProfesor() {
     if (!window.confirm("¿Eliminar esta lección?")) return;
 
     try {
-      await axios.delete(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/lecciones/${leccionId}`, {
+      await axios.delete(`${API_URL}/lecciones/${leccionId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
@@ -66,7 +67,7 @@ function VerLeccionesProfesor() {
               <ul>
                 {leccion.archivos.map((a, i) => (
                   <li key={i}>
-                    <a href={`https://defense-situation-bouquet-aqua.trycloudflare.com//uploads/${a}`} target="_blank">
+                    <a href={`${urlArchivo(a)}`} target="_blank">
                       {a}
                     </a>
                   </li>

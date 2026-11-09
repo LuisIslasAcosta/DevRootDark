@@ -24,10 +24,12 @@ import {
 } from "react-icons/fa";
 import "../styles/PrincipalAdmin.css";
 import "../../temas/temas.css";
+import { API_URL } from "../../config";
+import Logo from "../../componentes/Logo";
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, ArcElement, CategoryScale, LinearScale);
 
-const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
+const API = API_URL;
 const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
 const COLOR_USUARIOS = "#6366f1";
 const COLOR_CURSOS = "#f59e0b";
@@ -161,7 +163,10 @@ function PrincipalAdmin() {
   return (
     <div className="admin-layout">
       <aside className="admin-sidebar">
-        <div className="brand">Panel de Administración</div>
+        <div className="brand">
+          <Logo variante="nav" alto="40px" className="sidebar-logo" />
+          <span className="brand-texto">Panel de Administración</span>
+        </div>
 
         {user && (
           <div className="profile">

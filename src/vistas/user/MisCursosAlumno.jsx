@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "../styles/EstilosAlumno.css";
+import { API_URL } from "../../config";
 function MisCursosAlumno() {
   const navigate = useNavigate();
 
@@ -45,12 +46,12 @@ function MisCursosAlumno() {
       try {
         setLoading(true);
 
-        const cursosRes = await axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos", {
+        const cursosRes = await axios.get(`${API_URL}/cursos`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
         const insRes = await axios.get(
-          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/inscripciones/alumno/${user.id}`
+          `${API_URL}/inscripciones/alumno/${user.id}`
         );
 
         const idsInscritos = [...new Set(insRes.data.map(i => i.curso_id))];
@@ -95,7 +96,7 @@ function MisCursosAlumno() {
 
               {curso.imagenes?.length > 0 && (
                 <img
-                  src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${curso.imagenes[0]}`}
+                  src={`${API_URL}/uploads/imagenes/${curso.imagenes[0]}`}
                   alt={curso.nombre}
                   className="curso-thumb"
                 />

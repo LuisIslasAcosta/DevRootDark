@@ -12,6 +12,8 @@ import {
 
 import "../styles/EstilosAlumno.css";
 import "../../temas/temas.css";
+import { API_URL } from "../../config";
+import Logo from "../../componentes/Logo";
 
 function PrincipalAlumno() {
   const navigate = useNavigate();
@@ -72,7 +74,7 @@ function PrincipalAlumno() {
 
     const cargarCursos = async () => {
       try {
-        const cursosRes = await axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/cursos", {
+        const cursosRes = await axios.get(`${API_URL}/cursos`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -87,7 +89,7 @@ function PrincipalAlumno() {
 
       try {
         const insRes = await axios.get(
-          `https://defense-situation-bouquet-aqua.trycloudflare.com//api/inscripciones/alumno/${user.id}`
+          `${API_URL}/inscripciones/alumno/${user.id}`
         );
 
         const ids = Array.isArray(insRes.data)
@@ -110,7 +112,7 @@ function PrincipalAlumno() {
     if (!user?.id) return alert("Usuario no válido");
 
     try {
-      await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/inscripciones", {
+      await axios.post(`${API_URL}/inscripciones`, {
         curso_id: cursoId,
         alumno_id: user.id
       });
@@ -134,6 +136,9 @@ function PrincipalAlumno() {
 
       {/* ================= SIDEBAR ================= */}
       <aside className="dashboard-sidebar">
+        <div className="sidebar-logo-wrap">
+          <Logo variante="nav" alto="40px" className="sidebar-logo" />
+        </div>
 
         <div className="sidebar-profile">
           <img
@@ -221,7 +226,7 @@ function PrincipalAlumno() {
                   {curso.imagenes?.map((img, i) => (
                     <img
                       key={i}
-                      src={`https://defense-situation-bouquet-aqua.trycloudflare.com//api/uploads/imagenes/${img}`}
+                      src={`${API_URL}/uploads/imagenes/${img}`}
                       className="curso-thumb"
                       alt="Curso"
                     />

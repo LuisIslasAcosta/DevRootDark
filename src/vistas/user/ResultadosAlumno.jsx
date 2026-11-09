@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/EstilosAlumno.css";
+import { API_URL } from "../../config";
 function ResultadosAlumno() {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const [resultados, setResultados] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/respuestas/alumno/${usuario.id}`)
+    axios.get(`${API_URL}/respuestas/alumno/${usuario.id}`)
       .then(res => setResultados(res.data));
   }, []);
 

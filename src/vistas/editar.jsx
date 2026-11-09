@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCamera, FaArrowLeft } from "react-icons/fa";
 import "../vistas/styles/editar.css";
+import { API_URL } from "../config";
 
-const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
+const API = API_URL;
 const MAX_FOTO_MB = 2;
 
 const vacio = { nombre: "", email: "", telefono: "", foto_perfil: "" };

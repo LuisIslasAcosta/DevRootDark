@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 
 function CrearExamen() {
   const [cursos, setCursos] = useState([]);
@@ -23,7 +24,7 @@ function CrearExamen() {
 
   // ================= CARGAR CURSOS =================
   useEffect(() => {
-    axios.get("https://defense-situation-bouquet-aqua.trycloudflare.com//api/mis_cursos", {
+    axios.get(`${API_URL}/mis_cursos`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setCursos(res.data || []))
@@ -34,7 +35,7 @@ function CrearExamen() {
   useEffect(() => {
     if (!examen.curso_id) return;
 
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/curso/${examen.curso_id}`, {
+    axios.get(`${API_URL}/niveles/curso/${examen.curso_id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setNiveles(res.data || []))
@@ -45,7 +46,7 @@ function CrearExamen() {
   useEffect(() => {
     if (!examen.nivel_id) return;
 
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/lecciones/nivel/${examen.nivel_id}`, {
+    axios.get(`${API_URL}/lecciones/nivel/${examen.nivel_id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     })
     .then(res => setLecciones(res.data || []))
@@ -137,7 +138,7 @@ function CrearExamen() {
         formData.append("archivo", archivoExcel);
       }
 
-      await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/examenes", formData, {
+      await axios.post(`${API_URL}/examenes`, formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 

@@ -1,7 +1,7 @@
 /* Contenedor del formulario */
 .login-container {
   font-family: Arial, sans-serif;
-  background-image: url('/src/publico/styles/login.jpg');
+  background-image: url('../../publico/styles/login.jpg');
   background-size: cover;
   background-position: center;
   min-height: 100vh;

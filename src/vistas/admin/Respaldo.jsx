@@ -8,8 +8,9 @@ import {
   FaExclamationTriangle
 } from "react-icons/fa";
 import "../styles/Respaldo.css";
+import { API_URL } from "../../config";
 
-const API = "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
+const API = API_URL;
 
 const TIPOS = [
   { value: "completo", label: "Completo", ayuda: "Copia de todos los datos de la base." },

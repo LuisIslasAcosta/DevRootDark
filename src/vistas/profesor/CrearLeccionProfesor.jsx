@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
+import { API_URL } from "../../config";
 function CrearLeccionProfesor() {
   const { id } = useParams();
   const [titulo, setTitulo] = useState("");
@@ -17,7 +18,7 @@ function CrearLeccionProfesor() {
   useEffect(() => {
     if (!cursoId) return;
     const token = localStorage.getItem("token");
-    axios.get(`https://defense-situation-bouquet-aqua.trycloudflare.com//api/niveles/curso/${cursoId}`, {
+    axios.get(`${API_URL}/niveles/curso/${cursoId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -43,7 +44,7 @@ function CrearLeccionProfesor() {
 
     try {
       setLoading(true);
-      await axios.post("https://defense-situation-bouquet-aqua.trycloudflare.com//api/lecciones", formData, {
+      await axios.post(`${API_URL}/lecciones`, formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       alert("Lección creada ");
