@@ -4,11 +4,13 @@ import axios from "axios";
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
 import { API_URL } from "../../config";
+import ImportarExcelPreguntas from "./ImportarExcelPreguntas";
 
 function VerExamenes() {
   const { cursoId } = useParams(); 
   const [examenes, setExamenes] = useState([]);
   const [cursoNombre, setCursoNombre] = useState("");
+  const [importandoEn, setImportandoEn] = useState(null); // id del examen con el panel de Excel abierto
 
   // 🔹 Cargar información del curso
   useEffect(() => {
@@ -55,13 +57,13 @@ function VerExamenes() {
     <div className="examen-section">
       <h2>Exámenes del curso: {cursoNombre}</h2>
 
-      {examenes.length > 0 ? (
+      {examenes.length > 0 && (
         <table className="admin-table">
           <thead>
             <tr>
               <th>Título</th>
               <th>Fecha</th>
-              <th># Preguntas</th>
+              <th>Preguntas</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -70,8 +72,15 @@ function VerExamenes() {
               <tr key={ex.id}>
                 <td>{ex.titulo}</td>
                 <td>{ex.fecha}</td>
-                <td>{ex.preguntas?.length || 0}</td>
+                <td>{ex.num_preguntas ?? ex.preguntas?.length ?? 0}</td>
                 <td>
+                  <button
+                    className="custom-btn btn-ver"
+                    style={{ marginRight: "6px" }}
+                    onClick={() => setImportandoEn(importandoEn === ex.id ? null : ex.id)}
+                  >
+                    Importar Excel
+                  </button>
                   <button
                     className="custom-btn btn-eliminar"
                     onClick={() => eliminarExamen(ex.id)}
@@ -83,9 +92,22 @@ function VerExamenes() {
             ))}
           </tbody>
         </table>
-      ) : (
-        <p>No hay exámenes en este curso.</p>
       )}
+
+      {importandoEn && (
+        <ImportarExcelPreguntas
+          examenId={importandoEn}
+          examenTitulo={examenes.find(ex => ex.id === importandoEn)?.titulo}
+          onCerrar={() => setImportandoEn(null)}
+          onImportado={(cantidad) =>
+            setExamenes(prev => prev.map(ex => ex.id === importandoEn
+              ? { ...ex, num_preguntas: (ex.num_preguntas ?? 0) + cantidad }
+              : ex))
+          }
+        />
+      )}
+
+      {examenes.length === 0 && <p>No hay exámenes en este curso.</p>}
     </div>
   );
 }

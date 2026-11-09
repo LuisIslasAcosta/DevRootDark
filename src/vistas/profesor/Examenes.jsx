@@ -10,6 +10,7 @@ function CrearExamen() {
   const [lecciones, setLecciones] = useState([]);
 
   const [archivoExcel, setArchivoExcel] = useState(null);
+  const [inputArchivoKey, setInputArchivoKey] = useState(0);
 
   const [examen, setExamen] = useState({
     curso_id: "",
@@ -126,6 +127,7 @@ function CrearExamen() {
       const formData = new FormData();
       formData.append("curso_id", examen.curso_id);
       formData.append("leccion_id", examen.leccion_id);
+      formData.append("nivel_id", examen.nivel_id);
       formData.append("titulo", examen.titulo);
       formData.append("fecha", examen.fecha);
 
@@ -138,11 +140,11 @@ function CrearExamen() {
         formData.append("archivo", archivoExcel);
       }
 
-      await axios.post(`${API_URL}/examenes`, formData, {
+      const res = await axios.post(`${API_URL}/examenes`, formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
 
-      alert("Examen creado correctamente ");
+      alert(res.data?.mensaje || "Examen creado correctamente");
 
       setExamen({
         curso_id: "",
@@ -153,11 +155,12 @@ function CrearExamen() {
         preguntas: [{ enunciado: "", opciones: ["", "", "", ""], respuesta_correcta: "" }]
       });
       setArchivoExcel(null);
+      setInputArchivoKey(k => k + 1);
       setNiveles([]);
       setLecciones([]);
     } catch (err) {
       console.error(err);
-      alert("Error al crear examen ");
+      alert(err.response?.data?.mensaje || "Error al crear examen");
     }
   };
 
@@ -242,7 +245,12 @@ function CrearExamen() {
         {/* SUBIR EXCEL */}
         <div className="form-group">
           <label>O subir archivo Excel</label>
-          <input type="file" accept=".xlsx, .xls" onChange={handleArchivoChange} />
+          <input key={inputArchivoKey} type="file" accept=".xlsx,.csv" onChange={handleArchivoChange} />
+          <small className="excel-ayuda">
+            Columnas: <code>pregunta</code>, <code>opcion1</code> a <code>opcion4</code> y{" "}
+            <code>respuesta_correcta</code> (texto, letra A–D o número 1–4).{" "}
+            <a href="/plantillas/plantilla_preguntas.xlsx" download>Descargar plantilla</a>
+          </small>
         </div>
 
         <button type="submit">Crear Examen</button>
