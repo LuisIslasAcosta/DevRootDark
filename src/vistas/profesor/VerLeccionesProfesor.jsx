@@ -42,48 +42,48 @@ function VerLeccionesProfesor() {
   if (loading) return <p>Cargando lecciones...</p>;
 
   return (
-    <div className="container mt-4">
-      <h2> Lecciones del curso</h2>
+    <div className="examen-section">
+      <h2>Lecciones del curso</h2>
 
-      <button
-        className="btn btn-primary mb-3"
-        onClick={() => navigate(`/profesor/cursos/${id}/lecciones/crear`)}
-      >
-         Crear nueva lección
-      </button>
+      <div className="seccion-acciones">
+        <button
+          type="button"
+          className="custom-btn btn-crear"
+          onClick={() => navigate(`/profesor/cursos/${id}/lecciones/crear`)}
+        >
+          + Crear nueva lección
+        </button>
+      </div>
 
-      {lecciones.length === 0 && (
-        <p>No hay lecciones aún.</p>
-      )}
+      {lecciones.length === 0 && <p>No hay lecciones aún.</p>}
 
-      {lecciones.map(leccion => (
-        <div key={leccion.id} className="card mb-3 p-3">
-          <h5>{leccion.titulo}</h5>
-          <p>{leccion.contenido}</p>
+      <div className="lecciones-lista">
+        {lecciones.map(leccion => (
+          <article key={leccion.id} className="leccion-card">
+            <div className="leccion-card__cabecera">
+              <h3>{leccion.titulo}</h3>
+              <button
+                type="button"
+                className="custom-btn btn-eliminar"
+                onClick={() => eliminarLeccion(leccion.id)}
+              >
+                Eliminar
+              </button>
+            </div>
+            {leccion.contenido && <p>{leccion.contenido}</p>}
 
-          {leccion.archivos?.length > 0 && (
-            <div className="mt-2">
-              <strong>Archivos:</strong>
-              <ul>
+            {leccion.archivos?.length > 0 && (
+              <ul className="leccion-archivos">
                 {leccion.archivos.map((a, i) => (
                   <li key={i}>
-                    <a href={`${urlArchivo(a)}`} target="_blank">
-                      {a}
-                    </a>
+                    <a href={urlArchivo(a)} target="_blank" rel="noreferrer">📎 {a}</a>
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
-
-          <button
-            className="btn btn-danger mt-2"
-            onClick={() => eliminarLeccion(leccion.id)}
-          >
-             Eliminar
-          </button>
-        </div>
-      ))}
+            )}
+          </article>
+        ))}
+      </div>
     </div>
   );
 }

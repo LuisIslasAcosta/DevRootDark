@@ -19,9 +19,6 @@ function AlumnosCursoProfesor() {
     const headers = { Authorization: `Bearer ${token}` };
     let activo = true;
 
-    setCargando(true);
-    setError("");
-
     axios.get(`${API_URL}/cursos/${cursoId}`, { headers })
       .then(res => activo && setCursoNombre(res.data?.nombre || ""))
       .catch(() => {});

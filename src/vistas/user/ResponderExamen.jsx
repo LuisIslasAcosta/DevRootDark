@@ -145,7 +145,7 @@ function ResponderExamen() {
       <h2>Responder Examen</h2>
 
       {preguntas.length > 0 && (
-        <p style={{ marginBottom: "1rem" }}>
+        <p className="aviso-examen">
           <strong>Aviso:</strong> si cambias de pestaña o minimizas la ventana,
           el examen se enviará automáticamente con las respuestas que lleves.
         </p>
@@ -165,7 +165,7 @@ function ResponderExamen() {
             )}
 
             {opcionesValidas.map((op, i) => (
-              <label key={i} style={{ display: "block", marginBottom: "6px" }}>
+              <label key={i}>
                 <input
                   type="radio"
                   name={`pregunta_${p.id}`}

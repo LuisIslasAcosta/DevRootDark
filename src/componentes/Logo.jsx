@@ -39,11 +39,16 @@ function Logo({ variante = "banner", alto, className = "" }) {
 
   useEffect(() => {
     let frame;
+    let espera;
+    const medir = () => {
+      if (ref.current) setFondo(analizarFondo(ref.current));
+    };
     const actualizar = () => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        if (ref.current) setFondo(analizarFondo(ref.current));
-      });
+      clearTimeout(espera);
+      frame = requestAnimationFrame(medir);
+      // Se vuelve a medir cuando terminan las transiciones de color del tema
+      espera = setTimeout(medir, 400);
     };
     actualizar();
 
@@ -53,6 +58,7 @@ function Logo({ variante = "banner", alto, className = "" }) {
     window.addEventListener("storage", actualizar);
     return () => {
       cancelAnimationFrame(frame);
+      clearTimeout(espera);
       observador.disconnect();
       window.removeEventListener("storage", actualizar);
     };

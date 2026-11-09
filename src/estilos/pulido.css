@@ -1,0 +1,500 @@
+/* =====================================================================
+   Pulido general de DevRootDark
+   Se carga al final para unificar detalles en todas las vistas:
+   foco accesible, tablas en celular, barras laterales compactas,
+   formularios y transiciones. Usa las variables de los temas
+   (--bg-color, --text-color, --card-bg, --card-border, --link-color).
+   ===================================================================== */
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img,
+video {
+  max-width: 100%;
+}
+::selection {
+  background: color-mix(in srgb, var(--link-color, #2563eb) 30%, transparent);
+}
+
+/* Foco visible y consistente al navegar con teclado */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--link-color, #2563eb);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Transiciones suaves al cambiar de tema */
+:where(.pf-layout, .dashboard-layout, .admin-layout, .Cuerpo-completo, .pf-sidebar, .admin-sidebar, .nav) {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Botones: respuesta táctil y estado deshabilitado claro */
+:where(button, .btn, .custom-btn):not(:disabled):active {
+  transform: translateY(1px);
+}
+:where(button, .btn, .custom-btn):disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Campos de archivo con el mismo estilo en todas las vistas */
+input[type="file"]::file-selector-button {
+  margin-right: 0.75rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--link-color, #2563eb) 35%, transparent);
+  border-radius: 0.55rem;
+  background: color-mix(in srgb, var(--link-color, #2563eb) 12%, transparent);
+  color: var(--link-color, #2563eb);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+input[type="file"]::file-selector-button:hover {
+  background: color-mix(in srgb, var(--link-color, #2563eb) 20%, transparent);
+}
+
+/* Casillas y radios con el color del tema */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--link-color, #2563eb);
+}
+
+/* ---------- Tablas ---------- */
+.pf-main table th,
+.dashboard-main table th {
+  white-space: nowrap;
+}
+.pf-main .admin-table tbody tr,
+.dashboard-main .admin-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+.pf-main .admin-table tbody tr:hover,
+.dashboard-main .admin-table tbody tr:hover {
+  background-color: color-mix(in srgb, var(--link-color, #2563eb) 5%, transparent);
+}
+.pf-main .admin-table tbody tr:last-child td,
+.dashboard-main .admin-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ---------- Responder examen: opciones alineadas ---------- */
+.responder-examen .pregunta-item label {
+  display: flex !important;
+  align-items: center;
+  margin-bottom: 0 !important;
+}
+
+/* ---------- Página de políticas ---------- */
+.politicas-pagina {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(1.25rem, 4vw, 3rem) 1rem;
+  background: var(--bg-color, #e9ecef);
+  color: var(--text-color, #222);
+}
+.politicas-tarjeta {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 1.25rem;
+  background: var(--card-bg, #fff);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+.politicas-tarjeta .auth-logo {
+  margin-bottom: 1.25rem;
+}
+.politicas-tarjeta h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 800;
+  text-align: center;
+}
+.politicas-intro {
+  margin: 0 auto 1.75rem;
+  max-width: 36rem;
+  text-align: center;
+  opacity: 0.75;
+}
+.politicas-lista {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: politica;
+}
+.politicas-lista li {
+  position: relative;
+  padding: 1rem 1.1rem 1rem 3.4rem;
+  border: 1px solid var(--card-border, #ddd);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--text-color, #222) 3%, transparent);
+  line-height: 1.6;
+  counter-increment: politica;
+}
+.politicas-lista li::before {
+  content: counter(politica);
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--link-color, #2563eb);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.politicas-lista strong {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.politicas-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--card-border, #ddd);
+}
+.politicas-acciones label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.politicas-acciones input {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.politicas-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.politicas-botones a,
+.politicas-botones button {
+  padding: 0.65rem 1.2rem;
+  border-radius: 0.7rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.politicas-botones a {
+  border: 1px solid var(--card-border, #ddd);
+  color: var(--text-color, #222);
+}
+.politicas-botones button {
+  border: 1px solid var(--link-color, #2563eb);
+  background: var(--link-color, #2563eb);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ---------- Lecciones del curso (profesor) ---------- */
+.lecciones-lista {
+  display: grid;
+  gap: 1rem;
+}
+.leccion-card {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--border, var(--card-border));
+  border-radius: var(--radius, 1rem);
+  background: var(--surface, var(--card-bg));
+  box-shadow: var(--shadow, none);
+}
+.leccion-card__cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.leccion-card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.leccion-card p {
+  margin: 0;
+  opacity: 0.8;
+  line-height: 1.55;
+}
+.leccion-archivos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.leccion-archivos a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border, var(--card-border));
+  border-radius: 999px;
+  color: var(--link-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.leccion-archivos a:hover {
+  background: var(--accent-soft, rgba(37, 99, 235, 0.08));
+}
+.seccion-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.25rem 0 1.25rem;
+}
+
+/* ---------- Resultados del alumno ---------- */
+.resultados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+.resultado-tarjeta {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border, var(--card-border));
+  border-radius: var(--radius, 1rem);
+  background: var(--surface, var(--card-bg));
+  box-shadow: var(--shadow, none);
+}
+.resultado-tarjeta__titulo {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.resultado-tarjeta__nota {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.resultado-tarjeta__nota strong {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.resultado-tarjeta__nota span {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+.resultado-barra {
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-color, #222) 10%, transparent);
+}
+.resultado-barra > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: currentColor;
+}
+.resultado--alto { color: #16a34a; }
+.resultado--medio { color: #d97706; }
+.resultado--bajo { color: #dc2626; }
+.resultado-tarjeta__nota strong.resultado--alto,
+.resultado-tarjeta__nota strong.resultado--medio,
+.resultado-tarjeta__nota strong.resultado--bajo {
+  color: inherit;
+}
+.resultados-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.25rem 0 1.25rem;
+}
+.resultados-resumen > div {
+  padding: 0.75rem 1.1rem;
+  border: 1px solid var(--border, var(--card-border));
+  border-radius: 0.85rem;
+  background: var(--surface, var(--card-bg));
+}
+.resultados-resumen small {
+  display: block;
+  opacity: 0.7;
+  font-size: 0.8rem;
+}
+.resultados-resumen b {
+  font-size: 1.25rem;
+}
+
+/* ---------- Portada ---------- */
+.hero-section h1 {
+  font-size: clamp(1.75rem, 5vw, 3.2rem);
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.hero-section p {
+  text-wrap: balance;
+}
+
+/* ---------- Celular ---------- */
+@media (max-width: 800px) {
+  /* Tablas: desplazamiento horizontal en lugar de salirse de la pantalla */
+  .pf-main table,
+  .dashboard-main table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pf-main table td,
+  .dashboard-main table td {
+    min-width: 7rem;
+  }
+
+  /* Barras laterales compactas: logo, menú y acciones en poco espacio */
+  .pf-sidebar,
+  .alumno-sidebar {
+    gap: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+  }
+  .pf-sidebar .pf-perfil,
+  .pf-sidebar .brand-texto,
+  .admin-sidebar .profile,
+  .admin-sidebar .brand-texto {
+    display: none !important;
+  }
+  .pf-sidebar .pf-acciones-lado {
+    padding-top: 0.4rem !important;
+    border-top: 0 !important;
+  }
+  .pf-sidebar .pf-btn-lado {
+    padding: 0.45rem 0.6rem !important;
+    font-size: 0.85rem;
+  }
+  .pf-sidebar .pf-brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  /* Encabezados de sección más contenidos */
+  .pf-main h2,
+  .dashboard-main h2 {
+    font-size: clamp(1.25rem, 5.5vw, 1.6rem);
+  }
+
+  /* Portada */
+  .hero-section {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .hero-section h1 {
+    letter-spacing: 0.01em;
+  }
+}
+
+/* ---------- Alumno: barra lateral con el mismo diseño que el profesor ---------- */
+.dashboard-layout > .alumno-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+}
+@media (max-width: 800px) {
+  .dashboard-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .dashboard-layout > .alumno-sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .dashboard-layout > .alumno-sidebar .pf-nav {
+    flex-direction: row;
+    gap: 0.4rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .dashboard-layout > .alumno-sidebar .pf-link {
+    flex-shrink: 0;
+    padding: 0.55rem 0.85rem;
+  }
+  .dashboard-layout > .alumno-sidebar .pf-acciones-lado {
+    flex-direction: row;
+    margin-top: 0;
+  }
+  .dashboard-layout > .alumno-sidebar .pf-btn-lado {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Login, registro y recuperar ---------- */
+/* La tarjeta va siempre sobre la foto azul: enlaces claros y legibles en cualquier tema */
+.login-box .curso-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 0.6rem;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background-color 0.15s ease;
+}
+.login-box .curso-link:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+.login-box input::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Aviso al responder examen */
+.aviso-examen {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid color-mix(in srgb, #d97706 40%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, #d97706 10%, transparent);
+  font-size: 0.92rem;
+}
+
+/* Botón "Temas" de la portada (independiente del orden de carga de los estilos) */
+.menu-links .tema-dropdown > button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.menu-links .tema-dropdown > button:hover {
+  background-color: #0056b3;
+  color: #fff;
+}

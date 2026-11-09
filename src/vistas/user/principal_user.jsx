@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
+import { Outlet, useNavigate, useLocation, Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import {
   FaSignOutAlt,
@@ -7,9 +7,11 @@ import {
   FaHome,
   FaBookOpen,
   FaUser,
-  FaClipboardList
+  FaClipboardList,
+  FaChartLine
 } from "react-icons/fa";
 
+import "../styles/ProfesorPanel.css";
 import "../styles/EstilosAlumno.css";
 import "../../temas/temas.css";
 import { API_URL } from "../../config";
@@ -125,6 +127,15 @@ function PrincipalAlumno() {
     }
   };
 
+  // ================= PERFIL (barra lateral) =================
+  const [fotoError, setFotoError] = useState(false);
+  const fotoPerfil = user?.foto_perfil
+    ? (user.foto_perfil.startsWith("data:image") ? user.foto_perfil : `data:image/png;base64,${user.foto_perfil}`)
+    : null;
+  const nombreAlumno = user?.nombre || user?.username || "Alumno";
+  const inicialNombre = nombreAlumno.trim().charAt(0).toUpperCase();
+  const navClass = ({ isActive }) => `pf-link${isActive ? " active" : ""}`;
+
   // ================= LOGOUT =================
   const handleLogout = () => {
     localStorage.clear();
@@ -135,53 +146,47 @@ function PrincipalAlumno() {
     <div className="dashboard-layout">
 
       {/* ================= SIDEBAR ================= */}
-      <aside className="dashboard-sidebar">
-        <div className="sidebar-logo-wrap">
+      <aside className="pf-sidebar alumno-sidebar">
+        <div className="pf-brand">
           <Logo variante="nav" alto="40px" className="sidebar-logo" />
+          <span className="brand-texto">Panel del Alumno</span>
         </div>
 
-        <div className="sidebar-profile">
-          <img
-            src={
-              user?.foto_perfil
-                ? (user.foto_perfil.startsWith("data:image")
-                  ? user.foto_perfil
-                  : `data:image/png;base64,${user.foto_perfil}`)
-                : "/default-avatar.png"
-            }
-            alt="Perfil"
-            className="profile-pic"
-          />
-
-          <h5>{user?.nombre || user?.username || "Alumno"}</h5>
-
-          <button onClick={() => navigate("/alumno/perfil")} className="theme-btn icon-btn">
-            <FaUser />
-          </button>
+        <div className="pf-perfil">
+          {fotoPerfil && !fotoError ? (
+            <img src={fotoPerfil} alt="Foto de perfil" className="pf-avatar" onError={() => setFotoError(true)} />
+          ) : (
+            <div className="pf-avatar pf-avatar--inicial" aria-hidden="true">{inicialNombre}</div>
+          )}
+          <div className="pf-perfil-info">
+            <span className="pf-perfil-nombre">{nombreAlumno}</span>
+            <span className="pf-perfil-rol">Alumno</span>
+          </div>
         </div>
 
-        <h4 className="sidebar-brand">Panel del Alumno</h4>
-
-        <nav className="sidebar-nav">
-          <button onClick={() => navigate("/principal")}>
+        <nav className="pf-nav">
+          <NavLink to="/principal" end className={navClass}>
             <FaHome /> Inicio
-          </button>
-
-          <button onClick={() => navigate("/principal/mis-cursos")}>
-            <FaBookOpen /> Mis Cursos
-          </button>
+          </NavLink>
+          <NavLink to="/principal/mis-cursos" className={navClass}>
+            <FaBookOpen /> Mis cursos
+          </NavLink>
+          <NavLink to="/principal/resultados" className={navClass}>
+            <FaClipboardList /> Mis resultados
+          </NavLink>
+          <NavLink to="/principal/analisis-respuestas" className={navClass}>
+            <FaChartLine /> Mi progreso
+          </NavLink>
         </nav>
 
-        <button onClick={() => navigate("/principal/analisis-respuestas")}>
-          <FaClipboardList /> Mis Respuestas
-        </button>
-
-        <div className="sidebar-profile">
-          <button onClick={handleLogout} className="logout-btn">
-            <FaSignOutAlt /> Salir
+        <div className="pf-acciones-lado">
+          <button type="button" className="pf-btn-lado" onClick={() => navigate("/alumno/perfil")}>
+            <FaUser /> Editar perfil
+          </button>
+          <button type="button" className="pf-btn-lado pf-btn-lado--salir" onClick={handleLogout}>
+            <FaSignOutAlt /> Cerrar sesión
           </button>
         </div>
-
       </aside>
 
       {/* ================= MAIN ================= */}

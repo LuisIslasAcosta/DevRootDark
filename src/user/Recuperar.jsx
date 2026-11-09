@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import Logo from "../componentes/Logo";
 import "./styles/login.css";
 import { API_URL } from "../config";
 
@@ -73,6 +74,9 @@ const Recuperar = () => {
   return (
     <div className="login-container">
       <div className="login-box">
+        <Link to="/" className="auth-logo" aria-label="Volver al inicio">
+          <Logo variante="banner" />
+        </Link>
         <h2>Recuperar Contraseña</h2>
 
         {paso === 1 && (
