@@ -44,3 +44,15 @@ export const eliminarUsuario = (id) =>
   axios.delete(`${API_URL}/usuarios/${id}`, {
     headers: { 'Content-Type': 'application/json' },
   });
+
+// --- Confirmar correo con el token del enlace ---
+export const verificarCorreo = (token) =>
+  axios.post(`${API_URL}/verificar-correo`, { token }, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+// --- Reenviar el correo de confirmación ---
+export const reenviarVerificacion = (email) =>
+  axios.post(`${API_URL}/reenviar-verificacion`, { email }, {
+    headers: { 'Content-Type': 'application/json' },
+  });

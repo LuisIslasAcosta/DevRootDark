@@ -498,3 +498,60 @@ input[type="radio"] {
   background-color: #0056b3;
   color: #fff;
 }
+
+/* ---------- Avisos en login / registro / confirmar correo ---------- */
+.login-box .auth-aviso {
+  margin: 0.9rem 0 0.4rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.login-box .auth-aviso--ok {
+  border-color: rgba(74, 222, 128, 0.7);
+  background: rgba(22, 163, 74, 0.35);
+}
+.login-box .auth-aviso--error {
+  border-color: rgba(248, 113, 113, 0.75);
+  background: rgba(220, 38, 38, 0.35);
+}
+.login-box .auth-detalle {
+  margin: 0.6rem 0 1rem;
+  color: #fff;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-align: center;
+}
+.login-box .auth-secundario {
+  display: block;
+  width: 100%;
+  margin: 0.75rem 0 0.25rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 0.6rem;
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+  font-weight: 600;
+  cursor: pointer;
+}
+.login-box .auth-secundario:hover {
+  background: rgba(255, 255, 255, 0.24) !important;
+}
+.auth-estado {
+  text-align: center;
+}
+.auth-estado .auth-icono {
+  margin: 0.25rem 0 0.4rem;
+  font-size: 2.6rem;
+  line-height: 1;
+}
+.auth-icono--girando {
+  animation: auth-pulso 1.2s ease-in-out infinite;
+}
+@keyframes auth-pulso {
+  50% { transform: scale(1.12); opacity: 0.7; }
+}

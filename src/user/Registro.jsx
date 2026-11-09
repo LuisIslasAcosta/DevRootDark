@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { registrarUsuario } from "../service/api";
+import { registrarUsuario, reenviarVerificacion } from "../service/api";
 import { Link } from "react-router-dom";
 import Logo from "../componentes/Logo";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // íconos de ojo
@@ -23,6 +23,10 @@ const Registro = () => {
   });
 
   const [mensaje, setMensaje] = useState("");
+  const [tipoMensaje, setTipoMensaje] = useState("error");
+  const [registrado, setRegistrado] = useState(null); // { email, requiere_verificacion, mensaje }
+  const [enviando, setEnviando] = useState(false);
+  const [aviso, setAviso] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -44,12 +48,53 @@ const Registro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setEnviando(true);
+      setMensaje("");
       const response = await registrarUsuario(formData);
-      setMensaje(response.data.mensaje);
+      setRegistrado({ email: formData.email, ...response.data });
     } catch (error) {
+      setTipoMensaje("error");
       setMensaje(error.response?.data?.mensaje || "Error al registrar usuario");
+    } finally {
+      setEnviando(false);
     }
   };
+
+  const reenviar = async () => {
+    try {
+      const res = await reenviarVerificacion(registrado.email);
+      setAviso(res.data?.mensaje || "Correo reenviado.");
+    } catch (error) {
+      setAviso(error.response?.data?.mensaje || "No se pudo reenviar el correo.");
+    }
+  };
+
+  // Pantalla después de registrarse
+  if (registrado) {
+    return (
+      <div className="login-container">
+        <div className="login-box auth-estado">
+          <Link to="/" className="auth-logo" aria-label="Volver al inicio">
+            <Logo variante="banner" />
+          </Link>
+          <div className="auth-icono" aria-hidden="true">{registrado.requiere_verificacion ? "✉️" : "✅"}</div>
+          <h2>{registrado.requiere_verificacion ? "Revisa tu correo" : "¡Cuenta creada!"}</h2>
+          <p className="auth-aviso auth-aviso--ok">{registrado.mensaje}</p>
+          {registrado.requiere_verificacion && (
+            <>
+              <p className="auth-detalle">
+                Abre el correo que enviamos a <strong>{registrado.email}</strong> y presiona
+                «Confirmar mi correo». El enlace vence en 24 horas.
+              </p>
+              <button type="button" className="auth-secundario" onClick={reenviar}>Reenviar correo</button>
+              {aviso && <p className="auth-aviso">{aviso}</p>}
+            </>
+          )}
+          <Link to="/login"><button type="button">Ir a iniciar sesión</button></Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">
@@ -100,11 +145,11 @@ const Registro = () => {
           <input type="text" name="respuesta_seguridad" placeholder="Respuesta de seguridad" onChange={handleChange} required />
           <input type="tel" name="telefono" placeholder="Teléfono" onChange={handleChange} />
 
-          <button type="submit" className="btn-primary">Registrar</button>
+          <button type="submit" className="btn-primary" disabled={enviando}>{enviando ? "Creando cuenta..." : "Registrar"}</button>
         </form>
         <br />
         <Link to="/"><button>Regresar a la página principal</button></Link>
-        {mensaje && <p className="mensaje">{mensaje}</p>}
+        {mensaje && <p className={`auth-aviso auth-aviso--${tipoMensaje}`}>{mensaje}</p>}
         <Link to={`/login`} className="curso-link">¿Ya tienes cuenta?</Link>
       </div>
     </div>

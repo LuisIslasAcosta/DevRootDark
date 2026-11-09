@@ -7,6 +7,7 @@ import Login from './user/Login';
 import Politicas from './publico/Politicas';
 import Inicio from './publico/Inicio_prueba';
 import Recuperar from './user/Recuperar';
+import VerificarCorreo from './user/VerificarCorreo';
 
 // ================= ALUMNO =================
 import PrincipalAlumno from './vistas/user/principal_user';
@@ -54,6 +55,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/politicas" element={<Politicas />} />
         <Route path="/recuperar" element={<Recuperar/>}/>
+        <Route path="/verificar-correo" element={<VerificarCorreo />} />
 
         {/* ================= ALUMNO ================= */}
         <Route

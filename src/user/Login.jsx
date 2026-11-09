@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUsuario } from "../service/api";
+import { loginUsuario, reenviarVerificacion } from "../service/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // íconos de ojo
 import "./styles/login.css";
 import Logo from "../componentes/Logo";
@@ -8,6 +8,8 @@ import Logo from "../componentes/Logo";
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [mensaje, setMensaje] = useState("");
+  const [sinVerificar, setSinVerificar] = useState(""); // correo pendiente de confirmar
+  const [aviso, setAviso] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -34,14 +36,25 @@ const Login = () => {
         localStorage.setItem("usuario", JSON.stringify(response.data.usuario));
         localStorage.setItem("user_id", response.data.usuario.id);
 
-        setMensaje("Login exitoso ");
+        setMensaje("");
 
         if (response.data.usuario.rol === "administrador") navigate("/admin");
         else if (response.data.usuario.rol === "profesor") navigate("/profesor");
         else navigate("/principal");
       }
     } catch (error) {
+      setSinVerificar(error.response?.data?.codigo === "correo_no_verificado" ? (error.response.data.email || formData.email) : "");
+      setAviso("");
       setMensaje(error.response?.data?.mensaje || "Error al iniciar sesión");
+    }
+  };
+
+  const reenviar = async () => {
+    try {
+      const res = await reenviarVerificacion(sinVerificar);
+      setAviso(res.data?.mensaje || "Correo reenviado.");
+    } catch (error) {
+      setAviso(error.response?.data?.mensaje || "No se pudo reenviar el correo.");
     }
   };
 
@@ -87,7 +100,15 @@ const Login = () => {
         </form>
         <br />
         <Link to="/"><button>Regresar a la página principal</button></Link>
-        {mensaje && <p>{mensaje}</p>}
+        {mensaje && <p className="auth-aviso auth-aviso--error">{mensaje}</p>}
+        {sinVerificar && (
+          <>
+            <button type="button" className="auth-secundario" onClick={reenviar}>
+              Reenviar correo de confirmación
+            </button>
+            {aviso && <p className="auth-aviso">{aviso}</p>}
+          </>
+        )}
         <Link to="/register" className="curso-link">¿No tienes cuenta?</Link>
         <Link to="/recuperar" className="curso-link">¿Olvidaste tu contraseña?</Link>
       </div>
