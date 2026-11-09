@@ -2,7 +2,7 @@
 // (en Netlify: Site configuration → Environment variables; en local: archivo .env)
 const limpiar = (url) => (url || "").trim().replace(/\/+$/, "");
 
-export const API_URL = limpiar(import.meta.env.VITE_API_URL) || "http://localhost:5000/api";
+export const API_URL = limpiar(import.meta.env.VITE_API_URL) || "https://defense-situation-bouquet-aqua.trycloudflare.com//api";
 
 // Dominio del servidor sin "/api" (para imágenes y archivos)
 export const API_ORIGIN = API_URL.replace(/\/api$/, "");
