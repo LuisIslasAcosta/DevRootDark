@@ -13,7 +13,8 @@ import {
   FaUsers,
   FaLayerGroup,
   FaListUl,
-  FaMoneyCheckAlt
+  FaMoneyCheckAlt,
+  FaUserGraduate
 } from "react-icons/fa";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell, LabelList } from "recharts";
 
@@ -294,6 +295,9 @@ function ProfesorPanel() {
           </NavLink>
           <NavLink to="/profesor/reportes" className={navClass}>
             <FaChartBar /> Reportes
+          </NavLink>
+          <NavLink to="/profesor/seguimiento" className={navClass}>
+            <FaUserGraduate /> Seguimiento
           </NavLink>
         </nav>
 

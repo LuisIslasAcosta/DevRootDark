@@ -36,6 +36,7 @@ import AlumnosCursoProfesor from './vistas/profesor/AlumnosCursoProfesor';
 import CrearLeccionProfesor from './vistas/profesor/CrearLeccionProfesor';
 import VerLeccionesProfesor from './vistas/profesor/VerLeccionesProfesor';
 import ReportesProfesor from './vistas/profesor/ReportesProfesor';
+import SeguimientoAlumnos from './vistas/profesor/SeguimientoAlumnos';
 import VerNivelesProfesor from './vistas/profesor/VerNivelesProfesor';
 import CrearNivelProfesor from './vistas/profesor/CrearNivelProfesor';
 import PagosProfesor from './vistas/profesor/PagosProfesor';
@@ -141,6 +142,7 @@ function App() {
 
           {/* REPORTES & RESULTADOS */}
           <Route path="reportes" element={<ReportesProfesor />} />
+          <Route path="seguimiento" element={<SeguimientoAlumnos />} />
 
           {/* PERFIL */}
           <Route path="editar-perfil" element={<EditarPerfil />} />

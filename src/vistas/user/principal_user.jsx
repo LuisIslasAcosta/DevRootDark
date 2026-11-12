@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Outlet, useNavigate, useLocation, Link, NavLink } from "react-router-dom";
 import axios from "axios";
 import {
@@ -8,13 +8,17 @@ import {
   FaBookOpen,
   FaUser,
   FaClipboardList,
-  FaChartLine
+  FaChartLine,
+  FaSearch,
+  FaGraduationCap,
+  FaCheckCircle
 } from "react-icons/fa";
 
 import "../styles/ProfesorPanel.css";
 import "../styles/EstilosAlumno.css";
 import "../../temas/temas.css";
-import { API_URL } from "../../config";
+import "../styles/ProgresoAcademico.css";
+import { API_URL, urlArchivo } from "../../config";
 import Logo from "../../componentes/Logo";
 import PagoInscripcionModal from "../../componentes/PagoInscripcionModal";
 import { inscribirseCurso, obtenerMisInscripciones, mensajeError } from "../../componentes/pagos";
@@ -34,6 +38,8 @@ function PrincipalAlumno() {
   const [cursos, setCursos] = useState([]);
   const [inscripciones, setInscripciones] = useState({}); // curso_id -> inscripción
   const [pagoAbierto, setPagoAbierto] = useState(null);
+  const [busqueda, setBusqueda] = useState("");
+  const [vista, setVista] = useState("todos"); // todos | mios | gratis
 
   // ================= LOAD USER =================
   useEffect(() => {
@@ -106,6 +112,25 @@ function PrincipalAlumno() {
     cargarInscripciones();
 
   }, [navigate, user]);
+
+  // ================= IR A UN CURSO DEL CATÁLOGO (#curso-id) =================
+  useEffect(() => {
+    if (location.pathname !== "/principal" || !location.hash || cursos.length === 0) return;
+    const el = document.getElementById(location.hash.slice(1));
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [location.pathname, location.hash, cursos.length]);
+
+  const cursosFiltrados = useMemo(() => {
+    const texto = busqueda.trim().toLowerCase();
+    return cursos.filter((c) => {
+      if (vista === "mios" && inscripciones[c.id]?.estado !== "aceptada") return false;
+      if (vista === "gratis" && Number(c.precio) > 0) return false;
+      if (texto && !`${c.nombre} ${c.descripcion}`.toLowerCase().includes(texto)) return false;
+      return true;
+    });
+  }, [cursos, inscripciones, busqueda, vista]);
+
+  const totalInscritos = Object.values(inscripciones).filter((i) => i.estado === "aceptada").length;
 
   // ================= INSCRIBIRSE =================
   const inscribirse = async (cursoId) => {
@@ -244,37 +269,77 @@ function PrincipalAlumno() {
           </div>
         </div>
 
-        {/* ================= TODOS LOS CURSOS ================= */}
+        {/* ================= CAMPUS: CATÁLOGO DE CURSOS ================= */}
         {location.pathname === "/principal" && (
-          <div className="file-grid">
-            {cursos.length === 0 ? (
-              <p className="empty-text">No hay cursos disponibles</p>
+          <div className="mp campus">
+            <header className="mp-hero">
+              <div>
+                <span className="mp-hero-sub"><FaGraduationCap /> Campus DevRootDark</span>
+                <h2>¿Qué vas a aprender hoy?</h2>
+                <p>Elige un curso, avanza a tu ritmo con lecciones y exámenes, y revisa tu progreso en cualquier momento.</p>
+              </div>
+              <div className="campus-cifras">
+                <div><strong>{cursos.length}</strong><span>cursos disponibles</span></div>
+                <div><strong>{totalInscritos}</strong><span>{totalInscritos === 1 ? "curso inscrito" : "cursos inscritos"}</span></div>
+                <Link to="/principal/analisis-respuestas" className="campus-cifra-link"><FaChartLine /> Ver mi progreso</Link>
+              </div>
+            </header>
+
+            <div className="campus-barra">
+              <div className="campus-buscar">
+                <FaSearch aria-hidden="true" />
+                <input
+                  type="search"
+                  placeholder="Buscar un curso (ej. Python, Arduino, React)"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  aria-label="Buscar curso"
+                />
+              </div>
+              <div className="mp-filtro">
+                <button type="button" className={vista === "todos" ? "activo" : ""} onClick={() => setVista("todos")}>Todos</button>
+                <button type="button" className={vista === "mios" ? "activo" : ""} onClick={() => setVista("mios")}>Mis cursos</button>
+                <button type="button" className={vista === "gratis" ? "activo" : ""} onClick={() => setVista("gratis")}>Gratis</button>
+              </div>
+            </div>
+
+            {cursosFiltrados.length === 0 ? (
+              <div className="mp-vacio"><p>{cursos.length === 0 ? "No hay cursos disponibles por ahora." : "No encontramos cursos con esa búsqueda."}</p></div>
             ) : (
-              cursos.map(curso => (
-                <div key={curso.id} className="curso-form-card">
-
-                  {curso.imagenes?.map((img, i) => (
-                    <img
-                      key={i}
-                      src={`${API_URL}/uploads/imagenes/${img}`}
-                      className="curso-thumb"
-                      alt="Curso"
-                    />
-                  ))}
-
-                  <h3>{curso.nombre}</h3>
-                  <p>{curso.descripcion}</p>
-
-                  {botonInscripcion(curso)}
-
-                  {inscripciones[curso.id]?.estado === "aceptada" && (
-                    <Link to={`/principal/cursos/${curso.id}`} className="btn-modern">
-                      Ver Curso
-                    </Link>
-                  )}
-
-                </div>
-              ))
+              <div className="campus-grid">
+                {cursosFiltrados.map((curso) => {
+                  const ins = inscripciones[curso.id];
+                  const inscrito = ins?.estado === "aceptada";
+                  const img = curso.imagenes?.[0];
+                  const precio = Number(curso.precio) || 0;
+                  return (
+                    <article key={curso.id} id={`curso-${curso.id}`} className={`campus-curso${inscrito ? " campus-inscrito" : ""}`}>
+                      <div className="campus-portada">
+                        {img ? (
+                          <img src={/^https?:/.test(img) ? img : urlArchivo(img)} alt="" loading="lazy" />
+                        ) : (
+                          <div className="campus-portada-vacia"><FaBookOpen /></div>
+                        )}
+                        <span className={`campus-precio${precio > 0 ? "" : " gratis"}`}>
+                          {precio > 0 ? `$${precio.toFixed(2)}` : "Gratis"}
+                        </span>
+                        {inscrito && <span className="campus-estado"><FaCheckCircle /> Inscrito</span>}
+                      </div>
+                      <div className="campus-cuerpo">
+                        <h3>{curso.nombre}</h3>
+                        <p>{curso.descripcion}</p>
+                        <div className="campus-acciones">
+                          {inscrito ? (
+                            <Link to={`/principal/cursos/${curso.id}`} className="mp-btn">Entrar al curso</Link>
+                          ) : (
+                            botonInscripcion(curso)
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
             )}
           </div>
         )}
