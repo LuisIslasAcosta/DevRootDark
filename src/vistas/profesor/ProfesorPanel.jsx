@@ -15,7 +15,7 @@ import {
   FaListUl,
   FaMoneyCheckAlt
 } from "react-icons/fa";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell, LabelList } from "recharts";
 
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
@@ -28,7 +28,87 @@ import { obtenerPagosProfesor } from "../../componentes/pagos";
 const API = API_URL;
 const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
 
-const etiquetaCluster = (v) => (typeof v === "number" ? `Cluster ${v}` : v);
+const COLORES_GRUPO = ["#22c55e", "#f59e0b", "#6366f1", "#ec4899", "#14b8a6", "#ef4444", "#8b5cf6", "#0ea5e9"];
+
+const formatoMoneda = (valor) =>
+  new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }).format(valor);
+
+const plural = (n, singular, pluralTxt) => `${n} ${n === 1 ? singular : pluralTxt}`;
+
+// Traduce el silhouette score a palabras que cualquier persona entienda
+const interpretarSilhouette = (valor) => {
+  if (typeof valor !== "number" || Number.isNaN(valor)) return { texto: "Sin dato", detalle: "" };
+  if (valor >= 0.7) return { texto: "Muy claros", detalle: "Los cursos de cada grupo se parecen mucho entre sí." };
+  if (valor >= 0.5) return { texto: "Claros", detalle: "Los grupos están bien separados unos de otros." };
+  if (valor >= 0.25) return { texto: "Aceptables", detalle: "Los grupos se distinguen, aunque algunos cursos quedan cerca de otro grupo." };
+  return { texto: "Poco claros", detalle: "Los cursos se parecen mucho entre grupos; conviene tomarlos con cautela." };
+};
+
+// Nombre corto según la posición del grupo (de menor a mayor)
+const nombrePorPosicion = (indice, total, bajo, medio, alto) => {
+  if (total === 1) return medio;
+  if (indice === 0) return bajo;
+  if (indice === total - 1) return alto;
+  return total === 3 ? medio : `${medio} ${indice}`;
+};
+
+// Convierte la respuesta del KMeans en grupos con nombre y descripción en lenguaje común
+const construirGrupos = (distribucion, centroides, totalCursos) => {
+  const base = distribucion.map((d) => {
+    const centro = centroides?.[d.cluster] || [];
+    return {
+      cluster: d.cluster,
+      count: Number(d.count) || 0,
+      precio: Number(centro[0]),
+      videos: Number(centro[1])
+    };
+  });
+
+  const precios = base.map((g) => g.precio).filter(Number.isFinite);
+  const diferenciaPrecio = precios.length ? Math.max(...precios) - Math.min(...precios) : 0;
+  // Si todos cuestan casi lo mismo, la diferencia entre grupos está en la cantidad de videos
+  const porPrecio = diferenciaPrecio >= 1;
+
+  const ordenados = [...base].sort((a, b) =>
+    porPrecio ? (a.precio || 0) - (b.precio || 0) : (a.videos || 0) - (b.videos || 0)
+  );
+
+  return ordenados.map((g, i) => {
+    const etiqueta = porPrecio
+      ? nombrePorPosicion(i, ordenados.length, "Precio bajo", "Precio medio", "Precio alto")
+      : nombrePorPosicion(i, ordenados.length, "Pocos videos", "Videos intermedios", "Muchos videos");
+    const porcentaje = totalCursos > 0 ? (g.count / totalCursos) * 100 : 0;
+    const videosRedondeados = Number.isFinite(g.videos) ? Math.round(g.videos) : null;
+    const precioTexto = Number.isFinite(g.precio) ? (g.precio <= 0 ? "gratis" : formatoMoneda(g.precio)) : "-";
+    const videosTexto = videosRedondeados === null ? "-" : plural(videosRedondeados, "video", "videos");
+
+    return {
+      ...g,
+      etiqueta,
+      color: COLORES_GRUPO[i % COLORES_GRUPO.length],
+      porcentaje,
+      precioTexto,
+      videosTexto,
+      descripcion:
+        Number.isFinite(g.precio) && videosRedondeados !== null
+          ? `En promedio cuestan ${precioTexto} y tienen alrededor de ${videosTexto}.`
+          : "",
+      etiquetaBarra: `${plural(g.count, "curso", "cursos")} (${porcentaje.toFixed(0)}%)`
+    };
+  });
+};
+
+function TooltipGrupo({ active, payload }) {
+  if (!active || !payload?.length) return null;
+  const g = payload[0].payload;
+  return (
+    <div className="pf-tooltip">
+      <strong style={{ color: g.color }}>{g.etiqueta}</strong>
+      <span>{plural(g.count, "curso", "cursos")} · {g.porcentaje.toFixed(0)}% del total</span>
+      {g.descripcion && <span>{g.descripcion}</span>}
+    </div>
+  );
+}
 
 function ProfesorPanel() {
   const navigate = useNavigate();
@@ -158,13 +238,20 @@ function ProfesorPanel() {
   const nombre = user?.nombre || "Profesor";
   const inicial = nombre.trim().charAt(0).toUpperCase();
 
-  const distribucion = kmeansData?.distribucion || [];
+  const distribucion = useMemo(() => kmeansData?.distribucion || [], [kmeansData]);
   const totalRegistros = useMemo(
     () => distribucion.reduce((suma, d) => suma + (Number(d.count) || 0), 0),
     [distribucion]
   );
-  const silhouette =
-    typeof kmeansData?.silhouette === "number" ? kmeansData.silhouette.toFixed(3) : kmeansData?.silhouette;
+  const silhouetteNum = typeof kmeansData?.silhouette === "number" ? kmeansData.silhouette : null;
+  const silhouette = silhouetteNum !== null ? silhouetteNum.toFixed(2) : kmeansData?.silhouette;
+  const lecturaSilhouette = interpretarSilhouette(silhouetteNum);
+  const grupos = useMemo(
+    () => construirGrupos(distribucion, kmeansData?.centroides, totalRegistros),
+    [distribucion, kmeansData, totalRegistros]
+  );
+  const maxCursos = grupos.reduce((max, g) => Math.max(max, g.count), 0);
+  const gruposMayores = grupos.filter((g) => g.count === maxCursos && maxCursos > 0);
 
   const navClass = ({ isActive }) => `pf-link${isActive ? " active" : ""}`;
 
@@ -315,81 +402,115 @@ function ProfesorPanel() {
             )}
 
             {/* ================= KMEANS ================= */}
-            <h3 className="section-title">Análisis de alumnos (KMeans)</h3>
+            <h3 className="section-title">¿Cómo se agrupan tus cursos?</h3>
+            <p className="pf-intro">
+              Comparamos tus cursos según su <strong>precio</strong> y su <strong>cantidad de videos</strong>, y
+              juntamos los que se parecen entre sí. Así puedes ver de un vistazo qué tipo de cursos ofreces más.
+            </p>
 
             {loadingKmeans && <p className="empty-text">Cargando análisis...</p>}
             {errorKmeans && <p className="pf-error">{errorKmeans}</p>}
+            {kmeansData?.error && <p className="pf-error">{kmeansData.error}</p>}
 
-            {kmeansData && (
+            {kmeansData && !kmeansData.error && (
               <>
                 <div className="pf-stats">
                   <div className="pf-stat">
                     <span className="pf-stat-valor">{totalRegistros}</span>
-                    <span className="pf-stat-etiqueta">Registros analizados</span>
+                    <span className="pf-stat-etiqueta">Cursos analizados</span>
+                    <span className="pf-stat-ayuda">Todos los cursos que tienes publicados.</span>
                   </div>
                   <div className="pf-stat">
-                    <span className="pf-stat-valor">{distribucion.length}</span>
-                    <span className="pf-stat-etiqueta">Clusters</span>
+                    <span className="pf-stat-valor">{grupos.length}</span>
+                    <span className="pf-stat-etiqueta">Grupos encontrados</span>
+                    <span className="pf-stat-ayuda">Cada grupo reúne cursos con precio y videos parecidos.</span>
                   </div>
                   <div className="pf-stat">
-                    <span className="pf-stat-valor">{silhouette}</span>
-                    <span className="pf-stat-etiqueta">Silhouette score</span>
+                    <span className="pf-stat-valor">{lecturaSilhouette.texto}</span>
+                    <span className="pf-stat-etiqueta">
+                      Qué tan claros son los grupos {silhouette !== undefined && silhouette !== null && `(${silhouette})`}
+                    </span>
+                    <span className="pf-stat-ayuda">{lecturaSilhouette.detalle}</span>
                   </div>
                 </div>
 
                 <div className="pf-kmeans">
                   <div className="pf-panel">
-                    <h4>Distribución por cluster</h4>
+                    <h4>Cantidad de cursos en cada grupo</h4>
+                    {gruposMayores.length === 1 && (
+                      <p className="pf-resumen">
+                        La mayoría de tus cursos están en el grupo{" "}
+                        <strong style={{ color: gruposMayores[0].color }}>{gruposMayores[0].etiqueta}</strong>{" "}
+                        ({plural(gruposMayores[0].count, "curso", "cursos")} de {totalRegistros}).
+                      </p>
+                    )}
+                    {gruposMayores.length > 1 && (
+                      <p className="pf-resumen">
+                        Los grupos con más cursos son{" "}
+                        {gruposMayores.map((g, i) => (
+                          <React.Fragment key={g.cluster}>
+                            {i > 0 && (i === gruposMayores.length - 1 ? " y " : ", ")}
+                            <strong style={{ color: g.color }}>{g.etiqueta}</strong>
+                          </React.Fragment>
+                        ))}
+                        , con {plural(maxCursos, "curso", "cursos")} cada uno.
+                      </p>
+                    )}
                     <div className="pf-chart">
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={distribucion} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
+                        <BarChart data={grupos} margin={{ top: 28, right: 8, left: 8, bottom: 8 }}>
                           <CartesianGrid vertical={false} stroke="var(--card-border)" />
-                          <XAxis dataKey="cluster" tickFormatter={etiquetaCluster} tickLine={false} axisLine={false} tick={{ fill: "currentColor", fontSize: 12 }} />
-                          <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: "currentColor", fontSize: 12 }} />
-                          <Tooltip
-                            labelFormatter={etiquetaCluster}
-                            formatter={(valor) => [valor, "Registros"]}
-                            cursor={{ fill: "rgba(128,128,128,0.12)" }}
-                            contentStyle={{
-                              background: "var(--card-bg)",
-                              border: "1px solid var(--card-border)",
-                              borderRadius: 12,
-                              color: "var(--text-color)"
-                            }}
-                            labelStyle={{ color: "var(--text-color)", fontWeight: 700 }}
-                            itemStyle={{ color: "var(--text-color)" }}
+                          <XAxis dataKey="etiqueta" tickLine={false} axisLine={false} tick={{ fill: "currentColor", fontSize: 13, fontWeight: 600 }} />
+                          <YAxis
+                            allowDecimals={false}
+                            tickLine={false}
+                            axisLine={false}
+                            tick={{ fill: "currentColor", fontSize: 12 }}
+                            label={{ value: "Número de cursos", angle: -90, position: "insideLeft", fill: "currentColor", fontSize: 12, style: { textAnchor: "middle" } }}
                           />
-                          <Bar dataKey="count" fill="#6366f1" radius={[8, 8, 0, 0]} maxBarSize={64} />
+                          <Tooltip content={<TooltipGrupo />} cursor={{ fill: "rgba(128,128,128,0.12)" }} />
+                          <Bar dataKey="count" radius={[8, 8, 0, 0]} maxBarSize={72}>
+                            {grupos.map((g) => (
+                              <Cell key={g.cluster} fill={g.color} />
+                            ))}
+                            <LabelList
+                              dataKey="etiquetaBarra"
+                              content={({ x, y, width, value }) => (
+                                <text x={x + width / 2} y={y - 8} textAnchor="middle" fill="currentColor" fontSize={12} fontWeight={600}>
+                                  {value}
+                                </text>
+                              )}
+                            />
+                          </Bar>
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
-                    <p className="pf-nota">
-                      El silhouette score va de -1 a 1; mientras más cercano a 1, mejor definidos están los grupos.
-                    </p>
+                    <div className="pf-nota">
+                      <strong>¿Cómo leer esta gráfica?</strong> Cada barra es un grupo de cursos parecidos. Entre más alta
+                      la barra, más cursos tuyos hay en ese grupo. Pasa el cursor sobre una barra para ver qué tienen en común.
+                    </div>
                   </div>
 
                   <div className="pf-panel">
-                    <h4>Detalle por cluster</h4>
-                    <div className="pf-tabla-wrap">
-                      <table className="pf-tabla">
-                        <thead>
-                          <tr>
-                            <th>Cluster</th>
-                            <th>Registros</th>
-                            <th>Porcentaje</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {distribucion.map((item, index) => (
-                            <tr key={index}>
-                              <td>{etiquetaCluster(item.cluster)}</td>
-                              <td>{item.count}</td>
-                              <td>{totalRegistros > 0 ? `${((item.count / totalRegistros) * 100).toFixed(1)}%` : "-"}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                    <h4>¿Qué tiene cada grupo?</h4>
+                    <ul className="pf-grupos">
+                      {grupos.map((g) => (
+                        <li key={g.cluster} className="pf-grupo" style={{ borderLeftColor: g.color }}>
+                          <div className="pf-grupo-cabecera">
+                            <span className="pf-grupo-nombre">{g.etiqueta}</span>
+                            <span className="pf-grupo-cantidad">{plural(g.count, "curso", "cursos")}</span>
+                          </div>
+                          <div className="pf-grupo-datos">
+                            <span>Precio promedio: <strong>{g.precioTexto}</strong></span>
+                            <span>Videos promedio: <strong>{g.videosTexto}</strong></span>
+                          </div>
+                          <div className="pf-barra" aria-label={`${g.porcentaje.toFixed(0)}% de tus cursos`}>
+                            <div className="pf-barra-relleno" style={{ width: `${g.porcentaje}%`, backgroundColor: g.color }} />
+                          </div>
+                          <span className="pf-grupo-pct">{g.porcentaje.toFixed(0)}% de tus cursos</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </>
