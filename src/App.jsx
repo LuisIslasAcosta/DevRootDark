@@ -37,6 +37,8 @@ import CrearLeccionProfesor from './vistas/profesor/CrearLeccionProfesor';
 import VerLeccionesProfesor from './vistas/profesor/VerLeccionesProfesor';
 import ReportesProfesor from './vistas/profesor/ReportesProfesor';
 import SeguimientoAlumnos from './vistas/profesor/SeguimientoAlumnos';
+import Mensajes from './vistas/chat/Mensajes';
+import ReportesChat from './vistas/chat/ReportesChat';
 import VerNivelesProfesor from './vistas/profesor/VerNivelesProfesor';
 import CrearNivelProfesor from './vistas/profesor/CrearNivelProfesor';
 import PagosProfesor from './vistas/profesor/PagosProfesor';
@@ -72,6 +74,7 @@ function App() {
 
           <Route path="cursos/:id" element={<Cursos />} />
           <Route path="mis-cursos" element={<MisCursosAlumno />} />
+          <Route path="mensajes" element={<Mensajes />} />
 
           {/* RESPONDER EXAMEN */}
           <Route path="examen/:id" element={<ResponderExamen />} />
@@ -102,6 +105,7 @@ function App() {
           <Route path="cursos" element={<AdminCursos />} />
           <Route path="usuarios" element={<AdminUsuarios />} />
           <Route path="respaldo" element={<Respaldo />} />
+          <Route path="reportes-chat" element={<ReportesChat />} />
           <Route path="editar-perfil" element={<EditarPerfil />} />
           <Route path="curso/:id" element={<CursoDetalle />} />
         </Route>
@@ -143,6 +147,7 @@ function App() {
           {/* REPORTES & RESULTADOS */}
           <Route path="reportes" element={<ReportesProfesor />} />
           <Route path="seguimiento" element={<SeguimientoAlumnos />} />
+          <Route path="mensajes" element={<Mensajes />} />
 
           {/* PERFIL */}
           <Route path="editar-perfil" element={<EditarPerfil />} />

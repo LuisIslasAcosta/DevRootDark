@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import {
   FaExclamationTriangle,
   FaUserClock,
@@ -7,7 +8,8 @@ import {
   FaEnvelope,
   FaClock,
   FaCheckCircle,
-  FaLightbulb
+  FaLightbulb,
+  FaComments
 } from "react-icons/fa";
 import {
   BarChart,
@@ -276,8 +278,11 @@ function SeguimientoAlumnos() {
                 </div>
 
                 <footer className="mp-alumno-acciones">
+                  <Link className="mp-btn" to={`/profesor/mensajes?curso=${a.curso_id}&usuario=${a.alumno.id}`}>
+                    <FaComments /> Abrir chat
+                  </Link>
                   {a.alumno.email && (
-                    <a className="mp-btn" href={correoPara(a)}>
+                    <a className="mp-btn mp-btn-secundario" href={correoPara(a)}>
                       <FaEnvelope /> Escribirle
                     </a>
                   )}

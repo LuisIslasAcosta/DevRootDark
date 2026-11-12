@@ -12,7 +12,8 @@ import {
   FaArrowRight,
   FaGraduationCap,
   FaChalkboardTeacher,
-  FaBrain
+  FaBrain,
+  FaComments
 } from "react-icons/fa";
 import {
   BarChart,
@@ -367,9 +368,14 @@ function AnalisisRespuestasAlumno() {
                       {c.profesor && <span><FaChalkboardTeacher /> {c.profesor}</span>}
                       <EstadoCurso curso={c} />
                     </div>
-                    <Link to={`/principal/cursos/${c.curso_id}`} className="mp-btn">
-                      {c.terminado ? "Ver curso" : "Continuar"} <FaArrowRight />
-                    </Link>
+                    <div className="mp-curso-botones">
+                      <Link to={`/principal/mensajes?curso=${c.curso_id}`} className="mp-btn mp-btn-secundario" title="Escribir a tu profesor">
+                        <FaComments /> {c.en_riesgo ? "Pedir ayuda" : "Escribir al profesor"}
+                      </Link>
+                      <Link to={`/principal/cursos/${c.curso_id}`} className="mp-btn">
+                        {c.terminado ? "Ver curso" : "Continuar"} <FaArrowRight />
+                      </Link>
+                    </div>
                   </header>
 
                   <div className="mp-curso-cuerpo">

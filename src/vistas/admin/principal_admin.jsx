@@ -20,7 +20,8 @@ import {
   FaUsers,
   FaDatabase,
   FaUserPlus,
-  FaPlusCircle
+  FaPlusCircle,
+  FaShieldAlt
 } from "react-icons/fa";
 import "../styles/PrincipalAdmin.css";
 import "../../temas/temas.css";
@@ -199,6 +200,9 @@ function PrincipalAdmin() {
           </NavLink>
           <NavLink to="/admin/respaldo" className={navClass}>
             <FaDatabase /> Respaldo
+          </NavLink>
+          <NavLink to="/admin/reportes-chat" className={navClass}>
+            <FaShieldAlt /> Reportes de chat
           </NavLink>
         </nav>
 

@@ -11,7 +11,8 @@ import {
   FaChartLine,
   FaSearch,
   FaGraduationCap,
-  FaCheckCircle
+  FaCheckCircle,
+  FaComments
 } from "react-icons/fa";
 
 import "../styles/ProfesorPanel.css";
@@ -226,6 +227,9 @@ function PrincipalAlumno() {
           </NavLink>
           <NavLink to="/principal/analisis-respuestas" className={navClass}>
             <FaChartLine /> Mi progreso
+          </NavLink>
+          <NavLink to="/principal/mensajes" className={navClass}>
+            <FaComments /> Mensajes
           </NavLink>
         </nav>
 
