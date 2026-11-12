@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import {
   FaArrowLeft,
+  FaAward,
   FaBookOpen,
   FaCheck,
   FaChevronDown,
@@ -351,6 +352,8 @@ function Cursos() {
               <button type="button" className="cv-btn cv-btn-blanco" onClick={() => irA(siguiente)}>
                 <FaPlay /> {avance > 0 ? "Continuar donde me quedé" : "Empezar el curso"}
               </button>
+            ) : progreso?.terminado_aprobado ? (
+              <Link to={`/principal/certificado/${id}`} className="cv-btn cv-btn-oro"><FaAward /> Ver mi certificado</Link>
             ) : terminado ? (
               <span className="cv-chip-logro"><FaTrophy /> ¡Curso completado!</span>
             ) : null}
@@ -521,12 +524,25 @@ function Cursos() {
             </div>
           )}
 
-          {terminado && (
+          {progreso?.terminado_aprobado ? (
+            <div className="cv-tarjeta cv-logro">
+              <FaAward />
+              <strong>¡Tu certificado está listo!</strong>
+              <small>Terminaste el curso con {progreso.promedio}% de promedio.</small>
+              <Link to={`/principal/certificado/${id}`} className="cv-btn cv-btn-oro cv-btn-ancho"><FaAward /> Obtener certificado</Link>
+              <Link to="/principal/analisis-respuestas" className="cv-btn cv-btn-suave cv-btn-ancho">¿Qué curso sigue?</Link>
+            </div>
+          ) : terminado ? (
             <div className="cv-tarjeta cv-logro">
               <FaTrophy />
               <strong>¡Terminaste el curso!</strong>
-              <small>Revisa en Mi progreso qué curso te conviene después.</small>
-              <Link to="/principal/analisis-respuestas" className="cv-btn cv-btn-suave">Ver recomendaciones</Link>
+              <small>Para el certificado necesitas {aprobatoria}% de promedio. Repite los exámenes con calificación baja.</small>
+            </div>
+          ) : (
+            <div className="cv-tarjeta cv-certificado-bloqueado">
+              <span className="cv-tarjeta-etiqueta"><FaAward /> Certificado</span>
+              <small>Termina todas las lecciones y exámenes con {aprobatoria}% o más de promedio para obtener tu certificado.</small>
+              <span className="cv-mini-barra cv-mini-barra-ancha"><span style={{ width: `${avance}%` }} /></span>
             </div>
           )}
 

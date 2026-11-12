@@ -4,7 +4,8 @@
    ===================================================================== */
 
 .cv,
-.mc {
+.mc,
+.certp {
   --cu-accent: var(--accent, var(--link-color, #2563eb));
   --cu-surface: var(--surface, var(--card-bg, #ffffff));
   --cu-border: var(--border, var(--card-border, rgba(128, 128, 128, 0.22)));
@@ -1604,4 +1605,31 @@
   .cv-item {
     flex-wrap: wrap;
   }
+}
+
+/* ---------- Certificado: botón dorado y avance ---------- */
+.cv-btn-oro,
+.mp-btn-oro {
+  color: #422006 !important;
+  background: linear-gradient(135deg, #fde68a, #eab308) !important;
+  border-color: #eab308 !important;
+  box-shadow: 0 6px 16px rgba(234, 179, 8, 0.35);
+}
+
+.cv-btn-oro:hover:not(:disabled),
+.mp-btn-oro:hover {
+  color: #422006 !important;
+}
+
+.cv-certificado-bloqueado .cv-tarjeta-etiqueta {
+  color: #a16207;
+}
+
+.cv-mini-barra-ancha {
+  width: 100%;
+  margin-top: 0.2rem;
+}
+
+.cc-cuerpo > .cv-btn-oro + .cv-btn {
+  margin-top: 0;
 }

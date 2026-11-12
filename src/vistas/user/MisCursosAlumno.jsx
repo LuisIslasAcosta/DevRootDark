@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import {
   FaArrowRight,
+  FaAward,
   FaBookOpen,
   FaCheckCircle,
   FaClock,
@@ -186,7 +187,12 @@ function MisCursosAlumno() {
                       {p?.siguiente_leccion && grupo === "curso" && (
                         <small className="cc-siguiente">Sigue: <b>{p.siguiente_leccion}</b></small>
                       )}
-                      <Link to={`/principal/cursos/${curso.id}`} className="cv-btn cv-btn-ancho">
+                      {p?.terminado_aprobado && (
+                        <Link to={`/principal/certificado/${curso.id}`} className="cv-btn cv-btn-oro cv-btn-ancho">
+                          <FaAward /> Ver certificado
+                        </Link>
+                      )}
+                      <Link to={`/principal/cursos/${curso.id}`} className={`cv-btn cv-btn-ancho${p?.terminado_aprobado ? " cv-btn-suave" : ""}`}>
                         {grupo === "terminado" ? <>Repasar curso <FaArrowRight /></> : avance > 0 ? <><FaPlay /> Continuar</> : <><FaPlay /> Empezar</>}
                       </Link>
                     </>

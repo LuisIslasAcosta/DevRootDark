@@ -54,3 +54,6 @@ export const formatoPrecio = (precio) => {
   const n = Number(precio) || 0;
   return n > 0 ? n.toLocaleString("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 }) : "Gratis";
 };
+
+// Enlace público para comprobar un certificado
+export const urlVerificacion = (folio) => `${window.location.origin}/verificar/${folio}`;

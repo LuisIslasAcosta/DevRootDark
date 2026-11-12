@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Registro from './user/Registro';
 import Login from './user/Login';
 import Politicas from './publico/Politicas';
+import VerificarCertificado from './publico/VerificarCertificado';
+import Certificado from './vistas/user/Certificado';
 import Inicio from './publico/Inicio_prueba';
 import Recuperar from './user/Recuperar';
 import VerificarCorreo from './user/VerificarCorreo';
@@ -58,6 +60,8 @@ function App() {
         <Route path="/register" element={<Registro />} />
         <Route path="/login" element={<Login />} />
         <Route path="/politicas" element={<Politicas />} />
+        <Route path="/verificar" element={<VerificarCertificado />} />
+        <Route path="/verificar/:folio" element={<VerificarCertificado />} />
         <Route path="/recuperar" element={<Recuperar/>}/>
         <Route path="/verificar-correo" element={<VerificarCorreo />} />
 
@@ -71,6 +75,7 @@ function App() {
           }
         >
           <Route path="analisis-respuestas" element={<AnalisisRespuestasAlumno />} />
+          <Route path="certificado/:cursoId" element={<Certificado />} />
 
           <Route path="cursos/:id" element={<Cursos />} />
           <Route path="mis-cursos" element={<MisCursosAlumno />} />
