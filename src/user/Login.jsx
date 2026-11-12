@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUsuario, reenviarVerificacion } from "../service/api";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // íconos de ojo
-import "./styles/login.css";
-import Logo from "../componentes/Logo";
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from "react-icons/fa";
+import AuthLayout from "./AuthLayout";
 import BotonGoogle from "../componentes/BotonGoogle";
 
 const Login = () => {
@@ -12,13 +11,8 @@ const Login = () => {
   const [sinVerificar, setSinVerificar] = useState(""); // correo pendiente de confirmar
   const [aviso, setAviso] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [enviando, setEnviando] = useState(false);
   const navigate = useNavigate();
-
-  const [theme] = useState(() => localStorage.getItem("theme") || "light");
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,6 +21,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setEnviando(true);
     try {
       const response = await loginUsuario(formData);
       if (response.data.access_token) {
@@ -47,6 +42,8 @@ const Login = () => {
       setSinVerificar(error.response?.data?.codigo === "correo_no_verificado" ? (error.response.data.email || formData.email) : "");
       setAviso("");
       setMensaje(error.response?.data?.mensaje || "Error al iniciar sesión");
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -60,61 +57,73 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <Link to="/" className="auth-logo" aria-label="Volver al inicio">
-          <Logo variante="banner" />
-        </Link>
-        <h2>Iniciar Sesión</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo electrónico"
-            onChange={handleChange}
-            required
-          />
-          <div style={{ position: "relative" }}>
+    <AuthLayout titulo="Bienvenido de nuevo" subtitulo="Inicia sesión para continuar con tus cursos.">
+      <form className="au-form" onSubmit={handleSubmit}>
+        <label className="au-campo">
+          <span className="au-campo__etiqueta">Correo electrónico</span>
+          <span className="au-campo__control">
+            <FaEnvelope className="au-campo__icono" aria-hidden="true" />
+            <input
+              type="email"
+              name="email"
+              placeholder="tu@correo.com"
+              autoComplete="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </span>
+        </label>
+
+        <label className="au-campo">
+          <span className="au-campo__etiqueta">
+            Contraseña
+            <Link to="/recuperar" className="au-enlace au-enlace--chico">¿La olvidaste?</Link>
+          </span>
+          <span className="au-campo__control">
+            <FaLock className="au-campo__icono" aria-hidden="true" />
             <input
               type={showPassword ? "text" : "password"}
               name="password"
-              placeholder="Contraseña"
+              placeholder="Tu contraseña"
+              autoComplete="current-password"
+              value={formData.password}
               onChange={handleChange}
               required
-              style={{ paddingRight: "40px" }} // espacio para el ícono
             />
-            <span
+            <button
+              type="button"
+              className="au-ojo"
               onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: "absolute",
-                right: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-                color: "#555"
-              }}
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
-          <button type="submit">Login</button>
-        </form>
-        <BotonGoogle texto="signin_with" />
-        <br />
-        <Link to="/"><button>Regresar a la página principal</button></Link>
-        {mensaje && <p className="auth-aviso auth-aviso--error">{mensaje}</p>}
-        {sinVerificar && (
-          <>
-            <button type="button" className="auth-secundario" onClick={reenviar}>
-              Reenviar correo de confirmación
             </button>
-            {aviso && <p className="auth-aviso">{aviso}</p>}
-          </>
+          </span>
+        </label>
+
+        {mensaje && <p className="au-aviso au-aviso--error" role="alert">{mensaje}</p>}
+        {sinVerificar && (
+          <div className="au-aviso au-aviso--info">
+            <span>Confirma tu correo para poder entrar.</span>
+            <button type="button" className="au-enlace" onClick={reenviar}>Reenviar correo de confirmación</button>
+            {aviso && <span>{aviso}</span>}
+          </div>
         )}
-        <Link to="/register" className="curso-link">¿No tienes cuenta?</Link>
-        <Link to="/recuperar" className="curso-link">¿Olvidaste tu contraseña?</Link>
+
+        <button type="submit" className="au-boton" disabled={enviando}>
+          {enviando ? "Entrando..." : "Iniciar sesión"}
+        </button>
+      </form>
+
+      <div className="au-google">
+        <BotonGoogle texto="signin_with" />
       </div>
-    </div>
+
+      <p className="au-cambio">
+        ¿No tienes cuenta? <Link to="/register" className="au-enlace">Crea una gratis</Link>
+      </p>
+    </AuthLayout>
   );
 };
 
