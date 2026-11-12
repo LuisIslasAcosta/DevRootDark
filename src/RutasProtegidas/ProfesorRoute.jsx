@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import TerminosGuard from "./TerminosGuard";
 
 const ProfesorRoute = ({ children }) => {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -13,7 +14,7 @@ const ProfesorRoute = ({ children }) => {
     return <Navigate to="/" />;
   }
 
-  return children;
+  return <TerminosGuard>{children}</TerminosGuard>;
 };
 
 export default ProfesorRoute;

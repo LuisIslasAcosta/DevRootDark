@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import TerminosGuard from "./TerminosGuard";
 
 function AdminRoute({ children }) {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -14,7 +15,7 @@ function AdminRoute({ children }) {
     return <Navigate to="/principal" replace />;
   }
 
-  return children;
+  return <TerminosGuard>{children}</TerminosGuard>;
 }
 
 export default AdminRoute;

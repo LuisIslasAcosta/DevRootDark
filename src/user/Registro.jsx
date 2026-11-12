@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaCheck, FaEnvelopeOpenText, FaCheckCircle } from "react-icons/fa";
 import AuthLayout from "./AuthLayout";
 import BotonGoogle from "../componentes/BotonGoogle";
+import { UBICACIONES, PAISES, OTRA } from "../data/ubicaciones";
+import ModalTerminos from "../componentes/ModalTerminos";
 
 // Mismas reglas que valida la API al registrar
 const REGLAS = [
@@ -55,11 +57,33 @@ const Registro = () => {
   const [aviso, setAviso] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [aceptaTerminos, setAceptaTerminos] = useState(false);
+  const [verTerminos, setVerTerminos] = useState(false);
+  // "Otro país" / "Otra ciudad": se escriben a mano
+  const [paisLibre, setPaisLibre] = useState(false);
+  const [ciudadLibre, setCiudadLibre] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const elegirPais = (e) => {
+    const valor = e.target.value;
+    const libre = valor === OTRA;
+    setPaisLibre(libre);
+    setCiudadLibre(libre);
+    setFormData({ ...formData, pais: libre ? "" : valor, ciudad: "" });
+  };
+
+  const elegirCiudad = (e) => {
+    const valor = e.target.value;
+    const libre = valor === OTRA;
+    setCiudadLibre(libre);
+    setFormData({ ...formData, ciudad: libre ? "" : valor });
+  };
+
+  const ciudades = UBICACIONES[formData.pais] || [];
 
   const coinciden = formData.verificar_password.length > 0 && formData.password === formData.verificar_password;
   const contrasenaValida = REGLAS.every((r) => r.cumple(formData.password));
@@ -74,10 +98,14 @@ const Registro = () => {
       setMensaje("Las contraseñas no coinciden.");
       return;
     }
+    if (!aceptaTerminos) {
+      setMensaje("Debes aceptar los términos y condiciones para crear tu cuenta.");
+      return;
+    }
     try {
       setEnviando(true);
       setMensaje("");
-      const response = await registrarUsuario(formData);
+      const response = await registrarUsuario({ ...formData, acepta_terminos: true });
       setRegistrado({ email: formData.email, ...response.data });
     } catch (error) {
       setMensaje(error.response?.data?.mensaje || "Error al registrar usuario");
@@ -145,10 +173,30 @@ const Registro = () => {
               <input type="date" name="fecha_nacimiento" autoComplete="bday" value={formData.fecha_nacimiento} onChange={handleChange} required />
             </Campo>
             <Campo etiqueta="País">
-              <input type="text" name="pais" placeholder="México" autoComplete="country-name" value={formData.pais} onChange={handleChange} required />
+              <select value={paisLibre ? OTRA : formData.pais} onChange={elegirPais} required>
+                <option value="" disabled>Selecciona tu país</option>
+                {PAISES.map((p) => <option key={p} value={p}>{p}</option>)}
+                <option value={OTRA}>Otro país…</option>
+              </select>
+              {paisLibre && (
+                <input type="text" name="pais" placeholder="Escribe tu país" autoComplete="country-name" value={formData.pais} onChange={handleChange} required autoFocus />
+              )}
             </Campo>
             <Campo etiqueta="Ciudad">
-              <input type="text" name="ciudad" placeholder="Toluca" autoComplete="address-level2" value={formData.ciudad} onChange={handleChange} required />
+              {paisLibre ? (
+                <input type="text" name="ciudad" placeholder="Escribe tu ciudad" autoComplete="address-level2" value={formData.ciudad} onChange={handleChange} required />
+              ) : (
+                <>
+                  <select value={ciudadLibre ? OTRA : formData.ciudad} onChange={elegirCiudad} disabled={!formData.pais} required>
+                    <option value="" disabled>{formData.pais ? "Selecciona tu ciudad" : "Primero elige un país"}</option>
+                    {ciudades.map((c) => <option key={c} value={c}>{c}</option>)}
+                    <option value={OTRA}>Otra ciudad…</option>
+                  </select>
+                  {ciudadLibre && (
+                    <input type="text" name="ciudad" placeholder="Escribe tu ciudad" autoComplete="address-level2" value={formData.ciudad} onChange={handleChange} required autoFocus />
+                  )}
+                </>
+              )}
             </Campo>
             <Campo etiqueta="Teléfono (opcional)" ancho="completo">
               <input type="tel" name="telefono" placeholder="722 123 4567" autoComplete="tel" value={formData.telefono} onChange={handleChange} />
@@ -236,14 +284,26 @@ const Registro = () => {
 
         {mensaje && <p className="au-aviso au-aviso--error" role="alert">{mensaje}</p>}
 
-        <p className="au-legal">
-          Al crear tu cuenta aceptas nuestras <Link to="/politicas" className="au-enlace">políticas de privacidad</Link>.
-        </p>
+        <label className="au-terminos">
+          <input type="checkbox" checked={aceptaTerminos} onChange={(e) => setAceptaTerminos(e.target.checked)} required />
+          <span>
+            He leído y acepto los{" "}
+            <button type="button" className="au-enlace" onClick={() => setVerTerminos(true)}>términos, condiciones y políticas de privacidad</button>.
+          </span>
+        </label>
 
         <button type="submit" className="au-boton" disabled={enviando}>
           {enviando ? "Creando cuenta..." : "Crear cuenta"}
         </button>
       </form>
+
+      {verTerminos && (
+        <ModalTerminos
+          textoCancelar="Cerrar"
+          onAceptar={() => { setAceptaTerminos(true); setVerTerminos(false); }}
+          onCancelar={() => setVerTerminos(false)}
+        />
+      )}
 
       <p className="au-cambio">
         ¿Ya tienes cuenta? <Link to="/login" className="au-enlace">Inicia sesión</Link>

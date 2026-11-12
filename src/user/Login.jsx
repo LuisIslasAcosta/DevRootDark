@@ -4,6 +4,7 @@ import { loginUsuario, reenviarVerificacion } from "../service/api";
 import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from "react-icons/fa";
 import AuthLayout from "./AuthLayout";
 import BotonGoogle from "../componentes/BotonGoogle";
+import ModalTerminos from "../componentes/ModalTerminos";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -12,6 +13,7 @@ const Login = () => {
   const [aviso, setAviso] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [enviando, setEnviando] = useState(false);
+  const [terminos, setTerminos] = useState(null); // aviso de términos pendientes
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,11 +21,11 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e, aceptaTerminos = false) => {
+    e?.preventDefault();
     setEnviando(true);
     try {
-      const response = await loginUsuario(formData);
+      const response = await loginUsuario(aceptaTerminos ? { ...formData, acepta_terminos: true } : formData);
       if (response.data.access_token) {
         localStorage.setItem("token", response.data.access_token);
         localStorage.setItem("isLoggedIn", "true");
@@ -33,12 +35,18 @@ const Login = () => {
         localStorage.setItem("user_id", response.data.usuario.id);
 
         setMensaje("");
+        setTerminos(null);
 
         if (response.data.usuario.rol === "administrador") navigate("/admin");
         else if (response.data.usuario.rol === "profesor") navigate("/profesor");
         else navigate("/principal");
       }
     } catch (error) {
+      if (error.response?.data?.codigo === "terminos_pendientes") {
+        setMensaje("");
+        setTerminos(error.response.data);
+        return;
+      }
       setSinVerificar(error.response?.data?.codigo === "correo_no_verificado" ? (error.response.data.email || formData.email) : "");
       setAviso("");
       setMensaje(error.response?.data?.mensaje || "Error al iniciar sesión");
@@ -119,6 +127,16 @@ const Login = () => {
       <div className="au-google">
         <BotonGoogle texto="signin_with" />
       </div>
+
+      {terminos && (
+        <ModalTerminos
+          version={terminos.version}
+          actualizacion={terminos.actualizacion}
+          cargando={enviando}
+          onAceptar={() => handleSubmit(null, true)}
+          onCancelar={() => setTerminos(null)}
+        />
+      )}
 
       <p className="au-cambio">
         ¿No tienes cuenta? <Link to="/register" className="au-enlace">Crea una gratis</Link>

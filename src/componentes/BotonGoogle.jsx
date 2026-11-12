@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL } from "../config";
 import "./BotonGoogle.css";
 import { guardarSesion } from "./sesion";
+import ModalTerminos from "./ModalTerminos";
 
 const CLIENT_ID = (import.meta.env.VITE_GOOGLE_CLIENT_ID || "").trim();
 const SCRIPT_GOOGLE = "https://accounts.google.com/gsi/client";
@@ -36,23 +37,35 @@ function BotonGoogle({ texto = "continue_with" }) {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [entrando, setEntrando] = useState(false);
+  const [terminos, setTerminos] = useState(null); // { credential, version, actualizacion }
+
+  // Envía la credencial de Google; si faltan los términos, se piden antes de entrar
+  const entrar = async (credential, aceptaTerminos = false) => {
+    setError("");
+    setEntrando(true);
+    try {
+      const res = await axios.post(`${API_URL}/login/google`, aceptaTerminos ? { credential, acepta_terminos: true } : { credential });
+      setTerminos(null);
+      guardarSesion(res.data, navigate);
+    } catch (err) {
+      if (err.response?.data?.codigo === "terminos_pendientes") {
+        setTerminos({ credential, ...err.response.data });
+      } else {
+        setTerminos(null);
+        setError(err.response?.data?.mensaje || "No se pudo iniciar sesión con Google.");
+      }
+    } finally {
+      setEntrando(false);
+    }
+  };
+  const entrarRef = useRef(entrar);
+  entrarRef.current = entrar;
 
   useEffect(() => {
     if (!CLIENT_ID) return;
     let activo = true;
 
-    const alResponder = async ({ credential }) => {
-      setError("");
-      setEntrando(true);
-      try {
-        const res = await axios.post(`${API_URL}/login/google`, { credential });
-        guardarSesion(res.data, navigate);
-      } catch (err) {
-        setError(err.response?.data?.mensaje || "No se pudo iniciar sesión con Google.");
-      } finally {
-        setEntrando(false);
-      }
-    };
+    const alResponder = ({ credential }) => entrarRef.current(credential);
 
     cargarGoogle()
       .then(() => {
@@ -88,6 +101,15 @@ function BotonGoogle({ texto = "continue_with" }) {
       <div ref={contenedor} className="boton-google__contenedor" aria-busy={entrando} />
       {entrando && <p className="boton-google__estado">Entrando con Google...</p>}
       {error && <p className="auth-aviso auth-aviso--error">{error}</p>}
+      {terminos && (
+        <ModalTerminos
+          version={terminos.version}
+          actualizacion={terminos.actualizacion}
+          cargando={entrando}
+          onAceptar={() => entrar(terminos.credential, true)}
+          onCancelar={() => setTerminos(null)}
+        />
+      )}
     </div>
   );
 }
