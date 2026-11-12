@@ -2,8 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FaSearch, FaPlus, FaTimes, FaEye, FaTrashAlt, FaBookOpen, FaImage, FaVideo } from "react-icons/fa";
+import { FaSearch, FaPlus, FaTimes, FaEye, FaTrashAlt, FaBookOpen, FaImage, FaVideo, FaChalkboardTeacher, FaExclamationTriangle } from "react-icons/fa";
 import "../styles/AdminVistas.css";
+import "../styles/Cursos.css";
+import { degradadoCurso, portadaCurso, inicialesCurso, colorCalificacion, formatoPrecio } from "../../componentes/cursoVisual";
 import { API_URL } from "../../config";
 
 const API = API_URL;
@@ -39,6 +41,7 @@ function AdminCursos() {
   const [cursoAEliminar, setCursoAEliminar] = useState(null);
   const [eliminando, setEliminando] = useState(false);
   const [aviso, setAviso] = useState(null); // { tipo: "ok" | "error", texto }
+  const [resumen, setResumen] = useState({}); // curso_id -> alumnos, lecciones, promedio...
 
   const cargarCursos = () => {
     fetch(`${API}/cursos`)
@@ -59,7 +62,20 @@ function AdminCursos() {
 
   useEffect(() => {
     cargarCursos();
+    axios
+      .get(`${API}/progreso/cursos/resumen`, { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } })
+      .then((res) => setResumen(res.data?.cursos || {}))
+      .catch(() => setResumen({}));
   }, []);
+
+  const totales = useMemo(() => {
+    const valores = Object.values(resumen);
+    return {
+      alumnos: valores.reduce((s, r) => s + (r.inscritos || 0), 0),
+      profesores: new Set(cursos.map((c) => c.profesor).filter(Boolean)).size,
+      riesgo: valores.reduce((s, r) => s + (r.en_riesgo || 0), 0)
+    };
+  }, [resumen, cursos]);
 
   // El aviso desaparece solo
   useEffect(() => {
@@ -143,14 +159,20 @@ function AdminCursos() {
 
   return (
     <div className="admin-section">
-      <div className="av-header">
+      <header className="mc-hero mc-hero-admin">
         <div>
+          <span className="mc-hero-sub"><FaBookOpen /> Catálogo</span>
           <h2>Gestión de cursos</h2>
-          <p className="av-sub">
-            {cargando ? "Cargando..." : `${cursosFiltrados.length} de ${cursos.length} cursos`}
-          </p>
+          <p>{cargando ? "Cargando..." : `Mostrando ${cursosFiltrados.length} de ${cursos.length} cursos de la plataforma.`}</p>
         </div>
+        <div className="mc-hero-cifras">
+          <div><strong>{cursos.length}</strong><span>cursos</span></div>
+          <div><strong>{totales.profesores}</strong><span>{totales.profesores === 1 ? "profesor" : "profesores"}</span></div>
+          <div><strong>{totales.alumnos}</strong><span>{totales.alumnos === 1 ? "alumno inscrito" : "alumnos inscritos"}</span></div>
+        </div>
+      </header>
 
+      <div className="av-header">
         <div className="av-tools">
           <label className="av-buscar">
             <FaSearch aria-hidden="true" />
@@ -265,69 +287,52 @@ function AdminCursos() {
           </p>
         </div>
       ) : (
-        <div className="av-tabla-wrap">
-          <table className="admin-table admin-table--stack">
-            <thead>
-              <tr>
-                <th>Curso</th>
-                <th>Profesor</th>
-                <th>Contenido</th>
-                <th className="col-acciones">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cursosFiltrados.map((curso, index) => {
-                const imagenes = curso.imagenes || [];
-                const videos = curso.videos || [];
-                return (
-                  <tr key={curso.id || index}>
-                    <td data-label="Curso">
-                      <div className="av-persona">
-                        {imagenes[0] ? (
-                          <img
-                            className="av-miniatura"
-                            src={`${API}/uploads/imagenes/${imagenes[0]}`}
-                            alt={`Portada del curso ${curso.nombre}`}
-                            loading="lazy"
-                          />
-                        ) : (
-                          <span className="av-miniatura av-miniatura--vacia" aria-hidden="true">
-                            <FaBookOpen />
-                          </span>
-                        )}
-                        <span className="av-nombre">{curso.nombre}</span>
-                      </div>
-                    </td>
-                    <td data-label="Profesor">{curso.profesor || "—"}</td>
-                    <td data-label="Contenido">
-                      <div className="av-chips">
-                        <span className="av-chip">
-                          <FaImage /> {imagenes.length}
-                        </span>
-                        <span className="av-chip">
-                          <FaVideo /> {videos.length}
-                        </span>
-                      </div>
-                    </td>
-                    <td data-label="Acciones" className="col-acciones">
-                      <div className="av-acciones">
-                        <Link to={`/admin/curso/${curso.id}`} className="av-btn av-btn--editar">
-                          <FaEye /> Ver
-                        </Link>
-                        <button
-                          type="button"
-                          className="av-btn av-btn--eliminar"
-                          onClick={() => setCursoAEliminar(curso)}
-                        >
-                          <FaTrashAlt /> Eliminar
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="cc-grid cc-grid-ancho">
+          {cursosFiltrados.map((curso, index) => {
+            const imagenes = curso.imagenes || [];
+            const videos = curso.videos || [];
+            const r = resumen[curso.id] || {};
+            const portada = portadaCurso(curso);
+            return (
+              <article key={curso.id || index} className="cc-tarjeta">
+                <div className="cc-portada" style={portada ? undefined : { background: degradadoCurso(curso.nombre) }}>
+                  {portada ? <img src={portada} alt="" loading="lazy" /> : <span className="cc-iniciales">{inicialesCurso(curso.nombre)}</span>}
+                  <span className={`cc-precio${Number(curso.precio) > 0 ? "" : " gratis"}`}>{formatoPrecio(curso.precio)}</span>
+                  {r.en_riesgo > 0 && (
+                    <span className="cc-insignia cc-insignia-peligro"><FaExclamationTriangle /> {r.en_riesgo} en riesgo</span>
+                  )}
+                </div>
+                <div className="cc-cuerpo">
+                  <h3>{curso.nombre}</h3>
+                  <span className="cc-profesor"><FaChalkboardTeacher /> {curso.profesor || "Sin profesor"}</span>
+                  {curso.descripcion && <p className="cc-descripcion">{curso.descripcion}</p>}
+                  <div className="cc-metricas">
+                    <div><strong>{r.inscritos ?? "—"}</strong><span>alumnos</span></div>
+                    <div><strong>{r.lecciones ?? "—"}</strong><span>lecciones</span></div>
+                    <div><strong>{r.examenes ?? "—"}</strong><span>exámenes</span></div>
+                    <div>
+                      <strong style={{ color: colorCalificacion(r.promedio) }}>
+                        {r.promedio !== null && r.promedio !== undefined ? `${Math.round(r.promedio)}%` : "—"}
+                      </strong>
+                      <span>promedio</span>
+                    </div>
+                  </div>
+                  <div className="cc-chips">
+                    <span><FaImage /> {imagenes.length} {imagenes.length === 1 ? "imagen" : "imágenes"}</span>
+                    <span><FaVideo /> {videos.length} {videos.length === 1 ? "video" : "videos"}</span>
+                  </div>
+                  <div className="cc-acciones">
+                    <Link to={`/admin/curso/${curso.id}`} className="cv-btn">
+                      <FaEye /> Ver curso
+                    </Link>
+                    <button type="button" className="cv-btn cv-btn-peligro-suave" onClick={() => setCursoAEliminar(curso)}>
+                      <FaTrashAlt /> Eliminar
+                    </button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
 
