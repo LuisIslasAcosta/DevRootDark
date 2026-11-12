@@ -1209,3 +1209,138 @@ body {
     transition: none !important;
   }
 }
+/* ---------- Examen protegido ---------- */
+.examen-reglas {
+  max-width: 46rem;
+  padding: 1.4rem 1.5rem;
+  line-height: 1.55;
+  background-color: var(--card-bg, #fff);
+  border: 1px solid var(--card-border, rgba(128, 128, 128, 0.25));
+  border-radius: 1rem;
+}
+
+.examen-reglas ul {
+  margin: 0.75rem 0 1.25rem;
+  padding-left: 1.2rem;
+}
+
+.examen-reglas li + li {
+  margin-top: 0.4rem;
+}
+
+/* Sin selección de texto mientras se responde */
+body.examen-protegido,
+body.examen-protegido * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+.examen-en-curso img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* En pantalla completa, el examen ocupa toda la pantalla y se puede desplazar */
+body.examen-protegido:fullscreen,
+html:fullscreen {
+  overflow-y: auto;
+  background-color: var(--bg-color, #f3f4f6);
+}
+
+.examen-contenido {
+  position: relative;
+  transition: filter 0.15s ease;
+}
+
+.examen-contenido.examen-oculto {
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+/* Marca de agua con el nombre del alumno */
+.examen-marca-agua {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-around;
+  gap: 4rem 3rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.examen-marca-agua span {
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--text-color, #111);
+  opacity: 0.07;
+  transform: rotate(-24deg);
+}
+
+/* Capa que tapa el examen */
+.examen-bloqueo {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  text-align: center;
+  color: #fff;
+  background-color: rgba(15, 23, 42, 0.92);
+}
+
+.examen-bloqueo h3 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.examen-bloqueo p {
+  max-width: 32rem;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Aviso flotante cuando se bloquea una acción */
+.examen-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  z-index: 10000;
+  max-width: calc(100% - 2rem);
+  padding: 0.75rem 1.1rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #ef4444;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transform: translateX(-50%);
+}
+
+/* Si alguien logra imprimir, no sale el examen */
+@media print {
+  body.examen-protegido * {
+    visibility: hidden !important;
+  }
+
+  body.examen-protegido::after {
+    content: "Imprimir el examen no está permitido.";
+    visibility: visible;
+    position: fixed;
+    top: 40%;
+    left: 0;
+    right: 0;
+    font-size: 24px;
+    text-align: center;
+  }
+}
