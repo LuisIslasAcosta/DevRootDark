@@ -6,6 +6,9 @@ import axios from "axios";
 import "../styles/EstilosAlumno.css";
 import "../../temas/temas.css";
 import { API_URL, API_ORIGIN } from "../../config";
+import EstadoInscripcion from "../../componentes/EstadoInscripcion";
+import { obtenerMisInscripciones } from "../../componentes/pagos";
+import "../../componentes/pagos.css";
 
 function Cursos() {
   const { id } = useParams();
@@ -17,6 +20,7 @@ function Cursos() {
   const [progreso, setProgreso] = useState(null);
   const [leccionesVistas, setLeccionesVistas] = useState({});
   const [user, setUser] = useState(null);
+  const [inscripcion, setInscripcion] = useState(undefined); // undefined = cargando, null = sin inscripción
 
   // ================= LOAD USER =================
   useEffect(() => {
@@ -29,6 +33,13 @@ function Cursos() {
       }
     }
   }, []);
+
+  // ================= VERIFICAR INSCRIPCIÓN ACEPTADA =================
+  useEffect(() => {
+    obtenerMisInscripciones()
+      .then(res => setInscripcion((res.data || []).find(i => i.curso_id === id) || null))
+      .catch(() => setInscripcion(null));
+  }, [id]);
 
   // ================= CARGAR CURSO =================
   useEffect(() => {
@@ -160,6 +171,26 @@ function Cursos() {
 
   if (loading) return <p className="curso-loading">Cargando curso...</p>;
   if (!curso) return <p className="curso-error">No se encontró el curso</p>;
+
+  const esAlumno = (localStorage.getItem("rol") || "usuario") === "usuario";
+  if (esAlumno && inscripcion !== undefined && inscripcion?.estado !== "aceptada") {
+    return (
+      <div className="curso-bloqueado">
+        <h3>{curso.nombre}</h3>
+        {inscripcion ? (
+          <>
+            <p><EstadoInscripcion estado={inscripcion.estado} /></p>
+            <p>Tu ID de pago es <code>{inscripcion.referencia_pago}</code>.</p>
+            {inscripcion.estado === "rechazada" && <p className="insc-motivo">Motivo: {inscripcion.motivo_rechazo}</p>}
+            <p>Podrás ver las lecciones cuando tu profesor valide el pago.</p>
+          </>
+        ) : (
+          <p>Aún no estás inscrito en este curso.</p>
+        )}
+        <Link to="/principal/mis-cursos" className="btn-modern">Ir a Mis cursos</Link>
+      </div>
+    );
+  }
 
   return (
     <Container className="curso-info">

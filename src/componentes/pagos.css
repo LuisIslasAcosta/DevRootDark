@@ -1,0 +1,144 @@
+/* ================= ESTADO DE INSCRIPCIÓN ================= */
+.estado-insc {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.estado-insc--pendiente { background: #fff4d6; color: #8a5a00; }
+.estado-insc--revision  { background: #dbeafe; color: #1e40af; }
+.estado-insc--aceptada  { background: #d9f7e8; color: #146c43; }
+.estado-insc--rechazada { background: #fde2e1; color: #b42318; }
+
+/* ================= MODAL DE PAGO ================= */
+.pago-resumen {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.pago-etiqueta {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+.pago-monto { font-size: 1.6rem; }
+.pago-referencia {
+  border: 2px dashed #2ee5c6;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.pago-referencia-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pago-referencia code {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #0f766e;
+  background: transparent;
+}
+.pago-aviso { margin: 8px 0 0; font-size: 0.9rem; }
+.pago-instrucciones p { white-space: pre-line; margin-bottom: 12px; }
+.pago-form h6 { margin: 8px 0 12px; font-weight: 700; }
+.pago-form-fila {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+/* ================= TARJETAS DE INSCRIPCIÓN (ALUMNO) ================= */
+.insc-info {
+  font-size: 0.88rem;
+  margin: 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.insc-info code { font-weight: 700; }
+.insc-motivo { color: #b42318; font-size: 0.85rem; }
+
+/* ================= PAGOS DEL PROFESOR ================= */
+.pagos-filtros {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0 18px;
+}
+.pagos-filtros button {
+  border: 1px solid #ccd3dd;
+  background: transparent;
+  color: inherit;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.88rem;
+}
+.pagos-filtros button.activo {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #fff;
+}
+.pagos-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.pago-card {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  padding: 16px;
+  background: var(--card-bg, #fff);
+  color: var(--text-color, inherit);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+.pago-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.pago-card-top code { font-size: 1rem; font-weight: 700; color: #0f766e; }
+.pago-card dl {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 4px 8px;
+  margin: 0 0 10px;
+  font-size: 0.88rem;
+}
+.pago-card dt { opacity: 0.7; font-weight: 500; }
+.pago-card dd { margin: 0; word-break: break-word; }
+.pago-card-acciones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.pago-badge-nav {
+  margin-left: auto;
+  background: #e5484d;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  padding: 1px 7px;
+}
+.curso-bloqueado {
+  max-width: 620px;
+  margin: 40px auto;
+  text-align: center;
+  padding: 28px;
+  border-radius: 16px;
+  background: var(--card-bg, #fff);
+  color: var(--text-color, inherit);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+.curso-bloqueado code { font-weight: 700; color: #0f766e; }

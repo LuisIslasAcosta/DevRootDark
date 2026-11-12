@@ -38,6 +38,7 @@ import VerLeccionesProfesor from './vistas/profesor/VerLeccionesProfesor';
 import ReportesProfesor from './vistas/profesor/ReportesProfesor';
 import VerNivelesProfesor from './vistas/profesor/VerNivelesProfesor';
 import CrearNivelProfesor from './vistas/profesor/CrearNivelProfesor';
+import PagosProfesor from './vistas/profesor/PagosProfesor';
 
 // ================= RUTAS PROTEGIDAS =================
 import ProtectedRoute from './RutasProtegidas/ProtectedRoute';
@@ -134,6 +135,9 @@ function App() {
 
           {/* INSCRIPCIONES */}
           <Route path="inscripciones" element={<Inscripciones />} />
+
+          {/* PAGOS: validar comprobantes y aceptar alumnos */}
+          <Route path="pagos" element={<PagosProfesor />} />
 
           {/* REPORTES & RESULTADOS */}
           <Route path="reportes" element={<ReportesProfesor />} />

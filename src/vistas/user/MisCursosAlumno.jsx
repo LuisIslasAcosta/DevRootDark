@@ -3,39 +3,20 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "../styles/EstilosAlumno.css";
 import { API_URL } from "../../config";
+import EstadoInscripcion from "../../componentes/EstadoInscripcion";
+import PagoInscripcionModal from "../../componentes/PagoInscripcionModal";
+import { obtenerMisInscripciones, formatoMoneda, authHeader } from "../../componentes/pagos";
+import "../../componentes/pagos.css";
+
 function MisCursosAlumno() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-  const [cursos, setCursos] = useState([]);
+  const [items, setItems] = useState([]); // { curso, inscripcion }
   const [loading, setLoading] = useState(true);
+  const [pagoAbierto, setPagoAbierto] = useState(null);
 
-  // ================= LOAD USER =================
+  // ================= CARGAR CURSOS E INSCRIPCIONES =================
   useEffect(() => {
-    const usuarioGuardado = localStorage.getItem("usuario");
-    if (usuarioGuardado) {
-      try {
-        setUser(JSON.parse(usuarioGuardado));
-      } catch {
-        setUser(null);
-      }
-    }
-
-    const syncUser = () => {
-      const actualizado = localStorage.getItem("usuario");
-      if (actualizado) {
-        setUser(JSON.parse(actualizado));
-      }
-    };
-
-    window.addEventListener("storage", syncUser);
-    return () => window.removeEventListener("storage", syncUser);
-  }, []);
-
-  // ================= LOAD ENROLLED COURSES =================
-  useEffect(() => {
-    if (!user?.id) return;
-
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
@@ -45,85 +26,91 @@ function MisCursosAlumno() {
     const fetchData = async () => {
       try {
         setLoading(true);
+        const [cursosRes, insRes] = await Promise.all([
+          axios.get(`${API_URL}/cursos`, { headers: authHeader() }),
+          obtenerMisInscripciones(),
+        ]);
 
-        const cursosRes = await axios.get(`${API_URL}/cursos`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        const insRes = await axios.get(
-          `${API_URL}/inscripciones/alumno/${user.id}`
-        );
-
-        const idsInscritos = [...new Set(insRes.data.map(i => i.curso_id))];
-
-        const cursosFiltrados = cursosRes.data.filter(curso =>
-          idsInscritos.includes(curso.id)
-        );
-
-        setCursos(cursosFiltrados);
-
+        const cursos = Array.isArray(cursosRes.data) ? cursosRes.data : [];
+        const lista = (Array.isArray(insRes.data) ? insRes.data : []).map((ins) => ({
+          inscripcion: ins,
+          curso: cursos.find((c) => c.id === ins.curso_id) || { id: ins.curso_id, nombre: ins.curso_nombre },
+        }));
+        setItems(lista);
       } catch (error) {
         console.error("Error cargando cursos:", error);
-        if (error.response?.status === 401) {
-          navigate("/login");
-        }
+        if (error.response?.status === 401) navigate("/login");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [user, navigate]);
+  }, [navigate]);
+
+  const actualizarInscripcion = (nueva) => {
+    setItems((prev) => prev.map((it) => (it.inscripcion.id === nueva.id ? { ...it, inscripcion: nueva } : it)));
+    setPagoAbierto(nueva);
+  };
 
   return (
     <div>
-
       {/* HEADER */}
       <div className="dashboard-topbar">
         <h2>Mis Cursos</h2>
-        <p>Estos son los cursos en los que estás inscrito.</p>
+        <p>Consulta el estado de tus inscripciones y entra a los cursos que ya fueron aceptados.</p>
       </div>
 
       {/* LISTADO */}
       <div className="file-grid">
         {loading ? (
           <p>Cargando tus cursos...</p>
-        ) : cursos.length === 0 ? (
+        ) : items.length === 0 ? (
           <p>No estás inscrito en ningún curso aún.</p>
         ) : (
-          cursos.map(curso => (
-            <div key={curso.id} className="curso-form-card">
-
+          items.map(({ curso, inscripcion }) => (
+            <div key={inscripcion.id} className="curso-form-card">
               {curso.imagenes?.length > 0 && (
-                <img
-                  src={`${API_URL}/uploads/imagenes/${curso.imagenes[0]}`}
-                  alt={curso.nombre}
-                  className="curso-thumb"
-                />
+                <img src={`${API_URL}/uploads/imagenes/${curso.imagenes[0]}`} alt={curso.nombre} className="curso-thumb" />
               )}
 
               <h3 className="curso-title">{curso.nombre}</h3>
-              <p>{curso.descripcion}</p>
+              {curso.descripcion && <p>{curso.descripcion}</p>}
+              {curso.profesor && <span>Profesor: {curso.profesor}</span>}
 
-              {curso.duracion && <span>Duración: {curso.duracion}</span>}<br />
-              {curso.profesor && <span>Profesor: {curso.profesor}</span>}<br />
+              <div className="insc-info">
+                <EstadoInscripcion estado={inscripcion.estado} />
+                {inscripcion.monto > 0 && <span>Monto: {formatoMoneda(inscripcion.monto)}</span>}
+                {inscripcion.referencia_pago && (
+                  <span>ID de pago: <code>{inscripcion.referencia_pago}</code></span>
+                )}
+                {inscripcion.estado === "rechazada" && inscripcion.motivo_rechazo && (
+                  <span className="insc-motivo">Motivo: {inscripcion.motivo_rechazo}</span>
+                )}
+              </div>
 
-              <button className="btn-modern" disabled>
-                Inscrito
-              </button>
-
-              <Link 
-                to={`/principal/cursos/${curso.id}`} 
-                className="btn-modern" 
-                style={{ marginTop: "10px" }}
-              >
-                Ver Curso
-              </Link>
-
+              {inscripcion.estado === "aceptada" ? (
+                <Link to={`/principal/cursos/${curso.id}`} className="btn-modern" style={{ marginTop: "10px" }}>
+                  Ver Curso
+                </Link>
+              ) : (
+                <button className="btn-modern" onClick={() => setPagoAbierto(inscripcion)}>
+                  {inscripcion.estado === "en_revision" ? "Ver detalle del pago"
+                    : inscripcion.estado === "rechazada" ? "Subir nuevo comprobante"
+                    : "Pagar y subir comprobante"}
+                </button>
+              )}
             </div>
           ))
         )}
       </div>
+
+      <PagoInscripcionModal
+        show={!!pagoAbierto}
+        inscripcion={pagoAbierto}
+        onHide={() => setPagoAbierto(null)}
+        onActualizada={actualizarInscripcion}
+      />
     </div>
   );
 }

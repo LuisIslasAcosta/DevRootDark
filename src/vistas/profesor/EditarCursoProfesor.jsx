@@ -12,6 +12,7 @@ function EditarCursoProfesor() {
   const [curso, setCurso] = useState({
     nombre: "",
     descripcion: "",
+    instrucciones_pago: "",
     imagenes: [],
     videos: [],
     profesor: "",
@@ -69,6 +70,7 @@ function EditarCursoProfesor() {
     const formData = new FormData();
     formData.append("nombre", curso.nombre);
     formData.append("descripcion", curso.descripcion);
+    formData.append("instrucciones_pago", curso.instrucciones_pago || "");
 
     // nuevas imágenes
     curso.imagenesFiles.forEach(img => formData.append("imagenes", img));
@@ -119,6 +121,18 @@ function EditarCursoProfesor() {
             name="descripcion"
             value={curso.descripcion}
             onChange={handleChange}
+          />
+        </div>
+
+        {/* Datos de pago */}
+        <div className="form-group">
+          <label>Datos para recibir pagos</label>
+          <textarea
+            name="instrucciones_pago"
+            rows={4}
+            value={curso.instrucciones_pago || ""}
+            onChange={handleChange}
+            placeholder={"Banco: \nTitular: \nCLABE: \nEl alumno verá estos datos junto con su ID único de pago."}
           />
         </div>
 

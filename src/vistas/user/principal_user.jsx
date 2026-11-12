@@ -16,6 +16,8 @@ import "../styles/EstilosAlumno.css";
 import "../../temas/temas.css";
 import { API_URL } from "../../config";
 import Logo from "../../componentes/Logo";
+import PagoInscripcionModal from "../../componentes/PagoInscripcionModal";
+import { inscribirseCurso, obtenerMisInscripciones, mensajeError } from "../../componentes/pagos";
 
 function PrincipalAlumno() {
   const navigate = useNavigate();
@@ -30,7 +32,8 @@ function PrincipalAlumno() {
 
   // ================= DATA =================
   const [cursos, setCursos] = useState([]);
-  const [inscripciones, setInscripciones] = useState([]);
+  const [inscripciones, setInscripciones] = useState({}); // curso_id -> inscripción
+  const [pagoAbierto, setPagoAbierto] = useState(null);
 
   // ================= LOAD USER =================
   useEffect(() => {
@@ -90,17 +93,12 @@ function PrincipalAlumno() {
       if (!user?.id) return;
 
       try {
-        const insRes = await axios.get(
-          `${API_URL}/inscripciones/alumno/${user.id}`
-        );
-
-        const ids = Array.isArray(insRes.data)
-          ? insRes.data.map(i => i.curso_id)
-          : [];
-
-        setInscripciones(ids);
+        const insRes = await obtenerMisInscripciones();
+        const mapa = {};
+        (Array.isArray(insRes.data) ? insRes.data : []).forEach(i => { mapa[i.curso_id] = i; });
+        setInscripciones(mapa);
       } catch {
-        setInscripciones([]);
+        setInscripciones({});
       }
     };
 
@@ -114,17 +112,44 @@ function PrincipalAlumno() {
     if (!user?.id) return alert("Usuario no válido");
 
     try {
-      await axios.post(`${API_URL}/inscripciones`, {
-        curso_id: cursoId,
-        alumno_id: user.id
-      });
+      const res = await inscribirseCurso(cursoId);
+      const inscripcion = res.data.inscripcion;
+      setInscripciones(prev => ({ ...prev, [cursoId]: inscripcion }));
 
-      alert("Inscripción realizada ");
-      setInscripciones(prev => [...prev, cursoId]);
+      if (inscripcion.estado === "aceptada") alert("¡Listo! El curso es gratuito y ya tienes acceso.");
+      else setPagoAbierto(inscripcion); // muestra el ID de pago y el formulario del comprobante
 
-    } catch {
-      alert("Error al inscribirse ");
+    } catch (err) {
+      alert(mensajeError(err, "Error al inscribirse"));
     }
+  };
+
+  const actualizarInscripcion = (nueva) => {
+    setInscripciones(prev => ({ ...prev, [nueva.curso_id]: nueva }));
+    setPagoAbierto(nueva);
+  };
+
+  // Botón según el estado de la inscripción
+  const botonInscripcion = (curso) => {
+    const ins = inscripciones[curso.id];
+    if (!ins) {
+      return (
+        <button className="btn-modern" onClick={() => inscribirse(curso.id)}>
+          {Number(curso.precio) > 0 ? `Inscribirse · $${Number(curso.precio).toFixed(2)}` : "Inscribirse (gratis)"}
+        </button>
+      );
+    }
+    if (ins.estado === "aceptada") return <button className="btn-modern" disabled>Inscrito</button>;
+    const textos = {
+      pendiente_pago: "Pagar y subir comprobante",
+      en_revision: "Pago en revisión",
+      rechazada: "Pago rechazado · reenviar"
+    };
+    return (
+      <button className="btn-modern" onClick={() => setPagoAbierto(ins)}>
+        {textos[ins.estado] || "Ver pago"}
+      </button>
+    );
   };
 
   // ================= PERFIL (barra lateral) =================
@@ -240,17 +265,13 @@ function PrincipalAlumno() {
                   <h3>{curso.nombre}</h3>
                   <p>{curso.descripcion}</p>
 
-                  {inscripciones.includes(curso.id) ? (
-                    <button className="btn-modern" disabled>Inscrito</button>
-                  ) : (
-                    <button className="btn-modern" onClick={() => inscribirse(curso.id)}>
-                      Inscribirse
-                    </button>
-                  )}
+                  {botonInscripcion(curso)}
 
-                  <Link to={`/principal/cursos/${curso.id}`} className="btn-modern">
-                    Ver Curso
-                  </Link>
+                  {inscripciones[curso.id]?.estado === "aceptada" && (
+                    <Link to={`/principal/cursos/${curso.id}`} className="btn-modern">
+                      Ver Curso
+                    </Link>
+                  )}
 
                 </div>
               ))
@@ -260,6 +281,13 @@ function PrincipalAlumno() {
 
 
         <Outlet />
+
+        <PagoInscripcionModal
+          show={!!pagoAbierto}
+          inscripcion={pagoAbierto}
+          onHide={() => setPagoAbierto(null)}
+          onActualizada={actualizarInscripcion}
+        />
 
       </main>
     </div>

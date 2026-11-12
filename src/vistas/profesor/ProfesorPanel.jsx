@@ -12,15 +12,18 @@ import {
   FaPen,
   FaUsers,
   FaLayerGroup,
-  FaListUl
+  FaListUl,
+  FaMoneyCheckAlt
 } from "react-icons/fa";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
 import "../../temas/temas.css";
+import "../../componentes/pagos.css";
 import { API_URL } from "../../config";
 import Logo from "../../componentes/Logo";
+import { obtenerPagosProfesor } from "../../componentes/pagos";
 
 const API = API_URL;
 const CUSTOM_VARS = ["--bg-color", "--text-color", "--card-bg", "--link-color", "--card-border", "--link-hover"];
@@ -37,6 +40,14 @@ function ProfesorPanel() {
     return saved ? JSON.parse(saved) : null;
   });
   const [fotoError, setFotoError] = useState(false);
+
+  // ================= PAGOS POR VALIDAR (contador del menú) =================
+  const [pagosPorValidar, setPagosPorValidar] = useState(0);
+  useEffect(() => {
+    obtenerPagosProfesor("en_revision")
+      .then(res => setPagosPorValidar(Array.isArray(res.data) ? res.data.length : 0))
+      .catch(() => setPagosPorValidar(0));
+  }, [location.pathname]);
 
   // ================= THEME =================
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
@@ -186,6 +197,10 @@ function ProfesorPanel() {
           </NavLink>
           <NavLink to="/profesor/cursos" className={navClass}>
             <FaBookOpen /> Cursos
+          </NavLink>
+          <NavLink to="/profesor/pagos" className={navClass}>
+            <FaMoneyCheckAlt /> Pagos
+            {pagosPorValidar > 0 && <span className="pago-badge-nav">{pagosPorValidar}</span>}
           </NavLink>
           <NavLink to="/profesor/examenes" className={navClass}>
             <FaClipboardList /> Exámenes
