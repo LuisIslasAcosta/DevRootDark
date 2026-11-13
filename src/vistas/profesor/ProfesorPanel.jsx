@@ -142,7 +142,7 @@ function ProfesorPanel() {
 
   // ================= KMEANS =================
   const [kmeansData, setKmeansData] = useState(null);
-  const [loadingKmeans, setLoadingKmeans] = useState(false);
+  const [loadingKmeans, setLoadingKmeans] = useState(() => !!localStorage.getItem("token"));
   const [errorKmeans, setErrorKmeans] = useState(null);
 
   // ================= SYNC USER =================
@@ -212,7 +212,6 @@ function ProfesorPanel() {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    setLoadingKmeans(true);
     axios
       .get(`${API}/kmeans`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setKmeansData(res.data))

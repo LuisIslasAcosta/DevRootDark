@@ -1,0 +1,50 @@
+# Pipeline de integración continua del frontend (PWA) de DevRootDark
+# Revisa el código con ESLint y compila la aplicación en cada push y pull request.
+name: CI Frontend (PWA DevRootDark)
+
+on:
+  push:
+    branches: [main, in_develop, in_develop2, in_develop3]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Lint y compilación
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Análisis estático con ESLint
+        run: npm run lint
+
+      - name: Compilar la PWA
+        run: npm run build
+        env:
+          VITE_API_URL: https://luis444.tailceb0e5.ts.net/api
+
+      - name: Verificar archivos de la PWA en el build
+        run: |
+          test -f dist/index.html
+          for f in manifest.webmanifest sw.js; do
+            if [ -f "dist/$f" ]; then echo "OK: $f"; else echo "::warning::No se encontró dist/$f"; fi
+          done
+          echo "Build correcto"
+
+      - name: Publicar el build como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-pwa
+          path: dist/

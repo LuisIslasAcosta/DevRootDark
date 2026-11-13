@@ -8,22 +8,22 @@ const API = API_URL;
 
 function CursoDetalle() {
   const { id } = useParams();
-  const [curso, setCurso] = useState(null);
-  const [error, setError] = useState(false);
+  // Se guarda el id junto con el resultado para no mostrar datos de otro curso al cambiar de ruta
+  const [resultado, setResultado] = useState({ id: null, curso: null, error: false });
+  const curso = resultado.id === id ? resultado.curso : null;
+  const error = resultado.id === id && resultado.error;
   const [imagenAbierta, setImagenAbierta] = useState(null);
 
   useEffect(() => {
-    setCurso(null);
-    setError(false);
     fetch(`${API}/cursos/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Curso no encontrado");
         return res.json();
       })
-      .then(setCurso)
+      .then((data) => setResultado({ id, curso: data, error: false }))
       .catch((err) => {
         console.error("Error al cargar curso:", err);
-        setError(true);
+        setResultado({ id, curso: null, error: true });
       });
   }, [id]);
 
