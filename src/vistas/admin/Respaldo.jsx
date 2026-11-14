@@ -12,6 +12,14 @@ import { API_URL } from "../../config";
 
 const API = API_URL;
 
+// Todas las rutas de respaldos exigen el token del administrador
+const auth = (extra = {}) => ({ ...extra, Authorization: `Bearer ${localStorage.getItem("token")}` });
+const errorAuth = (res) => {
+  if (res.status === 401) return "Tu sesión expiró. Vuelve a iniciar sesión.";
+  if (res.status === 403) return "Solo el administrador puede usar los respaldos.";
+  return null;
+};
+
 const TIPOS = [
   { value: "completo", label: "Completo", ayuda: "Copia de todos los datos de la base." },
   { value: "incremental", label: "Incremental", ayuda: "Solo los cambios desde el último respaldo." },
@@ -69,15 +77,15 @@ function Respaldo() {
   const [confirmacion, setConfirmacion] = useState(null);
 
   const cargarRespaldos = () => {
-    fetch(`${API}/respaldos`)
+    fetch(`${API}/respaldos`, { headers: auth() })
       .then((res) => {
-        if (!res.ok) throw new Error("Error de servidor");
+        if (!res.ok) throw new Error(errorAuth(res) || "Error de servidor");
         return res.json();
       })
       .then(setLista)
       .catch((err) => {
         console.error("Error al cargar respaldos:", err);
-        setAviso({ tipo: "error", texto: "No se pudo cargar la lista de respaldos." });
+        setAviso({ tipo: "error", texto: /sesión|administrador/.test(err.message) ? err.message : "No se pudo cargar la lista de respaldos." });
       })
       .finally(() => setCargando(false));
   };
@@ -122,7 +130,7 @@ function Respaldo() {
     setOcupado("config");
     fetch(`${API}/config-respaldo`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: auth({ "Content-Type": "application/json" }),
       body: JSON.stringify({ tipo_respaldo: tipoRespaldo, intervalo, valor: valorIntervalo })
     })
       .then((res) => res.json().then((data) => ({ ok: res.ok, data })))
@@ -135,7 +143,7 @@ function Respaldo() {
 
   const generarRespaldoManual = () => {
     setOcupado("generar");
-    fetch(`${API}/respaldo/${tipoManual}`)
+    fetch(`${API}/respaldo/${tipoManual}`, { headers: auth() })
       .then((res) => {
         if (!res.ok) throw new Error("Error al generar");
         return res.blob();
@@ -150,7 +158,7 @@ function Respaldo() {
   };
 
   const descargarRespaldo = (respaldo) => {
-    fetch(`${API}/respaldo/${respaldo.tipo}`)
+    fetch(`${API}/respaldo/${respaldo.tipo}`, { headers: auth() })
       .then((res) => {
         if (!res.ok) throw new Error("Error al descargar");
         return res.blob();
@@ -162,7 +170,7 @@ function Respaldo() {
   const eliminarRespaldo = () => {
     const { respaldo } = confirmacion;
     setOcupado("eliminar");
-    fetch(`${API}/respaldo/${respaldo.tipo}/${respaldo.nombre}`, { method: "DELETE" })
+    fetch(`${API}/respaldo/${respaldo.tipo}/${respaldo.nombre}`, { method: "DELETE", headers: auth() })
       .then((res) => res.json().then((data) => ({ ok: res.ok, data })))
       .then(({ ok, data }) => {
         setAviso({ tipo: ok ? "ok" : "error", texto: data.message || (ok ? "Respaldo eliminado." : "No se pudo eliminar el respaldo.") });
@@ -180,7 +188,7 @@ function Respaldo() {
     const formData = new FormData();
     formData.append("file", archivoRespaldo);
     setOcupado("restaurar");
-    fetch(`${API}/respaldo`, { method: "POST", body: formData })
+    fetch(`${API}/respaldo`, { method: "POST", headers: auth(), body: formData })
       .then((res) => res.json().then((data) => ({ ok: res.ok, data })))
       .then(({ ok, data }) => {
         setAviso({ tipo: ok ? "ok" : "error", texto: data.message || (ok ? "Base de datos restaurada." : "No se pudo restaurar el respaldo.") });
