@@ -18,6 +18,8 @@ function CrearExamen() {
     leccion_id: "",
     titulo: "",
     fecha: "",
+    duracion_minutos: 60,
+    intentos_max: 3,
     preguntas: [
       { enunciado: "", opciones: ["", "", "", ""], respuesta_correcta: "" }
     ]
@@ -130,6 +132,8 @@ function CrearExamen() {
       formData.append("nivel_id", examen.nivel_id);
       formData.append("titulo", examen.titulo);
       formData.append("fecha", examen.fecha);
+      formData.append("duracion_minutos", examen.duracion_minutos);
+      formData.append("intentos_max", examen.intentos_max);
 
       // Solo enviar preguntas manuales si no hay archivo Excel
       if (!archivoExcel) {
@@ -152,6 +156,8 @@ function CrearExamen() {
         leccion_id: "",
         titulo: "",
         fecha: "",
+        duracion_minutos: 60,
+        intentos_max: 3,
         preguntas: [{ enunciado: "", opciones: ["", "", "", ""], respuesta_correcta: "" }]
       });
       setArchivoExcel(null);
@@ -206,6 +212,16 @@ function CrearExamen() {
         <div className="form-group">
           <label>Fecha</label>
           <input type="date" name="fecha" value={examen.fecha} onChange={handleChange} />
+        </div>
+
+        {/* TIEMPO E INTENTOS (también aplican cuando el alumno responde sin conexión) */}
+        <div className="form-group">
+          <label>Tiempo para responder (minutos)</label>
+          <input type="number" min="1" max="600" name="duracion_minutos" value={examen.duracion_minutos} onChange={handleChange} />
+        </div>
+        <div className="form-group">
+          <label>Intentos permitidos</label>
+          <input type="number" min="1" max="20" name="intentos_max" value={examen.intentos_max} onChange={handleChange} />
         </div>
 
         {/* PREGUNTAS MANUALES */}

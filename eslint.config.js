@@ -8,7 +8,7 @@ export default defineConfig([
   globalIgnores(['dist']),
   // Scripts de Node (pruebas E2E con Selenium): usan variables de Node como process
   {
-    files: ['reportes/**/*.js'],
+    files: ['reportes/**/*.js', 'vite.config.js'],
     languageOptions: { globals: globals.node },
   },
   {

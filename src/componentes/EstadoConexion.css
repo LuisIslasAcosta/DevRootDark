@@ -1,0 +1,49 @@
+.conexion-aviso {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 24px);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  font-family: inherit;
+}
+
+.conexion-sin_conexion { background: #b91c1c; }
+.conexion-sincronizando { background: #b45309; }
+.conexion-sincronizado { background: #15803d; }
+.conexion-error { background: #7c2d12; }
+
+.conexion-aviso button {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: transparent;
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.conexion-icono-tachado {
+  position: relative;
+  opacity: 0.85;
+}
+
+.conexion-girando { animation: conexion-giro 1s linear infinite; }
+
+@keyframes conexion-giro {
+  to { transform: rotate(360deg); }
+}
+
+/* Durante el examen el aviso no debe tapar el botón de enviar */
+body.examen-protegido .conexion-aviso {
+  bottom: auto;
+  top: 10px;
+}

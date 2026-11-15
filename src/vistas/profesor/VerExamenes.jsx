@@ -5,12 +5,14 @@ import "../styles/ProfesorPanel.css";
 import "../styles/SeccionesProfesor.css";
 import { API_URL } from "../../config";
 import ImportarExcelPreguntas from "./ImportarExcelPreguntas";
+import IntentosExamen from "./IntentosExamen";
 
 function VerExamenes() {
   const { cursoId } = useParams(); 
   const [examenes, setExamenes] = useState([]);
   const [cursoNombre, setCursoNombre] = useState("");
   const [importandoEn, setImportandoEn] = useState(null); // id del examen con el panel de Excel abierto
+  const [viendoIntentos, setViendoIntentos] = useState(null); // id del examen con sus intentos abiertos
 
   // 🔹 Cargar información del curso
   useEffect(() => {
@@ -82,6 +84,13 @@ function VerExamenes() {
                     Importar Excel
                   </button>
                   <button
+                    className="custom-btn btn-ver"
+                    style={{ marginRight: "6px" }}
+                    onClick={() => setViendoIntentos(viendoIntentos === ex.id ? null : ex.id)}
+                  >
+                    Intentos y alertas
+                  </button>
+                  <button
                     className="custom-btn btn-eliminar"
                     onClick={() => eliminarExamen(ex.id)}
                   >
@@ -104,6 +113,15 @@ function VerExamenes() {
               ? { ...ex, num_preguntas: (ex.num_preguntas ?? 0) + cantidad }
               : ex))
           }
+        />
+      )}
+
+      {viendoIntentos && (
+        <IntentosExamen
+          key={viendoIntentos}
+          examenId={viendoIntentos}
+          examenTitulo={examenes.find(ex => ex.id === viendoIntentos)?.titulo}
+          onCerrar={() => setViendoIntentos(null)}
         />
       )}
 

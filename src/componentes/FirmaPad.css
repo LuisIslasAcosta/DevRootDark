@@ -1,0 +1,186 @@
+.firma-pad {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.firma-pad-lienzo {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 3 / 1;
+  background:
+    repeating-linear-gradient(0deg, rgba(15, 23, 42, 0.04) 0 1px, transparent 1px 24px),
+    #ffffff;
+  border: 2px dashed #94a3b8;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.firma-pad-lienzo canvas {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.firma-pad-guia {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  color: #94a3b8;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.firma-pad-linea {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 22%;
+  border-top: 1px solid #cbd5e1;
+  pointer-events: none;
+}
+
+.firma-pad-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.firma-pad-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.firma-pad-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.firma-pad-btn-principal {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.firma-pad-btn-principal:hover {
+  color: #fff;
+  background: #1d4ed8;
+}
+
+/* Firma escrita */
+.firma-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  max-width: 720px;
+}
+
+.firma-texto-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.firma-texto-campo input {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.firma-texto-estilos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.6rem;
+}
+
+.firma-texto-estilo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.8rem;
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  color: #111;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.firma-texto-estilo span {
+  font-size: 1.9rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.firma-texto-estilo small {
+  color: #64748b;
+}
+
+.firma-texto-estilo.activo {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Pestañas de la página "Mi firma" */
+.firma-modos {
+  display: inline-flex;
+  gap: 0.3rem;
+  padding: 0.3rem;
+  margin-bottom: 1rem;
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+}
+
+.firma-modos button {
+  padding: 0.45rem 1rem;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+  color: inherit;
+}
+
+.firma-modos button.activo {
+  background: #fff;
+  color: #2563eb;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.15);
+}
+
+.firma-activa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  color: #14532d;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  max-width: 720px;
+}
+
+.firma-activa p {
+  margin: 0;
+  flex: 1;
+}

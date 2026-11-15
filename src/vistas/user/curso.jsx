@@ -17,6 +17,7 @@ import {
   FaLock,
   FaPlay,
   FaChalkboardTeacher,
+  FaCloudDownloadAlt,
   FaRedo,
   FaTrophy,
   FaVideo
@@ -30,6 +31,9 @@ import EstadoInscripcion from "../../componentes/EstadoInscripcion";
 import { obtenerMisInscripciones } from "../../componentes/pagos";
 import { degradadoCurso, portadaCurso, inicialesCurso, colorCalificacion } from "../../componentes/cursoVisual";
 import "../../componentes/pagos.css";
+import "../styles/ExamenOffline.css";
+import { descargarCurso, leerCursoDescargado } from "../../offline/descargarCurso";
+import { agregarPendiente, useEstadoConexion } from "../../offline/sincronizar";
 
 const encabezados = () => ({ Authorization: `Bearer ${localStorage.getItem("token")}` });
 
@@ -81,6 +85,12 @@ function Cursos() {
   const [pestana, setPestana] = useState("contenido");
   const [user, setUser] = useState(null);
   const [inscripcion, setInscripcion] = useState(undefined); // undefined = cargando, null = sin inscripción
+  const [descargado, setDescargado] = useState(null);
+  const [descarga, setDescarga] = useState(null); // { hechos, total, texto } mientras descarga
+  const [conVideos, setConVideos] = useState(true);
+  const [errorDescarga, setErrorDescarga] = useState("");
+  const { fase: faseConexion } = useEstadoConexion();
+  const sinConexion = faseConexion === "sin_conexion";
 
   // ================= LOAD USER =================
   useEffect(() => {
@@ -93,10 +103,32 @@ function Cursos() {
 
   // ================= VERIFICAR INSCRIPCIÓN ACEPTADA =================
   useEffect(() => {
-    obtenerMisInscripciones()
-      .then((res) => setInscripcion((res.data || []).find((i) => i.curso_id === id) || null))
-      .catch(() => setInscripcion(null));
+    let cancelado = false;
+    leerCursoDescargado(id)
+      .catch(() => null)
+      .then((local) => {
+        if (!cancelado) setDescargado(local || null);
+        return obtenerMisInscripciones()
+          .then((res) => !cancelado && setInscripcion((res.data || []).find((i) => i.curso_id === id) || null))
+          // Sin conexión: se usa la inscripción que se guardó al descargar el curso
+          .catch(() => !cancelado && setInscripcion(local?.inscripcion || null));
+      });
+    return () => { cancelado = true; };
   }, [id]);
+
+  const descargarParaOffline = async () => {
+    setErrorDescarga("");
+    setDescarga({ hechos: 0, total: 1, texto: "Preparando..." });
+    try {
+      const resumen = await descargarCurso(id, { conVideos, alAvanzar: setDescarga });
+      setDescargado(resumen);
+      if (resumen.fallos.length) setErrorDescarga(`No se pudieron descargar: ${resumen.fallos.join(", ")}`);
+    } catch (err) {
+      setErrorDescarga(err.response?.data?.mensaje || err.message || "No se pudo descargar el curso");
+    } finally {
+      setDescarga(null);
+    }
+  };
 
   // ================= CARGAR CURSO =================
   useEffect(() => {
@@ -244,6 +276,16 @@ function Cursos() {
   const marcarLeccionVista = async (leccionId) => {
     if (!user?.id || marcando) return;
     setMarcando(leccionId);
+    if (!navigator.onLine) {
+      // Sin conexión: se marca aquí y se envía al reconectar
+      await agregarPendiente(`leccion-${user.id}-${leccionId}`, {
+        tipo: "leccion_vista",
+        cuerpo: { alumno_id: user.id, leccion_id: leccionId, curso_id: id },
+      });
+      setVistasLocales((prev) => ({ ...prev, [leccionId]: true }));
+      setMarcando(null);
+      return;
+    }
     try {
       await axios.post(
         `${API_URL}/analisis/progreso/leccion/vista`,
@@ -261,7 +303,14 @@ function Cursos() {
 
   // ================= ESTADOS DE CARGA =================
   if (loading && !curso) return <div className="cv-cargando"><span /> Cargando curso...</div>;
-  if (!curso) return <div className="cv-vacio"><FaBookOpen /><p>No se encontró el curso.</p></div>;
+  if (!curso) {
+    return (
+      <div className="cv-vacio">
+        <FaBookOpen />
+        <p>{sinConexion ? "Este curso no está descargado. Conéctate a internet para verlo." : "No se encontró el curso."}</p>
+      </div>
+    );
+  }
 
   const portada = portadaCurso(curso);
   const fondoHero = portada
@@ -523,6 +572,37 @@ function Cursos() {
               )}
             </div>
           )}
+
+          <div className="cv-tarjeta cv-offline">
+            <span className="cv-tarjeta-etiqueta"><FaCloudDownloadAlt /> Sin conexión</span>
+            {descarga ? (
+              <>
+                <small>{descarga.texto}</small>
+                <span className="cv-offline-barra">
+                  <span style={{ width: `${Math.round((descarga.hechos / Math.max(1, descarga.total)) * 100)}%` }} />
+                </span>
+              </>
+            ) : (
+              <>
+                {descargado ? (
+                  <small>
+                    Descargado el {new Date(descargado.fecha).toLocaleString("es-MX", { dateStyle: "medium", timeStyle: "short" })}:
+                    {" "}{descargado.archivos} archivos y {descargado.examenes} exámenes listos para usar sin señal.
+                  </small>
+                ) : (
+                  <small>Descarga lecciones, documentos, videos y exámenes para estudiar y responder aunque no tengas internet.</small>
+                )}
+                <label>
+                  <input type="checkbox" checked={conVideos} onChange={(e) => setConVideos(e.target.checked)} disabled={sinConexion} />
+                  Incluir videos (ocupan más espacio)
+                </label>
+                <button type="button" className="cv-btn cv-btn-ancho" onClick={descargarParaOffline} disabled={sinConexion}>
+                  <FaCloudDownloadAlt /> {descargado ? "Actualizar descarga" : "Descargar para ver sin conexión"}
+                </button>
+              </>
+            )}
+            {errorDescarga && <small className="insc-motivo">{errorDescarga}</small>}
+          </div>
 
           {progreso?.terminado_aprobado ? (
             <div className="cv-tarjeta cv-logro">

@@ -1,5 +1,5 @@
 /* =====================================================================
-   Certificado de término de curso
+   Certificado de término de curso · versión oscura
    La hoja usa unidades relativas a su ancho (cqw) para verse igual en
    pantalla, en celular y al imprimir en hoja horizontal.
    ===================================================================== */
@@ -10,28 +10,43 @@
 }
 
 .cert-hoja {
-  --cert-tinta: #0f1f3d;
-  --cert-oro: #b8862b;
-  --cert-oro-claro: #e9c46a;
-  --cert-azul: #1e3a8a;
+  --cert-fondo: #050608;
+  --cert-texto: #eef1f6;
+  --cert-tenue: #8b93a3;
+  --cert-oro: #d4a73c;
+  --cert-oro-claro: #f6dc8c;
+  --cert-neon: #22e3ff;
+  --cert-verde: #39ff88;
+  --cert-rojo: #ff1f3d;
 
   position: relative;
   width: 100%;
   aspect-ratio: 297 / 210;
   overflow: hidden;
-  padding: 2.4cqw;
+  padding: 2.2cqw;
   font-family: "Inter", "Segoe UI", system-ui, sans-serif;
   font-size: 1.6cqw;
-  color: var(--cert-tinta);
+  color: var(--cert-texto);
   background:
-    radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.10), transparent 32%),
-    radial-gradient(circle at 100% 100%, rgba(184, 134, 43, 0.12), transparent 34%),
-    repeating-linear-gradient(45deg, rgba(15, 31, 61, 0.018) 0 2px, transparent 2px 9px),
-    #fffdf7;
+    radial-gradient(ellipse at 50% -10%, rgba(34, 227, 255, 0.16), transparent 55%),
+    radial-gradient(circle at 0% 100%, rgba(212, 167, 60, 0.16), transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(255, 31, 61, 0.10), transparent 38%),
+    linear-gradient(rgba(34, 227, 255, 0.045) 1px, transparent 1px) 0 0 / 2.6cqw 2.6cqw,
+    linear-gradient(90deg, rgba(34, 227, 255, 0.045) 1px, transparent 1px) 0 0 / 2.6cqw 2.6cqw,
+    var(--cert-fondo);
   border-radius: 0.6cqw;
-  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06), 0 24px 60px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 0 0 1px #1b1f29, 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 60px rgba(34, 227, 255, 0.08);
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
+}
+
+/* Líneas de monitor */
+.cert-hoja::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 0.35cqw);
 }
 
 .cert-marco {
@@ -40,43 +55,46 @@
   flex-direction: column;
   align-items: center;
   height: 100%;
-  padding: 2.4cqw 5cqw 1.6cqw;
+  padding: 2cqw 5cqw 1.4cqw;
   text-align: center;
-  border: 0.32cqw solid var(--cert-azul);
-  outline: 0.12cqw solid var(--cert-oro);
-  outline-offset: -0.9cqw;
+  border: 0.14cqw solid rgba(212, 167, 60, 0.75);
+  outline: 0.08cqw solid rgba(34, 227, 255, 0.35);
+  outline-offset: -0.8cqw;
+  box-shadow: inset 0 0 3cqw rgba(212, 167, 60, 0.08);
 }
 
 .cert-esquina {
   position: absolute;
-  width: 5cqw;
-  height: 5cqw;
-  border-color: var(--cert-oro);
+  width: 4.5cqw;
+  height: 4.5cqw;
+  border-color: var(--cert-neon);
   border-style: solid;
+  filter: drop-shadow(0 0 0.4cqw rgba(34, 227, 255, 0.8));
 }
 
-.cert-esquina-1 { top: 1.6cqw; left: 1.6cqw; border-width: 0.35cqw 0 0 0.35cqw; }
-.cert-esquina-2 { top: 1.6cqw; right: 1.6cqw; border-width: 0.35cqw 0.35cqw 0 0; }
-.cert-esquina-3 { bottom: 1.6cqw; left: 1.6cqw; border-width: 0 0 0.35cqw 0.35cqw; }
-.cert-esquina-4 { bottom: 1.6cqw; right: 1.6cqw; border-width: 0 0.35cqw 0.35cqw 0; }
+.cert-esquina-1 { top: 1.4cqw; left: 1.4cqw; border-width: 0.3cqw 0 0 0.3cqw; }
+.cert-esquina-2 { top: 1.4cqw; right: 1.4cqw; border-width: 0.3cqw 0.3cqw 0 0; }
+.cert-esquina-3 { bottom: 1.4cqw; left: 1.4cqw; border-width: 0 0 0.3cqw 0.3cqw; }
+.cert-esquina-4 { bottom: 1.4cqw; right: 1.4cqw; border-width: 0 0.3cqw 0.3cqw 0; }
 
 .cert-cabecera {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.3cqw;
-  color: var(--cert-tinta);
+  color: var(--cert-texto);
 }
 
 .cert-logo {
   font-size: 1.6cqw;
+  filter: drop-shadow(0 0 0.6cqw rgba(34, 227, 255, 0.35));
 }
 
 .cert-plataforma {
-  font-size: 0.85cqw;
+  font-size: 0.8cqw;
   font-weight: 600;
-  letter-spacing: 0.25em;
-  color: #475569;
+  letter-spacing: 0.32em;
+  color: var(--cert-tenue);
   text-transform: uppercase;
 }
 
@@ -92,25 +110,31 @@
   font-size: 4.6cqw;
   font-weight: 700;
   line-height: 1;
-  letter-spacing: 0.12em;
-  color: var(--cert-azul);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--cert-oro-claro);
+  background: linear-gradient(180deg, #fff6d6 0%, var(--cert-oro-claro) 40%, var(--cert-oro) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 0.8cqw rgba(212, 167, 60, 0.35));
 }
 
 .cert-titulo small {
   margin-top: 0.5cqw;
-  font-size: 1.05cqw;
+  font-size: 1cqw;
   font-weight: 700;
-  letter-spacing: 0.35em;
-  color: var(--cert-oro);
+  letter-spacing: 0.4em;
+  color: var(--cert-neon);
   text-transform: uppercase;
+  text-shadow: 0 0 0.6cqw rgba(34, 227, 255, 0.6);
 }
 
 .cert-otorga,
 .cert-texto {
-  margin: 1.5cqw 0 0;
-  font-size: 1.25cqw;
-  color: #475569;
+  margin: 1.3cqw 0 0;
+  font-size: 1.2cqw;
+  color: var(--cert-tenue);
 }
 
 .cert-texto {
@@ -125,22 +149,25 @@
   font-style: italic;
   font-weight: 700;
   line-height: 1.15;
-  color: var(--cert-tinta) !important;
-  border-bottom: 0.15cqw solid var(--cert-oro-claro);
+  color: #ffffff !important;
+  text-shadow: 0 0 1.2cqw rgba(255, 255, 255, 0.18);
+  border-bottom: 0.12cqw solid transparent;
+  border-image: linear-gradient(90deg, transparent, var(--cert-oro), var(--cert-oro-claro), var(--cert-oro), transparent) 1;
 }
 
 .cert-curso {
   margin: 0.6cqw 0 0 !important;
-  font-size: 2.3cqw !important;
+  font-size: 2.2cqw !important;
   font-weight: 800;
   line-height: 1.2;
-  color: var(--cert-azul) !important;
+  color: var(--cert-neon) !important;
+  text-shadow: 0 0 1cqw rgba(34, 227, 255, 0.45);
 }
 
 .cert-datos {
   display: flex;
   gap: 1.2cqw;
-  margin: 1.5cqw 0 0;
+  margin: 1.4cqw 0 0;
   padding: 0;
   list-style: none;
 }
@@ -151,29 +178,33 @@
   align-items: center;
   min-width: 10cqw;
   padding: 0.6cqw 1.2cqw;
-  background: rgba(30, 58, 138, 0.05);
-  border: 0.1cqw solid rgba(30, 58, 138, 0.15);
-  border-radius: 0.8cqw;
+  background: linear-gradient(180deg, rgba(34, 227, 255, 0.08), rgba(0, 0, 0, 0.4));
+  border: 0.08cqw solid rgba(34, 227, 255, 0.35);
+  border-radius: 0.5cqw;
+  box-shadow: 0 0 1cqw rgba(34, 227, 255, 0.08);
 }
 
 .cert-datos strong {
+  font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
   font-size: 1.7cqw;
-  font-weight: 900;
-  color: var(--cert-azul);
+  font-weight: 800;
+  color: var(--cert-oro-claro);
 }
 
 .cert-datos span {
-  font-size: 0.85cqw;
-  color: #64748b;
+  font-size: 0.8cqw;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cert-tenue);
 }
 
 .cert-acredita {
-  max-width: 62cqw;
-  margin: 1.4cqw 0 0;
-  font-size: 1.05cqw;
+  max-width: 60cqw;
+  margin: 1.3cqw 0 0;
+  font-size: 1cqw;
   font-style: italic;
   line-height: 1.5;
-  color: #475569;
+  color: var(--cert-tenue);
 }
 
 .cert-pie {
@@ -197,19 +228,40 @@
   font-size: 1.35cqw;
   font-style: italic;
   font-weight: 700;
+  color: var(--cert-texto);
+}
+
+/* Firma dibujada por el profesor: se guarda en tinta oscura y aquí se pinta en blanco */
+.cert-firma-img {
+  display: block;
+  height: 4.6cqw;
+  max-width: 20cqw;
+  margin-bottom: -0.9cqw;
+  object-fit: contain;
+  filter: invert(1) drop-shadow(0 0 0.35cqw rgba(246, 220, 140, 0.45));
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.cert-firma-codigo {
+  font-family: "JetBrains Mono", "Consolas", "Courier New", monospace;
+  font-size: 0.62cqw;
+  letter-spacing: 0.12em;
+  color: var(--cert-neon);
+  opacity: 0.85;
 }
 
 .cert-firma-linea {
   width: 100%;
   max-width: 22cqw;
-  border-top: 0.12cqw solid var(--cert-tinta);
+  border-top: 0.1cqw solid rgba(212, 167, 60, 0.7);
 }
 
 .cert-firma-cargo {
-  font-size: 0.85cqw;
+  font-size: 0.8cqw;
   font-weight: 600;
-  letter-spacing: 0.12em;
-  color: #64748b;
+  letter-spacing: 0.16em;
+  color: var(--cert-tenue);
   text-transform: uppercase;
 }
 
@@ -220,9 +272,9 @@
   height: 10.5cqw;
   margin-bottom: -0.6cqw;
   background:
-    repeating-conic-gradient(from 0deg, var(--cert-oro) 0deg 6deg, var(--cert-oro-claro) 6deg 12deg);
+    repeating-conic-gradient(from 0deg, var(--cert-oro) 0deg 5deg, #6b4f12 5deg 10deg);
   border-radius: 50%;
-  box-shadow: 0 0.4cqw 1.2cqw rgba(184, 134, 43, 0.35);
+  box-shadow: 0 0 2cqw rgba(212, 167, 60, 0.45), 0 0 0 0.15cqw rgba(34, 227, 255, 0.4);
 }
 
 .cert-sello > div {
@@ -233,34 +285,65 @@
   width: 8cqw;
   height: 8cqw;
   line-height: 1.05;
-  color: #fff;
+  color: var(--cert-oro-claro);
   text-transform: uppercase;
-  background: radial-gradient(circle at 35% 30%, #2f56c9, var(--cert-azul) 70%);
-  border: 0.25cqw solid #fff;
+  background: radial-gradient(circle at 35% 30%, #1a1d26, #050608 70%);
+  border: 0.2cqw solid var(--cert-oro);
   border-radius: 50%;
 }
 
 .cert-sello span {
-  font-size: 0.75cqw;
+  font-size: 0.72cqw;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
+  color: var(--cert-tenue);
 }
 
 .cert-sello strong {
   font-size: 1.5cqw;
   font-weight: 900;
+  color: var(--cert-neon);
+  text-shadow: 0 0 0.6cqw rgba(34, 227, 255, 0.7);
 }
 
 .cert-folio {
-  margin-top: 1.2cqw;
-  font-size: 0.8cqw;
-  color: #64748b;
+  margin-top: 1.1cqw;
+  font-size: 0.78cqw;
+  color: var(--cert-tenue);
+}
+
+/* QR de verificación en la esquina inferior derecha (fondo blanco para que se escanee bien) */
+.cert-qr {
+  position: absolute;
+  right: 3.2cqw;
+  bottom: 2.6cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35cqw;
+  text-decoration: none;
+  color: var(--cert-tenue);
+}
+
+.cert-qr svg {
+  width: 7.5cqw;
+  height: 7.5cqw;
+  padding: 0.3cqw;
+  background: #fff;
+  border: 0.08cqw solid var(--cert-neon);
+  border-radius: 0.4cqw;
+  box-shadow: 0 0 1cqw rgba(34, 227, 255, 0.35);
+}
+
+.cert-qr span {
+  font-size: 0.62cqw;
+  letter-spacing: 0.06em;
 }
 
 .cert-folio b {
-  font-family: "Consolas", "Courier New", monospace;
-  letter-spacing: 0.06em;
-  color: var(--cert-tinta);
+  font-family: "JetBrains Mono", "Consolas", "Courier New", monospace;
+  letter-spacing: 0.08em;
+  color: var(--cert-verde);
 }
 
 /* =====================================================================
@@ -476,7 +559,7 @@
 
   html,
   body {
-    background: #fff !important;
+    background: #050608 !important;
   }
 
   body * {

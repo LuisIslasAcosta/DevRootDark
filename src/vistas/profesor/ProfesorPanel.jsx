@@ -15,7 +15,9 @@ import {
   FaListUl,
   FaMoneyCheckAlt,
   FaUserGraduate,
-  FaComments
+  FaComments,
+  FaMusic,
+  FaSignature
 } from "react-icons/fa";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell, LabelList } from "recharts";
 
@@ -302,6 +304,12 @@ function ProfesorPanel() {
           <NavLink to="/profesor/mensajes" className={navClass}>
             <FaComments /> Mensajes
           </NavLink>
+          <NavLink to="/profesor/firma" className={navClass}>
+            <FaSignature /> Mi firma
+          </NavLink>
+          <a href="/reproductor/" target="_blank" rel="noopener noreferrer" className="pf-link" title="Concéntrate al máximo: agrega tus canciones y escúchalas mientras aprendes">
+            <FaMusic /> DevRootMusic
+          </a>
         </nav>
 
         <div className="pf-acciones-lado">

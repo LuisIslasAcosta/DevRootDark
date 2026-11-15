@@ -24,7 +24,6 @@ import AnalisisRespuestasAlumno from './vistas/user/AnalisisRespuestasAlumno';
 import PrincipalAdmin from './vistas/admin/principal_admin';
 import AdminCursos from './vistas/admin/AdminCursos';
 import AdminUsuarios from './vistas/admin/AdminUsuarios';
-import Respaldo from './vistas/admin/Respaldo';
 import CursoDetalle from './vistas/admin/CursoDetalle';
 
 // ================= PROFESOR =================
@@ -44,15 +43,18 @@ import ReportesChat from './vistas/chat/ReportesChat';
 import VerNivelesProfesor from './vistas/profesor/VerNivelesProfesor';
 import CrearNivelProfesor from './vistas/profesor/CrearNivelProfesor';
 import PagosProfesor from './vistas/profesor/PagosProfesor';
+import FirmaProfesor from './vistas/profesor/FirmaProfesor';
 
 // ================= RUTAS PROTEGIDAS =================
 import ProtectedRoute from './RutasProtegidas/ProtectedRoute';
+import EstadoConexion from './componentes/EstadoConexion';
 import AdminRoute from './RutasProtegidas/AdminRoute';
 import ProfesorRoute from './RutasProtegidas/ProfesorRoute';
 
 function App() {
   return (
     <Router>
+      <EstadoConexion />
       <Routes>
 
         {/* ================= PUBLICAS ================= */}
@@ -109,7 +111,6 @@ function App() {
         >
           <Route path="cursos" element={<AdminCursos />} />
           <Route path="usuarios" element={<AdminUsuarios />} />
-          <Route path="respaldo" element={<Respaldo />} />
           <Route path="reportes-chat" element={<ReportesChat />} />
           <Route path="editar-perfil" element={<EditarPerfil />} />
           <Route path="curso/:id" element={<CursoDetalle />} />
@@ -148,6 +149,7 @@ function App() {
 
           {/* PAGOS: validar comprobantes y aceptar alumnos */}
           <Route path="pagos" element={<PagosProfesor />} />
+          <Route path="firma" element={<FirmaProfesor />} />
 
           {/* REPORTES & RESULTADOS */}
           <Route path="reportes" element={<ReportesProfesor />} />

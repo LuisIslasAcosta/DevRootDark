@@ -12,7 +12,8 @@ import {
   FaSearch,
   FaGraduationCap,
   FaCheckCircle,
-  FaComments
+  FaComments,
+  FaMusic
 } from "react-icons/fa";
 
 import "../styles/ProfesorPanel.css";
@@ -91,8 +92,9 @@ function PrincipalAlumno() {
         });
 
         setCursos(Array.isArray(cursosRes.data) ? cursosRes.data : []);
-      } catch {
-        navigate("/login");
+      } catch (err) {
+        // Solo se cierra la sesión si el token ya no vale; sin conexión se sigue con lo descargado
+        if ([401, 422].includes(err.response?.status)) navigate("/login");
       }
     };
 
@@ -231,6 +233,9 @@ function PrincipalAlumno() {
           <NavLink to="/principal/mensajes" className={navClass}>
             <FaComments /> Mensajes
           </NavLink>
+          <a href="/reproductor/" target="_blank" rel="noopener noreferrer" className="pf-link" title="Concéntrate al máximo: agrega tus canciones y escúchalas mientras aprendes">
+            <FaMusic /> DevRootMusic
+          </a>
         </nav>
 
         <div className="pf-acciones-lado">

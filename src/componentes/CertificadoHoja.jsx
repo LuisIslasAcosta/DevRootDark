@@ -1,4 +1,5 @@
 import React from "react";
+import { QRCodeSVG } from "qrcode.react";
 import Logo from "./Logo";
 import { urlVerificacion } from "./cursoVisual";
 import "./Certificado.css";
@@ -50,9 +51,21 @@ function CertificadoHoja({ certificado }) {
 
           <footer className="cert-pie">
             <div className="cert-firma">
-              <span className="cert-firma-nombre">{c.profesor || "Profesor del curso"}</span>
-              <span className="cert-firma-linea" />
-              <span className="cert-firma-cargo">Profesor del curso</span>
+              {c.firma_profesor ? (
+                <>
+                  {/* Firma autógrafa del profesor (la guardada al emitir este certificado) */}
+                  <img className="cert-firma-img" src={c.firma_profesor} alt={`Firma de ${c.profesor || "el profesor"}`} />
+                  <span className="cert-firma-linea" />
+                  <span className="cert-firma-cargo">{c.profesor || "Profesor del curso"}</span>
+                  {c.firma_codigo && <span className="cert-firma-codigo">Firma {c.firma_codigo}</span>}
+                </>
+              ) : (
+                <>
+                  <span className="cert-firma-nombre">{c.profesor || "Profesor del curso"}</span>
+                  <span className="cert-firma-linea" />
+                  <span className="cert-firma-cargo">Profesor del curso</span>
+                </>
+              )}
             </div>
 
             <div className="cert-sello" aria-hidden="true">
@@ -69,6 +82,16 @@ function CertificadoHoja({ certificado }) {
               <span className="cert-firma-cargo">Fecha de emisión</span>
             </div>
           </footer>
+
+          {/* QR de verificación: al escanearlo abre la página pública que confirma si el folio es auténtico */}
+          <a className="cert-qr" href={urlVerificacion(c.folio)} target="_blank" rel="noreferrer"
+             title="Escanea para verificar la autenticidad">
+            {/* Nivel H: el QR se sigue leyendo aunque el logo tape el centro */}
+            <QRCodeSVG value={urlVerificacion(c.folio)} size={256} level="H" marginSize={1}
+                       bgColor="#ffffff" fgColor="#050505"
+                       imageSettings={{ src: "/brand/logo-qr.png", width: 62, height: 62, excavate: true }} />
+            <span>Escanea para verificar</span>
+          </a>
 
           <div className="cert-folio">
             Folio <b>{c.folio}</b> · Verifica su autenticidad en {urlVerificacion(c.folio).replace(/^https?:\/\//, "")}

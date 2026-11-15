@@ -18,10 +18,10 @@ import {
   FaHome,
   FaBookOpen,
   FaUsers,
-  FaDatabase,
   FaUserPlus,
   FaPlusCircle,
-  FaShieldAlt
+  FaShieldAlt,
+  FaMusic
 } from "react-icons/fa";
 import "../styles/PrincipalAdmin.css";
 import "../../temas/temas.css";
@@ -198,12 +198,13 @@ function PrincipalAdmin() {
           <NavLink to="/admin/usuarios" className={navClass}>
             <FaUsers /> Usuarios
           </NavLink>
-          <NavLink to="/admin/respaldo" className={navClass}>
-            <FaDatabase /> Respaldo
-          </NavLink>
           <NavLink to="/admin/reportes-chat" className={navClass}>
             <FaShieldAlt /> Reportes de chat
           </NavLink>
+          {/* Reproductor DevRootMusic (versión del administrador, se instala como app) */}
+          <a href="/reproductor-admin/" target="_blank" rel="noopener noreferrer" className="admin-link" title="Concéntrate al máximo: agrega tus canciones y escúchalas mientras aprendes">
+            <FaMusic /> DevRootMusic
+          </a>
         </nav>
 
         <div className="profile-actions">
